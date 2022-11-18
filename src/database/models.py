@@ -27,42 +27,59 @@ class Role(Base):
 class Form(Base):
 
     __tablename__ = "form"
-    id = Column(Integer, index=True, primary_key=True, unique=True, nullable=False)
-    sales_force_id = Column(String, index=True, unique=True, nullable=False)
-    vendor_deal_id = Column(String, index=True, unique=True)
-    purchase_order = Column(String, index=True, unique=True, nullable=False)
+    id = Column(Integer, index=True, primary_key=True,
+                unique=True, nullable=False)
+    sales_force_id = Column(String, index=True, nullable=False)
+    vendor_deal_id = Column(String, index=True)
+    purchase_order = Column(String, index=True, nullable=False)
     quote_direct = Column(String, unique=True)
     client_manager_name = Column(String, nullable=False)
     pre_sales_name = Column(String, nullable=False)
     sale_note = Column(String, nullable=True, default=None)
     customer_id = Column(Integer, ForeignKey("customer.id"), nullable=False)
     vendor_id = Column(Integer, ForeignKey("vendor.id"))
+    cisco_id = Column(Integer, ForeignKey("cisco.id"))
     software_id = Column(Integer, ForeignKey("software.id"))
     comments = Column(String, nullable=False)
     customer = relationship("Customer", back_populates="form")
     vendor = relationship("Vendor", back_populates="form")
+    cisco = relationship("Cisco", back_populates="form")
     software = relationship("Software", back_populates="form")
     status = Column(String, nullable=False)
     date = Column(Date, nullable=False)
 
 
-class Vendor(Base):
+class Cisco(Base):
 
-    __tablename__ = "vendor"
-    id = Column(Integer, index=True, primary_key=True, unique=True, nullable=False)
-    vendor_name = Column(String, nullable=False)
+    __tablename__ = "cisco"
+    id = Column(Integer, index=True, primary_key=True,
+                unique=True, nullable=False)
+    vendor_name = Column(String, nullable=False, default="Cisco")
     account_manager_name = Column(String, nullable=False)
     account_manager_phone = Column(String, nullable=False)
     account_manager_email = Column(String, nullable=False)
     smart_account = Column(String, default="")
     virtual_account = Column(String, default="")
+    form = relationship("Form", back_populates="cisco")
+
+
+class Vendor(Base):
+
+    __tablename__ = "vendor"
+    id = Column(Integer, index=True, primary_key=True,
+                unique=True, nullable=False)
+    vendor_name = Column(String, nullable=False)
+    account_manager_name = Column(String, nullable=False)
+    account_manager_phone = Column(String, nullable=False)
+    account_manager_email = Column(String, nullable=False)
     form = relationship("Form", back_populates="vendor")
 
 
 class Customer(Base):
 
     __tablename__ = "customer"
-    id = Column(Integer, index=True, primary_key=True, unique=True, nullable=False)
+    id = Column(Integer, index=True, primary_key=True,
+                unique=True, nullable=False)
     customer_name = Column(String, unique=True, nullable=False)
     customer_rut = Column(String, unique=True, nullable=False)
     customer_address = Column(String, unique=True, nullable=False)
@@ -78,11 +95,12 @@ class Customer(Base):
 
 class Software(Base):
     __tablename__ = "software"
-    id = Column(Integer, index=True, primary_key=True, unique=True, nullable=False)
+    id = Column(Integer, index=True, primary_key=True,
+                unique=True, nullable=False)
     software_type = Column(String, nullable=False)
-    durantion_time = Column(String, nullable=False)
+    duration_time = Column(String, nullable=False)
     customer_contact = Column(String, nullable=False)
     subscription_id = Column(String, nullable=True)
-    start_date = Column(Date, nullable=False)
+    start_date = Column(String, nullable=False)
     type_of_purchase = Column(String, nullable=True)
     form = relationship("Form", back_populates="software")

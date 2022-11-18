@@ -5,7 +5,7 @@
   "python.linting.pylintEnabled": true,
   "python.linting.mypyEnabled": true,
   "python.linting.enabled": true,
-  "python.formatting.provider": "black",
+  "python.formatting.provider": "autopep8",
   "[python]": {
     "editor.defaultFormatter": "ms-python.python"
   }

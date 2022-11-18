@@ -3,7 +3,8 @@ from typing import Union
 from db import SessionLocal, engine
 from pprint import pprint
 from schema import MessageType
-import models, schema
+import models
+import schema
 
 
 db = SessionLocal()
@@ -42,6 +43,27 @@ def get_form(column: str, value: Union[str, int], db: Session):
     return query
 
 
+def display_partial_form(search: schema.Query, db: Session):
+    query = (
+        db.query(models.Form.id, models.Form.vendor_deal_id, models.Form.quote_direct,
+                 models.Form.sales_force_id, models.Form.purchase_order, models.Form.date, models.Form.status)
+        .filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+        .first()
+    )
+    if query:
+        form = schema.DisplayForm.parse_obj(query)
+        return form
+    return query
+
+
+def display_full_form(search: schema.Query, db: Session):
+    query = (db.query(models.Form, models.Vendor, models.Cisco, models.Software, models.Customer)
+             .select_from(models.Form).filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+             .join(models.Vendor, models.Software, models.Cisco, models.Customer)
+             .all())
+    return query
+
+
 def get_customer(column: str, value: Union[str, int], db: Session):
     query = (
         db.query(models.Customer)
@@ -54,28 +76,26 @@ def get_customer(column: str, value: Union[str, int], db: Session):
     return query
 
 
-def get_vendor(column: str, value: Union[str, int], db: Session):
-    query = (
-        db.query(models.Vendor)
-        .filter(models.Vendor.__getattribute__(models.Vendor, column) == value)
-        .first()
-    )
-    if query:
-        vendor = schema.Vendor.parse_obj(query.__dict__)
-        return vendor
+def get_vendor(search: schema.Query, db: Session):
+    if search.vendor_cisco:
+        query = (
+            db.query(models.Cisco)
+            .filter(models.Cisco.__getattribute__(models.Cisco, search.column) == search.value)
+            .first()
+        )
+        if query:
+            vendor = schema.Cisco.parse_obj(query.__dict__)
+            return vendor
+    else:
+        query = (
+            db.query(models.Vendor)
+            .filter(models.Vendor.__getattribute__(models.Vendor, search.column) == search.value)
+            .first()
+        )
+        if query:
+            vendor = schema.Vendor.parse_obj(query.__dict__)
+            return vendor
     return query
-
-
-# def get_software(column: str, value: Union[str, int], db: Session):
-#     query = (
-#         db.query(models.Software)
-#         .filter(models.Software.__getattribute__(models.Software, column) == value)
-#         .first()
-#     )
-#     if query:
-#         software = schema.Software.parse_obj(query.__dict__)
-#         return software
-#     return query
 
 
 def get_user_role(roleId: int, db: Session):
@@ -150,7 +170,7 @@ def create_role(roles: list[schema.CreateRole], db: Session):
 
 def create_form(form: schema.CreateForm, db: Session):
     message = schema.Message()
-    query = get_form("sales_force_id", form.sales_force_id, db)
+    query = get_form("quote_direct", form.quote_direct, db)
     if query:
         message.add(MessageType.alreadyExist, query)
     else:
@@ -163,6 +183,7 @@ def create_form(form: schema.CreateForm, db: Session):
                 client_manager_name=form.client_manager_name,
                 pre_sales_name=form.pre_sales_name,
                 customer_id=form.customer_id,
+                cisco_id=form.cisco_id,
                 vendor_id=form.vendor_id,
                 software_id=form.software_id,
                 comments=form.comments,
@@ -206,21 +227,55 @@ def create_customer(customer: schema.CreateCustomer, db: Session):
     return message
 
 
-def create_vendor(vendor: schema.CreateVendor, db: Session):
+def create_vendor(vendor: Union[schema.CreateVendor, schema.CreateCisco], db: Session):
+    message = schema.Message()
+    if isinstance(vendor, schema.CreateVendor):
+        try:
+            new_vendor = models.Vendor(
+                vendor_name=vendor.vendor_name,
+                account_manager_name=vendor.account_manager_name,
+                account_manager_phone=vendor.account_manager_phone,
+                account_manager_email=vendor.account_manager_email
+            )
+            db.add(new_vendor)
+            db.commit()
+            db.refresh(new_vendor)
+            message.add(MessageType.vendorCreated, new_vendor)
+        except Exception as error:
+            message.add(MessageType.generalError, error)
+    else:
+        try:
+            new_vendor = models.Cisco(
+                account_manager_name=vendor.account_manager_name,
+                account_manager_phone=vendor.account_manager_phone,
+                account_manager_email=vendor.account_manager_email,
+                smart_account=vendor.smart_account,
+                virtual_account=vendor.virtual_account,
+            )
+            db.add(new_vendor)
+            db.commit()
+            db.refresh(new_vendor)
+            message.add(MessageType.vendorCreated, new_vendor)
+        except Exception as error:
+            message.add(MessageType.generalError, error)
+    return message
+
+
+def create_software(software: schema.CreateSoftware, db: Session):
     message = schema.Message()
     try:
-        new_vendor = models.Vendor(
-            vendor_name=vendor.vendor_name,
-            account_manager_name=vendor.account_manager_name,
-            account_manager_phone=vendor.account_manager_phone,
-            account_manager_email=vendor.account_manager_email,
-            smart_account=vendor.smart_account,
-            virtual_account=vendor.virtual_account,
+        new_software = models.Software(
+            software_type=software.software_type,
+            duration_time=software.duration_time,
+            customer_contact=software.customer_contact,
+            subscription_id=software.subscription_id,
+            start_date=software.start_date,
+            type_of_purchase=software.type_of_purchase
         )
-        db.add(new_vendor)
-        db.commit()
-        db.refresh(new_vendor)
-        message.add(MessageType.vendorCreated, new_vendor)
+        db.add(new_software)
+        print(db.commit())
+        db.refresh(new_software)
+        message.add(MessageType.softwareCreated, new_software)
     except Exception as error:
         message.add(MessageType.generalError, error)
     return message

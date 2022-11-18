@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import Any, Union
 import datetime
 from enum import Enum
-from pprint import pprint
 
 
 class MessageType(Enum):
@@ -21,6 +20,7 @@ class MessageType(Enum):
     formCreated = "Form have been created successfully"
     customerCreated = "Customer have been created successfully"
     vendorCreated = "Vendor have been created successfully"
+    softwareCreated = "Software have been created successfully"
 
 
 class Status(Enum):
@@ -33,6 +33,7 @@ class Status(Enum):
 class Query(BaseModel):
     column: str
     value: Union[str, int]
+    vendor_cisco: bool = True
 
 
 class Id(BaseModel):
@@ -65,14 +66,15 @@ class CreateRole(BaseModel):
 
 class CreateForm(BaseModel):
     sales_force_id: str
-    vendor_deal_id: str = ""
-    purchase_order: str
+    vendor_deal_id: str = "No Deal ID"
+    purchase_order: str = "No PO"
     quote_direct: str
     client_manager_name: str
     pre_sales_name: str
     customer_id: int
-    vendor_id: int
-    software_id: int
+    vendor_id: Union[int, None] = None
+    cisco_id: Union[int, None] = None
+    software_id: Union[int, None] = None
     comments: str
     status: str = Status.preSalesValidation.value
     sale_note: Union[str, None] = None
@@ -81,6 +83,16 @@ class CreateForm(BaseModel):
 
 class Form(CreateForm):
     id: int
+
+
+class DisplayForm(BaseModel):
+    id: int
+    vendor_deal_id: str
+    quote_direct: str
+    sales_force_id: str
+    purchase_order: str
+    date: datetime.date
+    status: str
 
 
 class SaleNote(BaseModel):
@@ -110,17 +122,27 @@ class CreateVendor(BaseModel):
     account_manager_name: str
     account_manager_phone: str
     account_manager_email: str
-    smart_account: str = ""
-    virtual_account: str = ""
 
 
 class Vendor(CreateVendor):
     id: int
 
 
+class CreateCisco(BaseModel):
+    account_manager_name: str
+    account_manager_phone: str
+    account_manager_email: str
+    smart_account: str = ""
+    virtual_account: str = ""
+
+
+class Cisco(CreateVendor):
+    id: int
+
+
 class CreateSoftware(BaseModel):
     software_type: str
-    durantion_time: str
+    duration_time: str
     customer_contact: str
     subscription_id: str
     start_date: str

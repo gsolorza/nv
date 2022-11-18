@@ -1,8 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException
 from db import SessionLocal, engine
 from sqlalchemy.orm import Session
-from typing import Any
-import models, schema, crud
+from typing import Any, Union
+import models
+import schema
+import crud
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -36,6 +38,18 @@ async def get_form(query: schema.Query, db: Session = Depends(getDb)):
     return response
 
 
+@app.get("/display_partial_form", response_model=schema.DisplayForm)
+async def display_partial_form(query: schema.Query, db: Session = Depends(getDb)):
+    response = crud.display_partial_form(query, db)
+    return response
+
+
+@app.get("/display_full_form", response_model=Any)
+async def display_full_form(query: schema.Query, db: Session = Depends(getDb)):
+    response = crud.display_full_form(query, db)
+    return response
+
+
 @app.get("/get_user_role", response_model=list[schema.UserQuery])
 async def get_user_role(query: schema.Id, db: Session = Depends(getDb)):
     response = crud.get_user_role(query.id, db)
@@ -48,9 +62,9 @@ async def get_customer(query: schema.Query, db: Session = Depends(getDb)):
     return response
 
 
-@app.get("/get_vendor", response_model=schema.Vendor)
+@app.get("/get_vendor", response_model=Union[schema.Vendor, schema.Cisco, None])
 async def get_vendor(query: schema.Query, db: Session = Depends(getDb)):
-    response = crud.get_vendor(query.column, query.value, db)
+    response = crud.get_vendor(query, db)
     return response
 
 
@@ -75,7 +89,7 @@ async def create_customer(
 
 
 @app.post("/create_vendor", response_model=schema.Message)
-async def create_vendor(vendor: schema.CreateVendor, db: Session = Depends(getDb)):
+async def create_vendor(vendor: Union[schema.CreateVendor, schema.CreateCisco], db: Session = Depends(getDb)):
     response = crud.create_vendor(vendor, db)
     return response
 
@@ -83,6 +97,12 @@ async def create_vendor(vendor: schema.CreateVendor, db: Session = Depends(getDb
 @app.post("/create_form", response_model=schema.Message)
 async def create_form(form: schema.CreateForm, db: Session = Depends(getDb)):
     response = crud.create_form(form, db)
+    return response
+
+
+@app.post("/create_software", response_model=schema.Message)
+async def create_software(software: schema.CreateSoftware, db: Session = Depends(getDb)):
+    response = crud.create_software(software, db)
     return response
 
 
