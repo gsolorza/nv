@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from db import SessionLocal, engine
 from sqlalchemy.orm import Session
+from fastapi.encoders import jsonable_encoder
 from typing import Any, Union
 import models
 import schema
@@ -106,7 +107,13 @@ async def create_software(software: schema.CreateSoftware, db: Session = Depends
     return response
 
 
-@app.post("/update_form_sale_note", response_model=Any)
-async def update_form_sale_note(value: schema.SaleNote, db: Session = Depends(getDb)):
-    response = crud.update_form_sale_note(value, db)
+@app.post("/update_form", response_model=Any)
+async def update_form(value: schema.UpdateForm, db: Session = Depends(getDb)):
+    response = crud.update_form(value, db)
+    return response
+
+
+@app.post("/delete_form", response_model=schema.Message)
+async def delete_form(id: schema.Id, db: Session = Depends(getDb)):
+    response = crud.delete_form(id, db)
     return response

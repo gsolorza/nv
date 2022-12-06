@@ -21,6 +21,7 @@ class MessageType(Enum):
     customerCreated = "Customer have been created successfully"
     vendorCreated = "Vendor have been created successfully"
     softwareCreated = "Software have been created successfully"
+    data = "data"
 
 
 class Status(Enum):
@@ -66,15 +67,11 @@ class CreateRole(BaseModel):
 
 class CreateForm(BaseModel):
     sales_force_id: str
-    vendor_deal_id: str = "No Deal ID"
     purchase_order: str = "No PO"
     quote_direct: str
     client_manager_name: str
     pre_sales_name: str
     customer_id: int
-    vendor_id: Union[int, None] = None
-    cisco_id: Union[int, None] = None
-    software_id: Union[int, None] = None
     comments: str
     status: str = Status.preSalesValidation.value
     sale_note: Union[str, None] = None
@@ -87,7 +84,6 @@ class Form(CreateForm):
 
 class DisplayForm(BaseModel):
     id: int
-    vendor_deal_id: str
     quote_direct: str
     sales_force_id: str
     purchase_order: str
@@ -95,9 +91,10 @@ class DisplayForm(BaseModel):
     status: str
 
 
-class SaleNote(BaseModel):
+class UpdateForm(BaseModel):
     id: int
-    sale_note: str
+    value: str
+    column: str
 
 
 class CreateCustomer(BaseModel):
@@ -118,10 +115,15 @@ class Customer(CreateCustomer):
 
 
 class CreateVendor(BaseModel):
+    form_id: int
+    vendor_deal_id: str
     vendor_name: str
     account_manager_name: str
     account_manager_phone: str
     account_manager_email: str
+
+    class Config:
+        orm_mode = True
 
 
 class Vendor(CreateVendor):
@@ -129,6 +131,8 @@ class Vendor(CreateVendor):
 
 
 class CreateCisco(BaseModel):
+    form_id: int
+    vendor_deal_id: str
     account_manager_name: str
     account_manager_phone: str
     account_manager_email: str
@@ -141,12 +145,16 @@ class Cisco(CreateVendor):
 
 
 class CreateSoftware(BaseModel):
+    form_id: int
     software_type: str
     duration_time: str
     customer_contact: str
     subscription_id: str
     start_date: str
     type_of_purchase: str
+
+    class Config:
+        orm_mode = True
 
 
 class Software(CreateSoftware):
@@ -161,6 +169,3 @@ class Message(BaseModel):
             self.message[messageType] = []
 
         self.message[messageType].append(object)
-
-    class Config:
-        orm_mode = True

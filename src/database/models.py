@@ -12,7 +12,8 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     active = Column(Boolean, nullable=False, default=True)
-    role_id = Column(Integer, ForeignKey("role.id"), nullable=False)
+    role_id = Column(Integer, ForeignKey("role.id"),
+                     nullable=False)
     role = relationship("Role", back_populates="user")
 
 
@@ -30,21 +31,20 @@ class Form(Base):
     id = Column(Integer, index=True, primary_key=True,
                 unique=True, nullable=False)
     sales_force_id = Column(String, index=True, nullable=False)
-    vendor_deal_id = Column(String, index=True)
     purchase_order = Column(String, index=True, nullable=False)
     quote_direct = Column(String, unique=True)
     client_manager_name = Column(String, nullable=False)
     pre_sales_name = Column(String, nullable=False)
     sale_note = Column(String, nullable=True, default=None)
     customer_id = Column(Integer, ForeignKey("customer.id"), nullable=False)
-    vendor_id = Column(Integer, ForeignKey("vendor.id"))
-    cisco_id = Column(Integer, ForeignKey("cisco.id"))
-    software_id = Column(Integer, ForeignKey("software.id"))
     comments = Column(String, nullable=False)
     customer = relationship("Customer", back_populates="form")
-    vendor = relationship("Vendor", back_populates="form")
-    cisco = relationship("Cisco", back_populates="form")
-    software = relationship("Software", back_populates="form")
+    vendor = relationship("Vendor", back_populates="form",
+                          cascade="all, delete", passive_deletes=True)
+    cisco = relationship("Cisco", back_populates="form",
+                         cascade="all, delete", passive_deletes=True)
+    software = relationship(
+        "Software", back_populates="form", cascade="all, delete", passive_deletes=True)
     status = Column(String, nullable=False)
     date = Column(Date, nullable=False)
 
@@ -52,26 +52,32 @@ class Form(Base):
 class Cisco(Base):
 
     __tablename__ = "cisco"
-    id = Column(Integer, index=True, primary_key=True,
-                unique=True, nullable=False)
+    id = Column(
+        Integer, index=True, primary_key=True, unique=True, nullable=False
+    )
+    vendor_deal_id = Column(String, nullable=False)
     vendor_name = Column(String, nullable=False, default="Cisco")
     account_manager_name = Column(String, nullable=False)
     account_manager_phone = Column(String, nullable=False)
     account_manager_email = Column(String, nullable=False)
     smart_account = Column(String, default="")
     virtual_account = Column(String, default="")
+    form_id = Column(Integer, ForeignKey("form.id", ondelete="CASCADE"))
     form = relationship("Form", back_populates="cisco")
 
 
 class Vendor(Base):
 
     __tablename__ = "vendor"
-    id = Column(Integer, index=True, primary_key=True,
-                unique=True, nullable=False)
+    id = Column(
+        Integer, index=True, primary_key=True, unique=True, nullable=False
+    )
+    vendor_deal_id = Column(String, nullable=False)
     vendor_name = Column(String, nullable=False)
     account_manager_name = Column(String, nullable=False)
     account_manager_phone = Column(String, nullable=False)
     account_manager_email = Column(String, nullable=False)
+    form_id = Column(Integer, ForeignKey("form.id", ondelete="CASCADE"))
     form = relationship("Form", back_populates="vendor")
 
 
@@ -103,4 +109,5 @@ class Software(Base):
     subscription_id = Column(String, nullable=True)
     start_date = Column(String, nullable=False)
     type_of_purchase = Column(String, nullable=True)
+    form_id = Column(Integer, ForeignKey("form.id", ondelete="CASCADE"))
     form = relationship("Form", back_populates="software")

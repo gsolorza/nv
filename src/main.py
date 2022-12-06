@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from forms import LoginForm
+from forms import LoginForm, Vendor
 from database.db import SessionLocal
 import secrets
 
@@ -19,15 +19,18 @@ def db():
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    form = LoginForm()
-    if form.validate_on_submit():
-        if form.password.data == "admin":
+    loginForm = LoginForm()
+    vendor = Vendor()
+    if loginForm.validate_on_submit() and vendor.validate_on_submit():
+        print("asdasdasdd")
+        print(vendor.vendor_name.data)
+        if loginForm.password.data == "admin":
             print("Authenticated successfully")
             return redirect(url_for("test"))
         else:
             print("Invalid credentials")
             return redirect(url_for("home"))
-    return render_template("forms/index.html", title="Notas de Venta", form=form)
+    return render_template("forms/index.html", title="Notas de Venta", loginForm=loginForm, vendor=vendor)
 
 
 @app.route("/test", methods=["GET"])

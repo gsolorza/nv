@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import Union
 from db import SessionLocal, engine
-from pprint import pprint
 from schema import MessageType
 import models
 import schema
@@ -45,9 +44,18 @@ def get_form(column: str, value: Union[str, int], db: Session):
 
 def display_partial_form(search: schema.Query, db: Session):
     query = (
-        db.query(models.Form.id, models.Form.vendor_deal_id, models.Form.quote_direct,
-                 models.Form.sales_force_id, models.Form.purchase_order, models.Form.date, models.Form.status)
-        .filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+        db.query(
+            models.Form.id,
+            models.Form.quote_direct,
+            models.Form.sales_force_id,
+            models.Form.purchase_order,
+            models.Form.date,
+            models.Form.status,
+        )
+        .filter(
+            models.Form.__getattribute__(
+                models.Form, search.column) == search.value
+        )
         .first()
     )
     if query:
@@ -57,11 +65,24 @@ def display_partial_form(search: schema.Query, db: Session):
 
 
 def display_full_form(search: schema.Query, db: Session):
-    query = (db.query(models.Form, models.Vendor, models.Cisco, models.Software, models.Customer)
-             .select_from(models.Form).filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
-             .join(models.Vendor, models.Software, models.Cisco, models.Customer)
-             .all())
-    return query
+    optional_tables = [models.Cisco, models.Vendor, models.Software]
+    message = schema.Message()
+    query = (db.query(
+        models.Form, models.Customer)
+        .select_from(models.Form).filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+        .join(models.Customer)
+        .all()
+    )
+    for dict in query:
+        for table in dict:
+            message.add(MessageType.data, {table.__tablename__: table})
+
+    for table in optional_tables:
+        query = db.query(table).filter(
+            table.form_id == search.value).all()
+        if query:
+            message.add(MessageType.data, {table.__tablename__: query})
+    return message
 
 
 def get_customer(column: str, value: Union[str, int], db: Session):
@@ -80,7 +101,10 @@ def get_vendor(search: schema.Query, db: Session):
     if search.vendor_cisco:
         query = (
             db.query(models.Cisco)
-            .filter(models.Cisco.__getattribute__(models.Cisco, search.column) == search.value)
+            .filter(
+                models.Cisco.__getattribute__(models.Cisco, search.column)
+                == search.value
+            )
             .first()
         )
         if query:
@@ -89,7 +113,10 @@ def get_vendor(search: schema.Query, db: Session):
     else:
         query = (
             db.query(models.Vendor)
-            .filter(models.Vendor.__getattribute__(models.Vendor, search.column) == search.value)
+            .filter(
+                models.Vendor.__getattribute__(models.Vendor, search.column)
+                == search.value
+            )
             .first()
         )
         if query:
@@ -110,11 +137,11 @@ def get_user_role(roleId: int, db: Session):
     return users
 
 
-def update_form_sale_note(value: schema.SaleNote, db: Session):
+def update_form(data: schema.UpdateForm, db: Session):
     query = (
         db.query(models.Form)
-        .filter(models.Form.id == value.id)
-        .update({models.Form.sale_note: value.sale_note}, synchronize_session=False)
+        .filter(models.Form.id == data.id)
+        .update({data.column: data.value}, synchronize_session=False)
     )
     db.commit()
     return query
@@ -177,15 +204,11 @@ def create_form(form: schema.CreateForm, db: Session):
         try:
             new_form = models.Form(
                 sales_force_id=form.sales_force_id,
-                vendor_deal_id=form.vendor_deal_id,
                 purchase_order=form.purchase_order,
                 quote_direct=form.quote_direct,
                 client_manager_name=form.client_manager_name,
                 pre_sales_name=form.pre_sales_name,
                 customer_id=form.customer_id,
-                cisco_id=form.cisco_id,
-                vendor_id=form.vendor_id,
-                software_id=form.software_id,
                 comments=form.comments,
                 status=form.status,
                 date=form.date,
@@ -232,10 +255,12 @@ def create_vendor(vendor: Union[schema.CreateVendor, schema.CreateCisco], db: Se
     if isinstance(vendor, schema.CreateVendor):
         try:
             new_vendor = models.Vendor(
+                vendor_deal_id=vendor.vendor_deal_id,
                 vendor_name=vendor.vendor_name,
                 account_manager_name=vendor.account_manager_name,
                 account_manager_phone=vendor.account_manager_phone,
-                account_manager_email=vendor.account_manager_email
+                account_manager_email=vendor.account_manager_email,
+                form_id=vendor.form_id,
             )
             db.add(new_vendor)
             db.commit()
@@ -246,11 +271,13 @@ def create_vendor(vendor: Union[schema.CreateVendor, schema.CreateCisco], db: Se
     else:
         try:
             new_vendor = models.Cisco(
+                vendor_deal_id=vendor.vendor_deal_id,
                 account_manager_name=vendor.account_manager_name,
                 account_manager_phone=vendor.account_manager_phone,
                 account_manager_email=vendor.account_manager_email,
                 smart_account=vendor.smart_account,
                 virtual_account=vendor.virtual_account,
+                form_id=vendor.form_id,
             )
             db.add(new_vendor)
             db.commit()
@@ -270,12 +297,40 @@ def create_software(software: schema.CreateSoftware, db: Session):
             customer_contact=software.customer_contact,
             subscription_id=software.subscription_id,
             start_date=software.start_date,
-            type_of_purchase=software.type_of_purchase
+            type_of_purchase=software.type_of_purchase,
+            form_id=software.form_id,
         )
         db.add(new_software)
-        print(db.commit())
+        db.commit()
         db.refresh(new_software)
         message.add(MessageType.softwareCreated, new_software)
     except Exception as error:
         message.add(MessageType.generalError, error)
+    return message
+
+
+def delete_form(id: schema.Id, db: Session):
+    optional_tables = [models.Cisco, models.Vendor, models.Software]
+    message = schema.Message()
+
+    for table in optional_tables:
+        queryList = (
+            db.query(table)
+            .filter(table.form_id == id.id)
+            .all()
+        )
+        for query in queryList:
+            db.delete(query)
+
+    form = (
+        db.query(models.Form)
+        .filter(models.Form.id == id.id)
+        .first()
+    )
+    if form:
+        db.delete(form)
+        message.add(MessageType.deletedObject, form)
+
+    db.commit()
+
     return message
