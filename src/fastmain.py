@@ -39,7 +39,7 @@ async def get_form(query: schema.Query, db: Session = Depends(getDb)):
     return response
 
 
-@app.get("/display_partial_form", response_model=schema.DisplayForm)
+@app.get("/display_partial_form", response_model=list[schema.DisplayForm])
 async def display_partial_form(query: schema.Query, db: Session = Depends(getDb)):
     response = crud.display_partial_form(query, db)
     return response
@@ -69,13 +69,13 @@ async def get_vendor(query: schema.Query, db: Session = Depends(getDb)):
     return response
 
 
-@app.post("/create_user", response_model=list[schema.Message])
+@app.post("/create_user", response_model=schema.Message)
 async def create_user(users: list[schema.CreateUser], db: Session = Depends(getDb)):
     response = crud.create_user(users, db)
     return response
 
 
-@app.post("/create_role", response_model=list[schema.Message])
+@app.post("/create_role", response_model=schema.Message)
 async def create_role(roles: list[schema.CreateRole], db: Session = Depends(getDb)):
     response = crud.create_role(roles, db)
     return response

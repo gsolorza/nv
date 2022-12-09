@@ -1,9 +1,10 @@
 from db import Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Boolean, Date
 from sqlalchemy.orm import relationship
+from flask_login import UserMixin
 
 
-class User(Base):
+class User(Base, UserMixin):
 
     __tablename__ = "user"
 
@@ -11,7 +12,7 @@ class User(Base):
     name = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
-    active = Column(Boolean, nullable=False, default=True)
+    is_active = Column(Boolean, nullable=False, default=True)
     role_id = Column(Integer, ForeignKey("role.id"),
                      nullable=False)
     role = relationship("Role", back_populates="user")

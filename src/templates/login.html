@@ -1,0 +1,58 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="row">
+  <div class="col-md-4"></div>
+
+  <div class="col-md-4">
+    <form method="POST" action="" class="content-section">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="text-center">LOGIN</legend>
+        <div class="form-group">
+          {{ form.email.label(class="form-control-label") }} {% if
+          form.email.errors %} {{ form.email(class="form-control form-control-md
+          is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.email.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.email(class="form-control form-control-md") }} {%
+          endif %}
+        </div>
+        <div class="form-group">
+          {{ form.password.label(class="form-control-label") }} {% if
+          form.password.errors %} {{ form.password(class="form-control
+          form-control-md is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.password.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.password(class="form-control form-control-md") }}
+          {% endif %}
+        </div>
+        <div class="form-check pl-0">
+          {{form.remember(class="form-chechk-input")}}
+          {{form.remember.label(class="form-check-label ")}}
+        </div>
+      </fieldset>
+      <div class="form-group">
+        {{ form.submit(class="btn btn-md btn-primary btn-block") }}
+      </div>
+      <small class="text-muted">
+        <a href="#">Forgot password?</a>
+      </small>
+    </form>
+  </div>
+  <div class="col-md-4"></div>
+</div>
+<div class="row">
+  <div class="col-md-4"></div>
+
+  <div class="border-top pt-3 col-md-4">
+    <small class="text-muted"> </small>
+    <div class="col-md-4"></div>
+  </div>
+</div>
+
+{% endblock content %}

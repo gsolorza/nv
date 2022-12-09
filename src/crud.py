@@ -1,23 +1,18 @@
 from sqlalchemy.orm import Session
 from typing import Union
-from db import SessionLocal, engine
 from schema import MessageType
 import models
 import schema
-
-
-db = SessionLocal()
-models.Base.metadata.create_all(bind=engine)
+from main import bcrypt
 
 
 def get_user(column: str, value: Union[str, int], db: Session):
     query = (
-        db.query(models.User.id, models.User.username)
+        db.query(models.User)
         .filter(models.User.__getattribute__(models.User, column) == value)
         .first()
     )
-    user = schema.UserQuery.parse_obj(query)
-    return user
+    return query
 
 
 def get_role(column: str, value: Union[str, int], db: Session):
@@ -26,8 +21,10 @@ def get_role(column: str, value: Union[str, int], db: Session):
         .filter(models.Role.__getattribute__(models.Role, column) == value)
         .first()
     )
-    role = schema.RoleQuery.parse_obj(query)
-    return role
+    if query:
+        role = schema.RoleQuery.parse_obj(query)
+        return role
+    return query
 
 
 def get_form(column: str, value: Union[str, int], db: Session):
@@ -43,24 +40,32 @@ def get_form(column: str, value: Union[str, int], db: Session):
 
 
 def display_partial_form(search: schema.Query, db: Session):
-    query = (
-        db.query(
-            models.Form.id,
-            models.Form.quote_direct,
-            models.Form.sales_force_id,
-            models.Form.purchase_order,
-            models.Form.date,
-            models.Form.status,
+    if search.value and search.column:
+        query = (
+            db.query(
+                models.Form.id,
+                models.Form.quote_direct,
+                models.Form.sales_force_id,
+                models.Form.purchase_order,
+                models.Form.date,
+                models.Form.status,
+                models.Form.sale_note
+            ).filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+            .all()
         )
-        .filter(
-            models.Form.__getattribute__(
-                models.Form, search.column) == search.value
+    else:
+        query = (
+            db.query(
+                models.Form.id,
+                models.Form.quote_direct,
+                models.Form.sales_force_id,
+                models.Form.purchase_order,
+                models.Form.date,
+                models.Form.status,
+                models.Form.sale_note
+            )
+            .all()
         )
-        .first()
-    )
-    if query:
-        form = schema.DisplayForm.parse_obj(query)
-        return form
     return query
 
 
@@ -127,7 +132,7 @@ def get_vendor(search: schema.Query, db: Session):
 
 def get_user_role(roleId: int, db: Session):
     query = (
-        db.query(models.User.id, models.User.username)
+        db.query(models.User.id, models.User.name)
         .select_from(models.User)
         .join(models.Role)
         .filter(models.Role.id == roleId)
@@ -150,15 +155,17 @@ def update_form(data: schema.UpdateForm, db: Session):
 def create_user(users: list[schema.CreateUser], db: Session):
     message = schema.Message()
     for user in users:
-        query = get_user("username", user.name, db)
+        query = get_user("name", user.name, db)
         if query:
             message.add(MessageType.alreadyExist, query)
         elif get_role("id", user.role_id, db):
             try:
+                hash_password = bcrypt.generate_password_hash(
+                    user.password).decode("utf-8")
                 new_user = models.User(
                     name=user.name,
                     email=user.email,
-                    password=user.password,
+                    password=hash_password,
                     role_id=user.role_id,
                 )
                 db.add(new_user)
@@ -183,6 +190,7 @@ def create_role(roles: list[schema.CreateRole], db: Session):
             message.add(MessageType.alreadyExist, query)
         else:
             try:
+                print("this")
                 new_role = models.Role(
                     role_name=role.role_name,
                 )

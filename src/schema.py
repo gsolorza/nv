@@ -32,9 +32,12 @@ class Status(Enum):
 
 
 class Query(BaseModel):
-    column: str
-    value: Union[str, int]
+    column: Union[str, None] = None
+    value: Union[str, int, None] = None
     vendor_cisco: bool = True
+
+    class Config:
+        orm_mode = True
 
 
 class Id(BaseModel):
@@ -43,7 +46,7 @@ class Id(BaseModel):
 
 class UserQuery(BaseModel):
     id: int
-    username: str
+    name: str
 
 
 class RoleQuery(BaseModel):
@@ -89,6 +92,7 @@ class DisplayForm(BaseModel):
     purchase_order: str
     date: datetime.date
     status: str
+    sale_note: Union[str, None]
 
 
 class UpdateForm(BaseModel):
