@@ -129,6 +129,7 @@ def form_update(form_id):
     query = schema.Query(column="id", value=form_id)
     form_data = crud.display_full_form(query, db())
     form = ChecklistFormSales()
+    print("Tu sabes")
     return redirect(url_for("home"))
 
 
