@@ -9,6 +9,7 @@ import secrets
 import schema
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
+from pprint import pprint
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -36,7 +37,7 @@ def load_user(user_id):
     return crud.get_user("id", user_id, db())
 
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 def login():
 
     form = LoginForm()
@@ -47,42 +48,43 @@ def login():
     if form.validate_on_submit():
         user = crud.get_user("email", form.email.data.lower(), db())
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            flash('You Have been logged In!', 'primary')
+            flash("You Have been logged In!", "primary")
             login_user(user, remember=form.remember.data)
             role = crud.get_role("id", user.role_id, db())
-            return render_template('home.html', role=role)
+            next_page = request.args.get("next")
+            return redirect(next_page) if next_page else render_template('home.html', role=role)
 
         else:
-            flash('Invalid Credentials', 'danger')
+            flash("Invalid Credentials", "danger")
 
-    return render_template('login.html', title='login', form=form)
+    return render_template("login.html", title="login", form=form)
 
 
-@app.route('/logout', methods=['GET'])
+@app.route("/logout", methods=["GET"])
 def logout():
     logout_user()
     return redirect(url_for("login"))
 
 
-@app.route('/home')
+@app.route("/home")
 @login_required
 def home():
     role = crud.get_role("id", current_user.role_id, db())  # type: ignore
-    return render_template('home.html', role=role)
+    return render_template("home.html", role=role)
 
 
-@app.route('/initial_form', methods=['GET', 'POST'])
+@app.route("/initial_form", methods=["GET", "POST"])
 @login_required
 def initial():
     form = InitialFormSales()
     if form.validate_on_submit():
         flash(
-            f'initial information, added correctly {form.sales_force_id.data}!', 'primary')
-        return redirect(url_for('home'))
+            f"initial information, added correctly {form.sales_force_id.data}!", "primary")
+        return redirect(url_for("home"))
     return render_template("initial_form.html", title="initial Information", form=form)
 
 
-@app.route('/checklist', methods=['GET', 'POST'])
+@app.route('/checklist', methods=["GET", "POST"])
 @login_required
 def checklist():
     form = ChecklistFormSales()
@@ -97,7 +99,7 @@ def checklist():
     return render_template('checklist.html', form=form, formvendor=formvendor, formsw=formsw, form_cisco_vendor=form_cisco_vendor)
 
 
-@app.route('/mychecklist', methods=['GET', 'POST'])
+@app.route('/mychecklist', methods=["GET", "POST"])
 @login_required
 def mychecklist():
     query = schema.Query()
@@ -109,7 +111,7 @@ def mychecklist():
     return render_template("mychecklist.html", title="Histoy Checklist", form_history=form_history)
 
 
-@app.route('/history', methods=['GET', 'POST'])
+@app.route('/history', methods=["GET", "POST"])
 @login_required
 def history():
 
@@ -120,6 +122,14 @@ def history():
 
     form_history = crud.display_partial_form(query, db())
     return render_template("history_checklist.html", title="Histoy Checklist", form_history=form_history)
+
+
+@app.route("/form/<int:form_id>", methods=["GET", "POST"])
+def form_update(form_id):
+    query = schema.Query(column="id", value=form_id)
+    form_data = crud.display_full_form(query, db())
+    form = ChecklistFormSales()
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

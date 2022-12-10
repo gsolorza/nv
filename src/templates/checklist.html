@@ -1,571 +1,645 @@
 {% extends 'layout.html'%}
-     {% block content%}
+{% block content%}
 
 
 <!--seccion INFORMACION INICIAL-->
 
-        <div class="col-md-12">
-            <form method="POST" action="{{ url_for('mychecklist') }}" class="content-section">
-                    {{ form.hidden_tag() }}
-                <div class="row shadow-lg p-3 mb-5 bg-body rounded">
-                    <legend class="text-center"><strong class="display-6 colorh2">Purchase Order Processing Checklist -  Chile </strong></legend><br><hr>
-                    
-                    <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.sales_force_id.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                    {%if form.sales_force_id.errors%}
-                            {{form.sales_force_id(class="form-control form-control-md validated ")}}
-                             {% for error in form.sales_force_id.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                                      </div>
-                    {% else %}
-                                {{ form.sales_force_id(class="form-control form-control-md") }}
-                    {% endif %}
-                    </div>
+<div class="col-md-12">
+    <form method="POST" action="{{ url_for('mychecklist') }}" class="content-section">
+        {{ form.hidden_tag() }}
+        <div class="row shadow-sm p-3 mb-5 bg-body rounded">
+            <legend class="text-center"><strong class="display-6 colorh2">Purchase Order Processing Checklist - Chile
+                </strong></legend><br>
+            <hr>
 
-                    <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.purchase_order.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.purchase_order(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>   
-                    <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.date.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.date(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>  
-                    <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.quote_direct.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.quote_direct(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>
-                    <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.client_manager_name.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.client_manager_name(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>
-                    <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.pre_sales_name.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.pre_sales_name(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>  
-                                                           
+            <div class="col-md-2 ">
+                <div class="form-group  needs-validation" novalidate>
+                    <strong>{{form.sales_force_id.label(class="form-control-label", for="validationCustom01")}}
+                    </strong>
+                </div>
+            </div>
+            <div class="col-md-2 ">
+                {%if form.sales_force_id.errors%}
+                {{form.sales_force_id(class="form-control form-control-md validated ")}}
+                {% for error in form.sales_force_id.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.sales_force_id(class="form-control form-control-md") }}
+            {% endif %}
         </div>
-                
 
-    <div class="col-md-12 shadow-sm p-3 mb-5 bg-body rounded ">
-                <div class="row bg-primary p-2 text-dark bg-opacity-10">
-                    <legend class="text-center"><strong><i class="fs-6">Customer Information</i></strong></legend>
-                    
-                    <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.customer_name.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.customer_name(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>
-                     <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.customer_rut.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.customer_rut(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>
-                     <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.customer_address.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.customer_address(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>  
-                        <div class="col-md-2 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.customer_contact_name.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.customer_contact_name(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>                 
-
-                    <div class="col-md-2" >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.customer_contact_phone.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-                            {{form.customer_contact_phone(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>   
-                    <div class="col-md-2" >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.customer_contact_email.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-2 " >
-
-                    
-                            {{form.customer_contact_email(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>  
-                   
-                </div>
-
-                <div class="row bg-primary p-2 text-dark bg-opacity-10  ">
-                    <legend class="text-center"><strong><i class="fs-6">Dispatch Customer Information</i></strong></legend>
-                    
-                    <div class="col-md-3 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.dispatch_address.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-3 " >
-                            {{form.dispatch_address(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>
-                     <div class="col-md-3 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.dispatch_receiver_name.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-3 " >
-                            {{form.dispatch_receiver_name(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>
-                     <div class="col-md-3 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.dispatch_receiver_phone.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-3 " >
-                            {{form.dispatch_receiver_phone(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>  
-                    
-                     <div class="col-md-3 " >
-                        <div class="form-group  needs-validation" novalidate >
-                            {{form.dispatch_receiver_email.label(class="form-control-label", for="validationCustom01")}}
-                        </div>
-                    </div>
-                    <div class="col-md-3 " >
-                            {{form.dispatch_receiver_email(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>  
-                                      
+        <div class="col-md-2 ">
+            <div class="form-group  needs-validation" novalidate>
+                <strong>{{form.purchase_order.label(class="form-control-label", for="validationCustom01")}} </strong>
             </div>
- </div>
- <!--SECCION CISCO-->
- {% if form.cisco_include.data==true%}
- <section id="cisco_vendor", name="seccion-prueba", class="col-md-12">
-    <div class="row shadow-lg p-3 mb-5 bg-body rounded" id="form_cisco_vendor">
-        <legend class="text-center"><strong>CISCO VENDOR INFORMATION </strong></legend><br><hr>
-        
-        <div id="vendor_deal_id", class="col-md-4 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{form.vendor_deal_id.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 " >
-                    {{form.vendor_deal_id(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
+        </div>
+        <div class="col-md-2 ">
+            {{form.purchase_order(class="form-control form-control-md validated " , id='validationcustome01')}}
+            <div class="invalid-feedback">
+                COMPLETE THIS FIELD!!!
             </div>
         </div>
 
-        <div id="cisco_account_manager_name" , class="col-md-4 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{form_cisco_vendor.account_manager_name.label(class="form-control-label", for="validationCustom01")}}
-                </div>
+        <div class="col-md-2 ">
+            <div class="form-group  needs-validation" novalidate>
+                <strong> {{form.quote_direct.label(class="form-control-label", for="validationCustom01")}}</strong>
             </div>
-            <div class="col-md-6 " >
-                    {{form_cisco_vendor.account_manager_name(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>   
         </div>
-        <div id="cisco_account_manager_phone" , class="col-md-4 row ">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{form_cisco_vendor.account_manager_phone.label(class="form-control-label", for="validationCustom01")}}
+        <div class="col-md-2 ">
+            {{form.quote_direct(class="form-control form-control-md validated " , id='validationcustome01')}}
+            <div class="invalid-feedback">
+                COMPLETE THIS FIELD!!!
+            </div>
+        </div>
+        <div class="col-md-2 ">
+            <div class="form-group  needs-validation" novalidate>
+                <strong>{{form.client_manager_name.label(class="form-control-label", for="validationCustom01")}}
+                </strong>
+            </div>
+        </div>
+        <div class="col-md-2 ">
+            <p>{{current_user.name }}</p>
+
+            <div class="invalid-feedback">
+                COMPLETE THIS FIELD!!!
+            </div>
+        </div>
+        <div class="col-md-2 ">
+            <div class="form-group  needs-validation" novalidate>
+                <strong>{{form.pre_sales_name.label(class="form-control-label", for="validationCustom01")}} </strong>
+            </div>
+        </div>
+        <div class="col-md-2 ">
+            <div class="btn-group">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown"
+                        aria-expanded="false">
+                        Choose
+                    </button>
+                    <ul class="dropdown-menu mb-3em">
+                        <li><a class="dropdown-item " href="#">{{current_user.name}}</a></li>
+
+
+                    </ul>
+                </div>
+                <br>
+                <div class="invalid-feedback">
+                    COMPLETE THIS FIELD!!!
                 </div>
             </div>
-            <div class="col-md-6 " >
-                    {{form_cisco_vendor.account_manager_phone(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div> 
+
         </div>
 
-        <div id="cisco_account_manager_email" , class="col-md-4 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{form_cisco_vendor.account_manager_email.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6" >
-                    {{form_cisco_vendor.account_manager_email(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>
-        </div>
-        <div id="cisco_smart_account" , class="col-md-4 row ">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{form_cisco_vendor.smart_account.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 " >
-                    {{form_cisco_vendor.smart_account(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>
-        </div>
 
-        <div id="cisco_virtual_account" , class="col-md-4 row ">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{form_cisco_vendor.virtual_account.label(class="form-control-label", for="validationCustom01")}}
+        <div class="col-md-12 shadow-sm p-3 mb-5 bg-body rounded ">
+            <div class="row bg-primary p-2 text-dark bg-opacity-10">
+                <legend class="text-center"><strong><i class="fs-6">Customer Information</i></strong></legend>
+
+                <div class="col-md-2 ">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.customer_name.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
                 </div>
+                <div class="col-md-2 ">
+                    {{form.customer_name(class="form-control form-control-md validated " , id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.customer_rut.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    {{form.customer_rut(class="form-control form-control-md validated " , id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.customer_address.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    {{form.customer_address(class="form-control form-control-md validated " ,
+                    id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.customer_contact_name.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    {{form.customer_contact_name(class="form-control form-control-md validated " ,
+                    id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.customer_contact_phone.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    {{form.customer_contact_phone(class="form-control form-control-md validated " ,
+                    id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.customer_contact_email.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+
+
+                    {{form.customer_contact_email(class="form-control form-control-md validated " ,
+                    id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+
             </div>
-            <div class="col-md-6 " >
-                    {{form_cisco_vendor.virtual_account(class="form-control form-control-md validated " , id='validationcustome01')}}
+
+            <div class="row bg-primary p-2 text-dark bg-opacity-10  ">
+                <legend class="text-center"><strong><i class="fs-6">Dispatch Customer Information</i></strong></legend>
+
+                <div class="col-md-3 ">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.dispatch_address.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-3 ">
+                    {{form.dispatch_address(class="form-control form-control-md validated " ,
+                    id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+                <div class="col-md-3 ">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.dispatch_receiver_name.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-3 ">
+                    {{form.dispatch_receiver_name(class="form-control form-control-md validated " ,
+                    id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+                <div class="col-md-3 ">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.dispatch_receiver_phone.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-3 ">
+                    {{form.dispatch_receiver_phone(class="form-control form-control-md validated " ,
+                    id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+
+                <div class="col-md-3 ">
+                    <div class="form-group  needs-validation" novalidate>
+                        {{form.dispatch_receiver_email.label(class="form-control-label", for="validationCustom01")}}
+                    </div>
+                </div>
+                <div class="col-md-3 ">
+                    {{form.dispatch_receiver_email(class="form-control form-control-md validated " ,
+                    id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--SECCION CISCO-->
+        {% if form.cisco_include.data==true%}
+        <section id="cisco_vendor" , name="seccion-prueba" , class="col-md-12">
+            <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="form_cisco_vendor">
+                <legend class="text-center"><strong>CISCO VENDOR INFORMATION </strong></legend><br>
+                <hr>
+
+                <div id="vendor_deal_id" , class="col-md-4 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{form.vendor_deal_id.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{form.vendor_deal_id(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
                         <div class="invalid-feedback">
                             COMPLETE THIS FIELD!!!
                         </div>
+                    </div>
+                </div>
+
+                <div id="cisco_account_manager_name" , class="col-md-4 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{form_cisco_vendor.account_manager_name.label(class="form-control-label",
+                            for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{form_cisco_vendor.account_manager_name(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+                <div id="cisco_account_manager_phone" , class="col-md-4 row ">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{form_cisco_vendor.account_manager_phone.label(class="form-control-label",
+                            for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{form_cisco_vendor.account_manager_phone(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+                <div id="cisco_account_manager_email" , class="col-md-4 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{form_cisco_vendor.account_manager_email.label(class="form-control-label",
+                            for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{form_cisco_vendor.account_manager_email(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+                <div id="cisco_smart_account" , class="col-md-4 row ">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{form_cisco_vendor.smart_account.label(class="form-control-label",
+                            for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{form_cisco_vendor.smart_account(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+                <div id="cisco_virtual_account" , class="col-md-4 row ">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{form_cisco_vendor.virtual_account.label(class="form-control-label",
+                            for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{form_cisco_vendor.virtual_account(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button id="btnciscovendor" , class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add a new
+                        Vendor</button>
+                </div>
+            </div>
+            {% endif %}
+        </section>
+
+
+        <!--SECCION VENDOR-->
+        {% if form.other_vendor_include.data==true%}
+        <section id="vendor" , name="seccion-prueba" , class="col-md-12">
+            <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="form_vendor">
+                <legend class="text-center"><strong>VENDOR INFORMATION </strong></legend><br>
+                <hr>
+
+                <div id="vendor_name" , class="col-md-4 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formvendor.vendor_name.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{formvendor.vendor_name(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+                <div id="vendor_did" , class="col-md-4 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formvendor.vendor_did.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{formvendor.vendor_did(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="vendor_account_manager_name" , class="col-md-4 row ">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formvendor.account_manager_name.label(class="form-control-label",
+                            for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{formvendor.account_manager_name(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+                <div id="vendor_account_manager_phone" , class="col-md-6 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formvendor.account_manager_phone.label(class="form-control-label",
+                            for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{formvendor.account_manager_phone(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+                <div id="vendor_account_manager_email" , class="col-md-6 row ">
+                    <div class="col-md-4">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formvendor.account_manager_email.label(class="form-control-label",
+                            for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-8 ">
+                        {{formvendor.account_manager_email(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button id="btnvendor" ,
+                        class="btn btn-md btn-outline-primary justify-content-md-center  col-md-3 mt-4">
+                        Add a new Vendor</button>
+                </div>
+            </div>
+            {%endif%}
+
+        </section>
+
+
+        <!--SECCION SOFTWARE-->
+        {% if form.sw_include.data==true%}
+        <section id="software" , name="seccion-prueba" , class="col-md-12">
+            <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="Form_Software">
+                <legend class="text-center"><strong>SOFTWARE INFORMATION </strong></legend><br>
+                <hr>
+
+                <div id="software_type" , class="col-md-4 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formsw.software_type.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{formsw.software_type(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+                <div id="duration_time" , class="col-md-4 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formsw.duration_time.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{formsw.duration_time(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+                <div id="customer_contact" , class="col-md-4 row ">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formsw.customer_contact.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{formsw.customer_contact(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+                <div id="subscription_id" , class="col-md-4 row">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formsw.subscription_id.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{formsw.subscription_id(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+                <div id="start_date" , class="col-md-4 row ">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formsw.start_date.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{formsw.start_date(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+
+                <div id="type_of_purchase" , class="col-md-4 row ">
+                    <div class="col-md-6 ">
+                        <div class="form-group  needs-validation" novalidate>
+                            {{formsw.type_of_purchase.label(class="form-control-label", for="validationCustom01")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        {{formsw.type_of_purchase(class="form-control form-control-md validated " ,
+                        id='validationcustome01')}}
+                        <div class="invalid-feedback">
+                            COMPLETE THIS FIELD!!!
+                        </div>
+                    </div>
+                </div>
+                <button id="btn" , class="btn btn-md btn-outline-primary col-md-3 mt-4"> Add a new software</button>
+                {% endif%}
+        </section>
+
+
+        <div class="col-md-12 shadow-sm p-3 mb-5 bg-body rounded ">
+            <div class="row bg-primary p-2 text-dark bg-opacity-10">
+                <legend class=""><i class="fs-6">Please add your Comments</i></legend>
+
+
+                <div class="col-md-12 ">
+                    {{form.comments(class="form-control form-control-md validated " , id='validationcustome01')}}
+                    <div class="invalid-feedback">
+                        COMPLETE THIS FIELD!!!
+                    </div>
+                </div>
+                <br>
+
+
+
+            </div>
+            <br>
+            <div class="btn-group mb-10">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown"
+                        aria-expanded="false">
+                        Assign to
+                    </button>
+                    <ul class="dropdown-menu mb-3em">
+                        <li><a class="dropdown-item " href="#">SALES</a></li>
+                        <li><a class="dropdown-item" href="#">PRE SALES </a></li>
+                        <li><a class="dropdown-item" href="#">INSIDE PRESALES</a></li>
+                        <li><a class="dropdown-item" href="#">P&L</a></li>
+
+                    </ul>
+                </div>
+                <br>
+                <br>
+
+
             </div>
         </div>
 
         <div class="row">
-        <button id="btnciscovendor", class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add a new Vendor</button>
-    </div>
-        </div>   
-        {% endif %}    
- </section>  
 
- 
- <!--SECCION VENDOR-->
- {% if form.other_vendor_include.data==true%}
- <section id="vendor", name="seccion-prueba", class="col-md-12">
-    <div class="row shadow-lg p-3 mb-5 bg-body rounded" id="form_vendor">
-        <legend class="text-center"><strong>VENDOR INFORMATION </strong></legend><br><hr>
-        
-        <div id="vendor_name" , class="col-md-4 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formvendor.vendor_name.label(class="form-control-label", for="validationCustom01")}}
-                </div>
+
+
+            <div class="form-group">
+
+                {{ form.submit(class="btn btn-md btn-primary ") }}
             </div>
-            <div class="col-md-6 " >
-                    {{formvendor.vendor_name(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>   
+
+
+
+            </fieldset>
         </div>
-        <div id="vendor_did", class="col-md-4 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formvendor.vendor_did.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 " >
-                    {{formvendor.vendor_did(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>
-        </div>
-
-       
-        <div id="vendor_account_manager_name" , class="col-md-4 row ">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formvendor.account_manager_name.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 " >
-                    {{formvendor.account_manager_name(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div> 
-        </div>
-
-        <div id="vendor_account_manager_phone" , class="col-md-6 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formvendor.account_manager_phone.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6" >
-                    {{formvendor.account_manager_phone(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>
-        </div>
-        <div id="vendor_account_manager_email" , class="col-md-6 row ">
-            <div class="col-md-4" >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formvendor.account_manager_email.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-8 " >
-                    {{formvendor.account_manager_email(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>
-        </div>
-
-        <div class="row">
-        <button id="btnvendor", class="btn btn-md btn-outline-primary justify-content-md-center  col-md-3 mt-4"> Add a new Vendor</button>
-    </div>
-        </div>
-    {%endif%}
-       
- </section>   
+        <script src="http://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
 
-<!--SECCION SOFTWARE-->
-{% if form.sw_include.data==true%}
-<section id="software", name="seccion-prueba", class="col-md-12">
-    <div class="row shadow-lg p-3 mb-5 bg-body rounded" id="Form_Software">
-        <legend class="text-center"><strong>SOFTWARE INFORMATION </strong></legend><br><hr>
-        
-        <div id="software_type", class="col-md-4 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formsw.software_type.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 " >
-                    {{formsw.software_type(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>
-        </div>
 
-        <div id="duration_time" , class="col-md-4 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formsw.duration_time.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 " >
-                    {{formsw.duration_time(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>   
-        </div>
-        <div id="customer_contact" , class="col-md-4 row ">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formsw.customer_contact.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 " >
-                    {{formsw.customer_contact(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div> 
-        </div>
-
-        <div id="subscription_id" , class="col-md-4 row">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formsw.subscription_id.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6" >
-                    {{formsw.subscription_id(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>
-        </div>
-        <div id="start_date" , class="col-md-4 row ">
-            <div class="col-md-6 " >
-                <div class="form-group  needs-validation" novalidate >
-                    {{formsw.start_date.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 " >
-                    {{formsw.start_date(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>
-        </div>
-
-        <div id="type_of_purchase" , class="col-md-4 row ">
-            <div class="col-md-6 ">
-                <div class="form-group  needs-validation" novalidate >
-                    {{formsw.type_of_purchase.label(class="form-control-label", for="validationCustom01")}}
-                </div>
-            </div>
-            <div class="col-md-6 ">
-                    {{formsw.type_of_purchase(class="form-control form-control-md validated " , id='validationcustome01')}}
-                        <div class="invalid-feedback">
-                            COMPLETE THIS FIELD!!!
-                        </div>
-            </div>     
-        </div>         
-         <button id="btn", class="btn btn-md btn-outline-primary col-md-3 mt-4"> Add a new software</button>
-  {% endif%}
-    </section>
-
-
-    <div class="col-md-12 shadow-sm p-3 mb-5 bg-body rounded ">
-                <div class="row bg-primary p-2 text-dark bg-opacity-10">
-                    <legend class=""><i class="fs-6">Please add your Comments</i></legend>
-                    
-                   
-                    <div class="col-md-12 " >
-                            {{form.comments(class="form-control form-control-md validated " , id='validationcustome01')}}
-                                <div class="invalid-feedback">
-                                    COMPLETE THIS FIELD!!!
-                                </div>
-                    </div>
-
-
-                </div>
-    </div>
-
-                <div class="form-group">
-                
-                    {{ form.submit(class="btn btn-md btn-primary ") }}
-                </div>
-             
-            
-                </fieldset> 
-                </div>
-  <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  
-            
-       
         <script>
 
             function changeAttribute(elements, formnId, buttonId) {
                 const hr = document.createElement("hr");
-                hr.className="mt-3";
+                hr.className = "mt-3";
                 let form = document.querySelector(formnId);
                 form.appendChild(hr);
                 let btn = document.querySelector(buttonId);
                 for (element of elements) {
                     let field = document.querySelector(element).cloneNode(true);
-                    var sectionLength =  document.querySelectorAll(element).length
+                    var sectionLength = document.querySelectorAll(element).length
                     if (field) {
-                        field.children[1].firstElementChild.setAttribute("name", element.replace("#", "")+sectionLength)
+                        field.children[1].firstElementChild.setAttribute("name", element.replace("#", "") + sectionLength)
                         field.children[1].firstElementChild.value = ""
                         form.appendChild(field)
-                }
-                form.appendChild(btn);
-                
-                
-                }
-        }
+                    }
+                    form.appendChild(btn);
 
-           $(function() {
-            $('#btn').on('click', function() {
-                let elementList = ["#type_of_purchase", "#software_type", "#duration_time", "#customer_contact", "#subscription_id", "#start_date"]
-                formId = "#Form_Software"
-                buttonId = "#btn"
-                changeAttribute(elementList, formId, buttonId)
-            
-            });
-        });
 
-        $(function() {
-            $('#btnvendor').on('click', function() {
-                let elementList = ["#vendor_name", "#vendor_did", "#vendor_account_manager_name", "#vendor_account_manager_phone", "#vendor_account_manager_email"]
-                formId = "#form_vendor"
-                buttonId = "#btnvendor"
-                changeAttribute(elementList, formId, buttonId)
-                form.appendChild(btnvendor);
-            
+                }
+            }
+
+            $(function () {
+                $('#btn').on('click', function () {
+                    let elementList = ["#type_of_purchase", "#software_type", "#duration_time", "#customer_contact", "#subscription_id", "#start_date"]
+                    formId = "#Form_Software"
+                    buttonId = "#btn"
+                    changeAttribute(elementList, formId, buttonId)
+
+                });
             });
-        });
-        $(function() {
-            $('#btnciscovendor').on('click', function() {
-                let elementList = [ "#vendor_deal_id", "#cisco_account_manager_name", "#cisco_account_manager_phone", "#cisco_account_manager_email", "#cisco_smart_account","#cisco_virtual_account"]
-                formId = "#form_cisco_vendor"
-                buttonId = "#btnciscovendor"
-                changeAttribute(elementList, formId, buttonId)
-                form.appendChild(btnciscovendor);
-            
+
+            $(function () {
+                $('#btnvendor').on('click', function () {
+                    let elementList = ["#vendor_name", "#vendor_did", "#vendor_account_manager_name", "#vendor_account_manager_phone", "#vendor_account_manager_email"]
+                    formId = "#form_vendor"
+                    buttonId = "#btnvendor"
+                    changeAttribute(elementList, formId, buttonId)
+                    form.appendChild(btnvendor);
+
+                });
             });
-        });
-        
+            $(function () {
+                $('#btnciscovendor').on('click', function () {
+                    let elementList = ["#vendor_deal_id", "#cisco_account_manager_name", "#cisco_account_manager_phone", "#cisco_account_manager_email", "#cisco_smart_account", "#cisco_virtual_account"]
+                    formId = "#form_cisco_vendor"
+                    buttonId = "#btnciscovendor"
+                    changeAttribute(elementList, formId, buttonId)
+                    form.appendChild(btnciscovendor);
+
+                });
+            });
+
 
         // $(function(){
         //     $('btnvendor').on('click',function(){

@@ -1,54 +1,61 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for post in posts %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted }}</small>
-            </div>
-            <h2><strong> <a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
-          </div>
-        </article>
+{% for post in posts %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="#">{{ post.author }}</a>
+      <small class="text-muted">{{ post.date_posted }}</small>
+    </div>
+    <h2><strong> <a class="article-title" href="#">{{ post.title }}</a></h2>
+    <p class="article-content">{{ post.content }}</p>
+  </div>
+</article>
 
-        
-    {% endfor %}
- <!-- Main jumbotron for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <div class="container">
-          <h1 class="display-3  .colorh2 ">Welcome !</h1>
-          <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-          {# <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p> #}
-        </div>
-      </div>
 
-      <div class="container colorh2">
-        <!-- Example row of columns -->
-        <div class="row">
-          {% if role.role_name == "Sales" %}
-            <div class="col-md-4">
-              <h2><strong>Create Checklist</strong></h2>
-              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. {{ current_user.email }}</p>
-              <p><a class="btn btn-secondary" href="{{ url_for('initial') }}" role="button">Create &raquo;</a></p>
-            </div>
-          {% endif %}
-          <div class="col-md-4">
-            <h2><strong> Checklist history</strong></h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-secondary" href="{{ url_for('history') }}" role="button">View details &raquo;</a></p>
-          </div>
-          <div class="col-md-4">
-            <h2><strong> My Checklist</strong></h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-secondary" href="{{ url_for('mychecklist') }}" role="button">View details &raquo;</a></p>
-          </div>
-        </div>
+{% endfor %}
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="container col-md-6">
+  <h1 class="display-6  .colorh2 ">Welcome {{current_user.name}} !</h1>
+  <strong>
+    <hr class="hrclass">
+    <br><br>
 
-        <hr>
+</div>
+</div>
 
-      </div> <!-- /container -->
+<div class="container colorh2">
+  <!-- Example row of columns -->
+  <div class="row">
+    {% if role.role_name == "Sales" %}
+    <div class="col-md-4">
+      <h2><strong>Create Checklist</strong></h2>
+      <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+        condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
+        sed odio dui. {{ current_user.email }}</p>
+      <p><a class="btn btn-secondary" href="{{ url_for('initial') }}" role="button">Create &raquo;</a></p>
+    </div>
+    {% endif %}
+    <div class="col-md-4">
+      <h2><strong> Checklist history</strong></h2>
+      <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+        condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
+        sed odio dui. </p>
+      <p><a class="btn btn-secondary" href="{{ url_for('history') }}" role="button">View details &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+      <h2><strong> My Checklist</strong></h2>
+      <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta
+        felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum
+        massa justo sit amet risus.</p>
+      <p><a class="btn btn-secondary" href="{{ url_for('mychecklist') }}" role="button">View details &raquo;</a></p>
+    </div>
+  </div>
 
-    </main>
+  <hr>
+
+</div> <!-- /container -->
+
+</main>
 
 {% endblock content %}

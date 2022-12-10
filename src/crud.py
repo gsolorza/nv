@@ -71,23 +71,26 @@ def display_partial_form(search: schema.Query, db: Session):
 
 def display_full_form(search: schema.Query, db: Session):
     optional_tables = [models.Cisco, models.Vendor, models.Software]
-    message = schema.Message()
-    query = (db.query(
-        models.Form, models.Customer)
-        .select_from(models.Form).filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
-        .join(models.Customer)
-        .all()
-    )
-    for dict in query:
-        for table in dict:
-            message.add(MessageType.data, {table.__tablename__: table})
+    data = {}
+    if search.column and search.value:
+        query = (db.query(
+            models.Form, models.Customer)
+            .select_from(models.Form).filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+            .join(models.Customer)
+            .all()
+        )
+        if query:
+            for item in query:
+                for table in item:
+                    data[table.__tablename__] = table
 
     for table in optional_tables:
         query = db.query(table).filter(
             table.form_id == search.value).all()
         if query:
-            message.add(MessageType.data, {table.__tablename__: query})
-    return message
+            data[table.__tablename__] = query
+
+    return data
 
 
 def get_customer(column: str, value: Union[str, int], db: Session):
