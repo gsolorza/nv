@@ -1,49 +1,60 @@
 {% extends 'layout.html'%}
 {%block content%}
+<div class="container col-md-6">
+  <h1 class="display-6  .colorh2 "> Checklist History !</h1>
+  <strong>
+    <hr class="hrclass">
+    <br><br>
 
-   <div class="jumbotron p-1 mt-1">
-        <div class="container">
-          <h1 class="display-3  .colorh2 "> Request History !</h1>
-          <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-         
 </div>
-      </div>
- <form method="POST" action="{{ url_for('history') }}" class="content-section">
+</div>
+<div class="">
 
-  <nav class="navbar navbar-expand-md ">
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search by Sales Force ID" aria-label="Search" name="sales_force_id">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
-    </div>
-  </nav>
-</header> 
-        <table class="table">
-          <thead class="table-light">
-            <th> # </th>
-            <th> Sales Force ID </th>
-            <th> Quote Direct </th>
-            <th> Purchase Order </th>
-            <th> Sale Note ID </th>
-            <th> Date </th>
-            <th> Status </th>
-          </thead>
-          {% if form_history %}
-            {% for form in form_history %}
-              {% if form.status == "Approved" %}
-              <tbody>
-                  <td>{{form.id}}</td>
-                  <td>{{form.sales_force_id}}</td>
-                  <td>{{form.quote_direct}}</td>
-                  <td>{{form.purchase_order}}</td>
-                  <td>{{form.sale_note}}</td>
-                  <td>{{form.date}}</td>
-                  <td>{{form.status}}</td>
-              </tbody>
-              {% endif %}
-            {% endfor %}
-            {% endif %}
-        </table>
+  <nav class="navbar navbar-expand-md  ">
+    <form class="container col-md-3 " role="search">
+      <input class="form-control me-2" type="search" placeholder="Search by Sales Force ID" aria-label="Search"
+        name="sales_force_id">
+      <button class="btn btn-outline-primary" type="submit">Search</button>
+    </form>
+</div>
+</div>
+</nav>
+</div>
+<form method="POST" action="{{ url_for('mychecklist') }}" class="container ">
 
-{%endblock content%}
+
+
+  <table class="table">
+
+    <thead class="table-primary">
+      <th> # </th>
+      <th> Sales Force ID </th>
+      <th> Quote Direct </th>
+      <th> Purchase Order </th>
+      <th> Sale Note ID </th>
+      <th> Date </th>
+      <th> Status </th>
+
+    </thead>
+    {% if form_history %}
+    {% for form in form_history %}
+    {% if form.status =="Approved" %}
+    <tbody>
+      <td class="colorh2">{{form.id}}</td>
+      <td>{{form.sales_force_id}}</td>
+      <td>{{form.quote_direct}}</td>
+      <td>{{form.purchase_order}}</td>
+      <td>{{form.sale_note}}</td>
+      <td>{{form.date}}</td>
+      <td class="text-success">{{form.status}}</td>
+    </tbody>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+  </table>
+  </header>
+
+
+
+
+  {%endblock content%}
