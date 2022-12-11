@@ -80,6 +80,9 @@ class CreateForm(BaseModel):
     sale_note: Union[str, None] = None
     date: datetime.date = datetime.date.today()
 
+    class Config:
+        orm_mode = True
+
 
 class Form(CreateForm):
     id: int
@@ -112,6 +115,9 @@ class CreateCustomer(BaseModel):
     dispatch_receiver_name: str
     dispatch_receiver_phone: str
     dispatch_receiver_email: str
+
+    class Config:
+        orm_mode = True
 
 
 class Customer(CreateCustomer):
@@ -163,6 +169,14 @@ class CreateSoftware(BaseModel):
 
 class Software(CreateSoftware):
     id: int
+
+
+class FullForm(BaseModel):
+    form: CreateForm
+    customer: CreateCustomer
+    vendor: Union[list[CreateVendor], None] = None
+    cisco: Union[list[CreateCisco], None] = None
+    software: Union[list[CreateSoftware], None] = None
 
 
 class Message(BaseModel):

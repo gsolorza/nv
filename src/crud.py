@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from forms import ChecklistFormSales, Vendor, Cisco_vendor, Software_Form
 from typing import Union
 from schema import MessageType
 import models
@@ -71,7 +72,7 @@ def display_partial_form(search: schema.Query, db: Session):
 
 def display_full_form(search: schema.Query, db: Session):
     optional_tables = [models.Cisco, models.Vendor, models.Software]
-    data = {}
+    result = {}
     if search.column and search.value:
         query = (db.query(
             models.Form, models.Customer)
@@ -82,14 +83,15 @@ def display_full_form(search: schema.Query, db: Session):
         if query:
             for item in query:
                 for table in item:
-                    data[table.__tablename__] = table
+                    result[table.__tablename__] = table
 
     for table in optional_tables:
         query = db.query(table).filter(
             table.form_id == search.value).all()
         if query:
-            data[table.__tablename__] = query
+            result[table.__tablename__] = query
 
+    data = schema.FullForm.parse_obj(result)
     return data
 
 
@@ -345,3 +347,64 @@ def delete_form(id: schema.Id, db: Session):
     db.commit()
 
     return message
+
+
+def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco_vendor, Software_Form], data: schema.FullForm):
+    if isinstance(form, ChecklistFormSales):
+        if data.form and data.customer:
+            form.sale_note.data = data.form.sale_note
+            form.sales_force_id.data = data.form.sales_force_id
+            form.purchase_order.data = data.form.purchase_order
+            form.quote_direct.data = data.form.quote_direct
+            form.client_manager_name.data = data.form.client_manager_name
+            form.pre_sales_name.data = data.form.pre_sales_name
+            form.customer_name.data = data.customer.customer_name
+            form.customer_rut.data = data.customer.customer_rut
+            form.customer_address.data = data.customer.customer_address
+            form.customer_contact_name.data = data.customer.customer_contact_name
+            form.customer_contact_phone.data = data.customer.customer_contact_phone
+            form.customer_contact_email.data = data.customer.customer_contact_email
+            form.dispatch_address.data = data.customer.dispatch_address
+            form.dispatch_receiver_name.data = data.customer.dispatch_receiver_name
+            form.dispatch_receiver_phone.data = data.customer.dispatch_receiver_phone
+            form.dispatch_receiver_email.data = data.customer.dispatch_receiver_email
+            form.comments.data = data.form.comments
+            return form
+    elif isinstance(form, Vendor):
+        if data.vendor:
+            vendor_list: list[Vendor] = []
+            for vendor in data.vendor:
+                form_vendor = Vendor()
+                form_vendor.vendor_deal_id.data = vendor.vendor_deal_id
+                form_vendor.vendor_name.data = vendor.vendor_name
+                form_vendor.account_manager_name.data = vendor.account_manager_name
+                form_vendor.account_manager_phone.data = vendor.account_manager_phone
+                form_vendor.account_manager_email.data = vendor.account_manager_email
+                vendor_list.append(form_vendor)
+            return vendor_list
+    elif isinstance(form, Cisco_vendor):
+        if data.cisco:
+            cisco_list: list[Cisco_vendor] = []
+            for cisco in data.cisco:
+                form_cisco = Cisco_vendor()
+                form_cisco.vendor_deal_id.data = cisco.vendor_deal_id
+                form_cisco.account_manager_name.data = cisco.account_manager_name
+                form_cisco.account_manager_phone.data = cisco.account_manager_phone
+                form_cisco.account_manager_email.data = cisco.account_manager_email
+                form_cisco.smart_account.data = cisco.smart_account
+                form_cisco.virtual_account.data = cisco.virtual_account
+                cisco_list.append(form_cisco)
+            return cisco_list
+    elif isinstance(form, Software_Form):
+        if data.software:
+            software_list: list[Software_Form] = []
+            for software in data.software:
+                form_software = Software_Form()
+                form_software.software_type.data = software.software_type
+                form_software.duration_time.data = software.duration_time
+                form_software.customer_contact.data = software.customer_contact
+                form_software.subscription_id.data = software.subscription_id
+                form_software.start_date.data = software.start_date
+                form_software.type_of_purchase.data = software.type_of_purchase
+                software_list.append(form_software)
+            return software_list

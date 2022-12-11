@@ -128,7 +128,10 @@ def history():
 def form_update(form_id):
     query = schema.Query(column="id", value=form_id)
     form_data = crud.display_full_form(query, db())
-    form = ChecklistFormSales()
+    form = crud.encap_form(ChecklistFormSales(), form_data)
+    form_vendor = crud.encap_form(Vendor(), form_data)
+    form_cisco = crud.encap_form(Cisco_vendor(), form_data)
+    form_software = crud.encap_form(Software_Form(), form_data)
     return redirect(url_for("home"))
 
 

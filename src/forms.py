@@ -42,12 +42,10 @@ class InitialFormSales(FlaskForm):
 
 
 class ChecklistFormSales(FlaskForm):
-    sale_note_id = StringField("Sale Note ID", validators=[
-                               Length(min=5, max=30)], render_kw={"readonly": False})
+    sale_note = StringField("Sale Note ID", validators=[
+        Length(min=5, max=30)], render_kw={"readonly": False})
     sales_force_id = StringField("Sales Force ID", validators=[
                                  DataRequired(), Length(min=5, max=30)])
-    vendor_deal_id = StringField(
-        "Deal ID", [Length(min=5, max=30)], render_kw={"readonly": False})
     purchase_order = StringField("Purchase Order", validators=[
                                  DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     quote_direct = StringField("Quote Direct", validators=[
@@ -77,9 +75,6 @@ class ChecklistFormSales(FlaskForm):
                                           DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     dispatch_receiver_email = EmailField("Dispatch Receiver Email", validators=[
                                          DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    sw_include = BooleanField("Software", default='checked')
-    other_vendor_include = BooleanField("Other Vendor", default='checked')
-    cisco_include = BooleanField(" Cisco Vendor", default='checked')
 
     comments = TextAreaField("Comments", validators=[DataRequired(), Length(
         min=5, max=2000)], render_kw={"placeholder": "Enter your comments"})
@@ -88,10 +83,10 @@ class ChecklistFormSales(FlaskForm):
 
 
 class Vendor(FlaskForm):
+    vendor_deal_id = StringField(
+        "Deal ID", [Length(min=5, max=30)], render_kw={"readonly": False})
     vendor_name = StringField("Vendor Name", validators=[
                               DataRequired(), Length(min=5, max=10)])
-    vendor_did = StringField("Deal ID/Oportunity ID/ Other ID",
-                             validators=[DataRequired(), Length(min=5, max=10)])
     account_manager_name = StringField("Account Manager Name", validators=[
                                        DataRequired(), Length(min=5, max=10)])
     account_manager_phone = StringField("Account Manager Phone", validators=[
@@ -101,8 +96,8 @@ class Vendor(FlaskForm):
 
 
 class Cisco_vendor(FlaskForm):
-    vendor_name = StringField("Vendor Name", validators=[
-                              DataRequired(), Length(min=5, max=10)])
+    vendor_deal_id = StringField(
+        "Deal ID", [Length(min=5, max=30)], render_kw={"readonly": False})
     account_manager_name = StringField("Account Manager Name", validators=[
                                        DataRequired(), Length(min=5, max=10)])
     account_manager_phone = StringField("Account Manager Phone", validators=[
