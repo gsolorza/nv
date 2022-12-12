@@ -7,7 +7,7 @@
     </div>
 
     <div class="col-md-4">
-        <form method="POST" action="{{ url_for('checklist') }}" class="content-section">
+        <form method="POST" action="{{url_for('checklist')}}" class="content-section">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <h1 class="display-5  .colorh2 ">Initial Information</h1>
@@ -37,16 +37,16 @@
                 <div class=" checkbox text-left">
                     <label class="mr-2 col-md-6">
                         <div class="form-check">
-                            {{ form.sw_include(class="form-check-input") }}
-                            <p><strong>{{form.sw_include.label}}</strong></p>
+                            {{ form.include_software(class="form-check-input") }}
+                            <p><strong>{{form.include_software.label}}</strong></p>
 
                         </div>
 
                         <div class=" checkbox text-left" , id="check">
                             <label class="mr-2">
                                 <div class="form-check">
-                                    {{ form.other_vendor_include(class="form-check-input") }}
-                                    <p><strong>{{form.other_vendor_include.label}}</strong></p>
+                                    {{ form.include_vendor(class="form-check-input") }}
+                                    <p><strong>{{form.include_vendor.label}}</strong></p>
 
                                 </div>
 
@@ -54,8 +54,8 @@
                         <div class=" checkbox text-left" , id="check">
                             <label class="mr-2">
                                 <div class="form-check">
-                                    {{ form.cisco_include(class="form-check-input")}}
-                                    <p><strong>{{form.cisco_include.label}}</strong></p>
+                                    {{ form.include_cisco(class="form-check-input")}}
+                                    <p><strong>{{form.include_cisco.label}}</strong></p>
 
                                 </div>
 

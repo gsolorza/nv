@@ -27,9 +27,9 @@ async def get_user(query: schema.Query, db: Session = Depends(getDb)):
     return response
 
 
-@app.get("/get_role", response_model=schema.RoleQuery)
+@app.get("/get_role", response_model=Any)
 async def get_role(query: schema.Query, db: Session = Depends(getDb)):
-    response = crud.get_role(query.column, query.value, db)
+    response = crud.get_role(query, db)
     return response
 
 

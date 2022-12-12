@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from forms import ChecklistFormSales, Vendor, Cisco_vendor, Software_Form
+from forms import ChecklistFormSales, Vendor, Cisco, Software
 from typing import Union
 from schema import MessageType
 import models
@@ -16,16 +16,29 @@ def get_user(column: str, value: Union[str, int], db: Session):
     return query
 
 
-def get_role(column: str, value: Union[str, int], db: Session):
-    query = (
-        db.query(models.Role.id, models.Role.role_name)
-        .filter(models.Role.__getattribute__(models.Role, column) == value)
-        .first()
-    )
-    if query:
-        role = schema.RoleQuery.parse_obj(query)
-        return role
-    return query
+def get_role(search: schema.Query, db: Session) -> Union[schema.RoleQuery, list, None]:
+    if search.column and search.value:
+        query = (
+            db.query(models.Role.id, models.Role.role_name)
+            .filter(models.Role.__getattribute__(models.Role, search.column) == search.value)
+            .first()
+        )
+        if query:
+            role = schema.RoleQuery.parse_obj(query)
+            return role
+        return None
+    else:
+        data = []
+        query = (
+            db.query(models.Role)
+            .all()
+        )
+        if query:
+            for table in query:
+                role = schema.RoleQuery.parse_obj(table.__dict__)
+                data.append(role)
+            return data
+        return None
 
 
 def get_form(column: str, value: Union[str, int], db: Session):
@@ -137,7 +150,7 @@ def get_vendor(search: schema.Query, db: Session):
 
 def get_user_role(roleId: int, db: Session):
     query = (
-        db.query(models.User.id, models.User.name)
+        db.query(models.User.id, models.User.name, models.Role.role_name)
         .select_from(models.User)
         .join(models.Role)
         .filter(models.Role.id == roleId)
@@ -163,7 +176,7 @@ def create_user(users: list[schema.CreateUser], db: Session):
         query = get_user("name", user.name, db)
         if query:
             message.add(MessageType.alreadyExist, query)
-        elif get_role("id", user.role_id, db):
+        elif get_role(schema.Query(column="id", value=user.role_id), db):
             try:
                 hash_password = bcrypt.generate_password_hash(
                     user.password).decode("utf-8")
@@ -190,7 +203,8 @@ def create_user(users: list[schema.CreateUser], db: Session):
 def create_role(roles: list[schema.CreateRole], db: Session):
     message = schema.Message()
     for role in roles:
-        query = get_role("role_name", role.role_name, db)
+        query = get_role(schema.Query(
+            column="role_name", value=role.role_name), db)
         if query:
             message.add(MessageType.alreadyExist, query)
         else:
@@ -349,7 +363,7 @@ def delete_form(id: schema.Id, db: Session):
     return message
 
 
-def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco_vendor, Software_Form], data: schema.FullForm):
+def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: schema.FullForm):
     if isinstance(form, ChecklistFormSales):
         if data.form and data.customer:
             form.sale_note.data = data.form.sale_note
@@ -370,6 +384,8 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco_vendor, Software_Fo
             form.dispatch_receiver_email.data = data.customer.dispatch_receiver_email
             form.comments.data = data.form.comments
             return form
+        else:
+            return None
     elif isinstance(form, Vendor):
         if data.vendor:
             vendor_list: list[Vendor] = []
@@ -382,11 +398,13 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco_vendor, Software_Fo
                 form_vendor.account_manager_email.data = vendor.account_manager_email
                 vendor_list.append(form_vendor)
             return vendor_list
-    elif isinstance(form, Cisco_vendor):
+        else:
+            return data.vendor
+    elif isinstance(form, Cisco):
         if data.cisco:
-            cisco_list: list[Cisco_vendor] = []
+            cisco_list: list[Cisco] = []
             for cisco in data.cisco:
-                form_cisco = Cisco_vendor()
+                form_cisco = Cisco()
                 form_cisco.vendor_deal_id.data = cisco.vendor_deal_id
                 form_cisco.account_manager_name.data = cisco.account_manager_name
                 form_cisco.account_manager_phone.data = cisco.account_manager_phone
@@ -395,11 +413,13 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco_vendor, Software_Fo
                 form_cisco.virtual_account.data = cisco.virtual_account
                 cisco_list.append(form_cisco)
             return cisco_list
-    elif isinstance(form, Software_Form):
+        else:
+            return data.cisco
+    elif isinstance(form, Software):
         if data.software:
-            software_list: list[Software_Form] = []
+            software_list: list[Software] = []
             for software in data.software:
-                form_software = Software_Form()
+                form_software = Software()
                 form_software.software_type.data = software.software_type
                 form_software.duration_time.data = software.duration_time
                 form_software.customer_contact.data = software.customer_contact
@@ -408,3 +428,5 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco_vendor, Software_Fo
                 form_software.type_of_purchase.data = software.type_of_purchase
                 software_list.append(form_software)
             return software_list
+        else:
+            return data.software

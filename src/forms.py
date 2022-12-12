@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, BooleanField, SelectField, EmailField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, DateField, BooleanField, EmailField, TextAreaField, SelectField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
 
 
 class LoginForm(FlaskForm):
@@ -29,15 +29,13 @@ class RegistrationForm(FlaskForm):
 class InitialFormSales(FlaskForm):
     sales_force_id = StringField("Sales Force ID",
                                  validators=[DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    vendor_deal_id = StringField("Cisco Vendor Deal ID", validators=[
-                                 Length(min=5, max=30)], render_kw={"placeholder": "N/A"})
     purchase_order = StringField("Purchase Order", validators=[Length(
         min=4, max=20)], render_kw={"placeholder": "NoPO", "readonly": False})
     quote_direct = StringField("Quote Direct", validators=[
                                DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    sw_include = BooleanField("Software", default='checked')
-    other_vendor_include = BooleanField("Other Vendor", default='checked')
-    cisco_include = BooleanField(" Cisco Vendor", default='checked')
+    include_software = BooleanField("Software", default='checked')
+    include_vendor = BooleanField("Other Vendor", default='checked')
+    include_cisco = BooleanField(" Cisco Vendor", default='checked')
     submit = SubmitField("Create Form")
 
 
@@ -52,8 +50,7 @@ class ChecklistFormSales(FlaskForm):
                                DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     client_manager_name = StringField("Sales Engineer Name", validators=[
                                       DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    pre_sales_name = StringField("Pre Sales Engineer Name", validators=[
-                                 DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+    pre_sales_name = SelectField("Pre Sales Engineer", validate_choice=False)
     date = DateField("Date", validators=[DataRequired()])
     customer_name = StringField("Customer Name", validators=[
                                 DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
@@ -76,6 +73,9 @@ class ChecklistFormSales(FlaskForm):
     dispatch_receiver_email = EmailField("Dispatch Receiver Email", validators=[
                                          DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
 
+    include_software = BooleanField("Software", default='checked')
+    include_vendor = BooleanField("Other Vendor", default='checked')
+    include_cisco = BooleanField(" Cisco Vendor", default='checked')
     comments = TextAreaField("Comments", validators=[DataRequired(), Length(
         min=5, max=2000)], render_kw={"placeholder": "Enter your comments"})
 
@@ -84,7 +84,7 @@ class ChecklistFormSales(FlaskForm):
 
 class Vendor(FlaskForm):
     vendor_deal_id = StringField(
-        "Deal ID", [Length(min=5, max=30)], render_kw={"readonly": False})
+        "Deal ID", validators=[DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     vendor_name = StringField("Vendor Name", validators=[
                               DataRequired(), Length(min=5, max=10)])
     account_manager_name = StringField("Account Manager Name", validators=[
@@ -95,11 +95,11 @@ class Vendor(FlaskForm):
         "Account Manager Email", validators=[DataRequired(), Email()])
 
 
-class Cisco_vendor(FlaskForm):
+class Cisco(FlaskForm):
     vendor_deal_id = StringField(
-        "Deal ID", [Length(min=5, max=30)], render_kw={"readonly": False})
+        "Deal ID", validators=[DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     account_manager_name = StringField("Account Manager Name", validators=[
-                                       DataRequired(), Length(min=5, max=10)])
+                                       DataRequired(), Length(min=5, max=10), Regexp(f"[aA-zZ]+", message="The name must contain only letters")])
     account_manager_phone = StringField("Account Manager Phone", validators=[
                                         DataRequired(), Length(min=5, max=15)])
     account_manager_email = EmailField(
@@ -110,7 +110,7 @@ class Cisco_vendor(FlaskForm):
                                   DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
 
 
-class Software_Form(FlaskForm):
+class Software(FlaskForm):
     software_type = StringField(
         "Subscription/ Software Type", validators=[DataRequired()])
     duration_time = StringField(
@@ -124,9 +124,6 @@ class Software_Form(FlaskForm):
 
 
 class Status(FlaskForm):
-    preSalesValidation = SelectField("Pre Sales Validation")
-    insidePreSalesValidation = SelectField("Inside Pre Sales Validation")
-    plValidation = SelectField("P&L Valdiation")
-    approved = SelectField("Approved")
+    assignment = SelectField("Assign", validate_choice=False)
 # Checklist form Vendor
 # Checklist form Software

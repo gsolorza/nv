@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from forms import LoginForm
-from forms import RegistrationForm, InitialFormSales, ChecklistFormSales, Vendor, Software_Form, Cisco_vendor, Status
+from forms import RegistrationForm, InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, Status
 # from src.database.schema import Status
 from db import SessionLocal, engine
 import crud
@@ -42,7 +42,9 @@ def login():
 
     form = LoginForm()
     if current_user.is_authenticated:  # type: ignore
-        role = crud.get_role("id", current_user.role_id, db())  # type: ignore
+        query = schema.Query(
+            column="id", value=current_user.role_id)  # type: ignore
+        role = crud.get_role(query, db())
         return render_template("home.html", role=role)
 
     if form.validate_on_submit():
@@ -50,7 +52,8 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             flash("You Have been logged In!", "primary")
             login_user(user, remember=form.remember.data)
-            role = crud.get_role("id", user.role_id, db())
+            query = schema.Query(column="id", value=user.role_id)
+            role = crud.get_role(query, db())
             next_page = request.args.get("next")
             return redirect(next_page) if next_page else render_template('home.html', role=role)
 
@@ -69,38 +72,52 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
-    role = crud.get_role("id", current_user.role_id, db())  # type: ignore
+    query = schema.Query(
+        column="id", value=current_user.role_id)  # type: ignore
+    role = crud.get_role(query, db())
     return render_template("home.html", role=role)
 
 
 @app.route("/initial_form", methods=["GET", "POST"])
 @login_required
 def initial():
-    form = InitialFormSales()
-    if form.validate_on_submit():
-        flash(
-            f"initial information, added correctly {form.sales_force_id.data}!", "primary")
-        return redirect(url_for("home"))
-    return render_template("initial_form.html", title="initial Information", form=form)
+    initial_form = InitialFormSales()
+    return render_template("initial_form.html", title="initial Information", form=initial_form)
 
 
 @app.route('/checklist', methods=["GET", "POST"])
 @login_required
 def checklist():
     form = ChecklistFormSales()
-    formvendor = Vendor()
-    form_cisco_vendor = Cisco_vendor()
-    formsw = Software_Form()
+    form_vendor = Vendor()
+    form_cisco = Cisco()
+    form_software = Software()
+    status = Status()
+    role_list = crud.get_role(schema.Query(), db())
+    pre_sales_role = crud.get_role(schema.Query(
+        column="role_name", value="PreSales"), db())
+    pre_sales = crud.get_user_role(
+        pre_sales_role.id, db())  # type: ignore
+    status.assignment.choices = [
+        role for role in role_list]  # type: ignore
+    print(request.args)
+    print(request.form)
+    if request.method == "POST":
+        if form_cisco.validate_on_submit():
+            print(request.form)
+            flash(
+                f'initial information, added correctly {form.sales_force_id.data} {status}!', 'primary')
+            return render_template('checklist.html', form=form, form_vendor=form_vendor, form_software=form_software, form_cisco=form_cisco, status=status, pre_sales=pre_sales)
+    return render_template('checklist.html', form=form, form_vendor=form_vendor, form_software=form_software, form_cisco=form_cisco, status=status, pre_sales=pre_sales)
 
-    if form.validate_on_submit():
-        flash(
-            f'initial information, added correctly {form.sales_force_id.data}!', 'primary')
-        return redirect(url_for('home'))
-    return render_template('checklist.html', form=form, formvendor=formvendor, formsw=formsw, form_cisco_vendor=form_cisco_vendor)
+
+@app.route('/test', methods=["GET", "POST"])
+def test():
+    return render_template("about.html")
 
 
-@app.route('/mychecklist', methods=["GET", "POST"])
-@login_required
+@ app.route('/mychecklist', methods=["GET", "POST"])
+@ login_required
 def mychecklist():
     query = schema.Query()
     if request.method == "POST":
@@ -111,8 +128,8 @@ def mychecklist():
     return render_template("mychecklist.html", title="Histoy Checklist", form_history=form_history)
 
 
-@app.route('/history', methods=["GET", "POST"])
-@login_required
+@ app.route('/history', methods=["GET", "POST"])
+@ login_required
 def history():
 
     query = schema.Query()
@@ -124,14 +141,14 @@ def history():
     return render_template("history_checklist.html", title="Histoy Checklist", form_history=form_history)
 
 
-@app.route("/form/<int:form_id>", methods=["GET", "POST"])
+@ app.route("/form/<int:form_id>", methods=["GET", "POST"])
 def form_update(form_id):
     query = schema.Query(column="id", value=form_id)
     form_data = crud.display_full_form(query, db())
     form = crud.encap_form(ChecklistFormSales(), form_data)
     form_vendor = crud.encap_form(Vendor(), form_data)
-    form_cisco = crud.encap_form(Cisco_vendor(), form_data)
-    form_software = crud.encap_form(Software_Form(), form_data)
+    form_cisco = crud.encap_form(Cisco(), form_data)
+    form_software = crud.encap_form(Software(), form_data)
     return redirect(url_for("home"))
 
 

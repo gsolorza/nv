@@ -53,6 +53,9 @@ class RoleQuery(BaseModel):
     id: int
     role_name: str
 
+    class Config:
+        orm_mode = True
+
 
 class UserBase(BaseModel):
     name: str
