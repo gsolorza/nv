@@ -223,7 +223,10 @@
         </div>
         <!--SECCION CISCO-->
         {% if form.include_cisco.data==true%}
+        <input type="number" id="cisco_quantity" name="cisco_quantity" value=1 hidden>
         <section id="cisco_vendor" , name="seccion-prueba" , class="col-md-12">
+            {% if value %}
+            {% for form_cisco in value%}
             <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="form_cisco_vendor">
                 <legend class="text-center"><strong>CISCO VENDOR INFORMATION </strong></legend><br>
                 <hr>
@@ -325,13 +328,17 @@
                     <button id="btnciscovendor" , class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add a new
                         Vendor</button>
                 </div>
-            </div>
+            </div> 
+            {% endfor %}
+            {% endif %}
+           
             {% endif %}
         </section>
 
 
         <!--SECCION VENDOR-->
         {% if form.include_vendor.data==true%}
+        <input type="number" id="vendor_quantity" name="vendor_quantity" value=1 hidden>
         <section id="vendor" , name="seccion-prueba" , class="col-md-12">
             <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="form_vendor">
                 <legend class="text-center"><strong>VENDOR INFORMATION </strong></legend><br>
@@ -427,6 +434,7 @@
 
         <!--SECCION SOFTWARE-->
         {% if form.include_software.data==true%}
+        <input type="number" id="software_quantity" name="software_quantity", hidden>
         <section id="software" , name="seccion-prueba" , class="col-md-12">
             <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="Form_Software">
                 <legend class="text-center"><strong>SOFTWARE INFORMATION </strong></legend><br>
@@ -557,10 +565,11 @@
 
         <div class="row">
 
+            
 
+            
 
             <div class="form-group">
-
                 {{ form.submit(class="btn btn-md btn-primary ") }}
             </div>
 
@@ -575,7 +584,7 @@
 
         <script>
 
-            function changeAttribute(elements, formnId, buttonId) {
+            function changeAttribute(elements, formnId, buttonId, quantity) {
                 const hr = document.createElement("hr");
                 hr.className = "mt-3";
                 let form = document.querySelector(formnId);
@@ -593,6 +602,21 @@
 
 
                 }
+                document.querySelector(quantity).value = sectionLength + 1
+            }
+
+            function updateFormQuantity(){
+                var softwareForm = {formId:"#Form_Software", formQuantity:"#software_quantity"}
+                var vendorForm = {formId:"#form_vendor", formQuantity:"#vendor_quantity"}
+                var ciscoForm = {formId:"#form_cisco_vendor", formQuantity:"#cisco_quantity"}
+                let formList = [softwareForm, vendorForm, ciscoForm]
+                formList.forEach(form => {
+                    var sectionLength = document.querySelectorAll(form.formId).length
+                    if(sectionLength && document.querySelector(form.formQuantity).value < sectionLength){
+                        document.querySelector(form.formQuantity).value = sectionLength
+                    }
+                })
+
             }
 
             $(function () {
@@ -600,7 +624,8 @@
                     let elementList = ["#type_of_purchase", "#software_type", "#duration_time", "#customer_contact", "#subscription_id", "#start_date"]
                     formId = "#Form_Software"
                     buttonId = "#btn"
-                    changeAttribute(elementList, formId, buttonId)
+                    quantity = "#software_quantity"
+                    changeAttribute(elementList, formId, buttonId, quantity)
 
                 });
             });
@@ -610,7 +635,8 @@
                     let elementList = ["#vendor_name", "#vendor_did", "#vendor_account_manager_name", "#vendor_account_manager_phone", "#vendor_account_manager_email"]
                     formId = "#form_vendor"
                     buttonId = "#btnvendor"
-                    changeAttribute(elementList, formId, buttonId)
+                    quantity = "#vendor_quantity"
+                    changeAttribute(elementList, formId, buttonId, quantity)
                     form.appendChild(btnvendor);
 
                 });
@@ -620,23 +646,24 @@
                     let elementList = ["#vendor_deal_id", "#cisco_account_manager_name", "#cisco_account_manager_phone", "#cisco_account_manager_email", "#cisco_smart_account", "#cisco_virtual_account"]
                     formId = "#form_cisco_vendor"
                     buttonId = "#btnciscovendor"
-                    changeAttribute(elementList, formId, buttonId)
+                    quantity = "#cisco_quantity"
+                    changeAttribute(elementList, formId, buttonId, quantity)
                     form.appendChild(btnciscovendor);
 
                 });
             });
 
-
-        // $(function(){
-        //     $('btnvendor').on('click',function(){
-        //         let elementList2 =["#vendor_did","#vendor_name","#account_manager_name","account_manager_phone","#account_manager_email"]
-        //         form2¿id = "#vendor"
-        //         buttonId2="#btnvendor"
-        //         changeAttribute(elementList, formId, buttonId)
-        //     });
-
-
-        // });
+            $(function () {
+                $('#submit').on('click', function () {
+                    updateFormQuantity()
+                });
+            });
+        
 
         </script>
+
+        <div hidden>{{ form.include_cisco }}  </div>
+        <div hidden>{{ form.include_vendor }}  </div>
+        <div hidden>{{ form.include_software }}  </div>
+
         {%endblock content%}

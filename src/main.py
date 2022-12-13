@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from forms import LoginForm
 from forms import RegistrationForm, InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, Status
 # from src.database.schema import Status
 from db import SessionLocal, engine
 import crud
 import models
-import secrets
 import schema
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
@@ -15,8 +14,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = Flask(__name__)
 
-token = secrets.token_hex(16)
-app.config["SECRET_KEY"] = token
+app.config["SECRET_KEY"] = "54b555c45fc50eb75e3eb9a50794e6be"
 bcrypt = Bcrypt(app)
 
 login_manager = LoginManager()
@@ -75,6 +73,7 @@ def home():
     query = schema.Query(
         column="id", value=current_user.role_id)  # type: ignore
     role = crud.get_role(query, db())
+    print(session)
     return render_template("home.html", role=role)
 
 
@@ -89,6 +88,9 @@ def initial():
 @login_required
 def checklist():
     form = ChecklistFormSales()
+    print(form.include_cisco.data)
+    print(form.include_vendor.data)
+    print(form.include_software.data)
     form_vendor = Vendor()
     form_cisco = Cisco()
     form_software = Software()
@@ -100,14 +102,36 @@ def checklist():
         pre_sales_role.id, db())  # type: ignore
     status.assignment.choices = [
         role for role in role_list]  # type: ignore
-    print(request.args)
-    print(request.form)
+    if request.form.get("include_cisco"):
+        form.include_cisco.data = True
+    # session["include_cisco"] = True
+    print(session["include_cisco"])
+    # request.form.get("include_cisco")
+    # request.form.get("include_vendor")
+    # request.form.get("include_software")
     if request.method == "POST":
-        if form_cisco.validate_on_submit():
-            print(request.form)
-            flash(
-                f'initial information, added correctly {form.sales_force_id.data} {status}!', 'primary')
-            return render_template('checklist.html', form=form, form_vendor=form_vendor, form_software=form_software, form_cisco=form_cisco, status=status, pre_sales=pre_sales)
+        print("THIS IS AFTER POST")
+        quantity = request.form.get("cisco_quantity")
+        if quantity:
+            value = [Cisco() for x in range(int(quantity))]
+            i = 0
+            for val in value:
+                if i > 0:
+                    val.vendor_deal_id.name = "vendor_deal_id"+str(i)
+                    val.vendor_deal_id.data = request.form.get(
+                        "vendor_deal_id"+str(i))
+                    print(val.vendor_deal_id.data)
+                i += 1
+        else:
+            value = [form_cisco]
+        print(request.form)
+        # form.include_cisco.data = session["include_cisco"]
+        print(form.include_vendor.data)
+        print(session["include_cisco"])
+        print(session)
+        flash(
+            f'initial information, added correctly {form.sales_force_id.data} {status}!', 'primary')
+        return render_template('checklist.html', form=form, form_vendor=form_vendor, form_software=form_software, form_cisco=form_cisco, status=status, pre_sales=pre_sales, value=value)
     return render_template('checklist.html', form=form, form_vendor=form_vendor, form_software=form_software, form_cisco=form_cisco, status=status, pre_sales=pre_sales)
 
 
