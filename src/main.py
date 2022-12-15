@@ -88,11 +88,7 @@ def initial():
 @login_required
 def checklist():
     form = ChecklistFormSales()
-    print(form.include_cisco.data)
-    print(form.include_vendor.data)
-    print(form.include_software.data)
     form_vendor = Vendor()
-    form_cisco = Cisco()
     form_software = Software()
     status = Status()
     role_list = crud.get_role(schema.Query(), db())
@@ -105,15 +101,20 @@ def checklist():
     if request.form.get("include_cisco"):
         form.include_cisco.data = True
     # session["include_cisco"] = True
-    # print(session["include_cisco"])
+    print(session["include_cisco"])
     # request.form.get("include_cisco")
     # request.form.get("include_vendor")
     # request.form.get("include_software")
     if request.method == "POST":
-        print("THIS IS AFTER POST")
-        quantity = request.form.get("cisco_quantity")
-        if quantity:
-            value = [Cisco() for x in range(int(quantity))]
+        cisco_quantity = request.form.get("cisco_quantity")
+        vendor_quantity = request.form.get("vendor_quantity")
+        software_quantity = request.form.get("software_quantity")
+        print(cisco_quantity)
+        forms_cisco = [Cisco()] if not cisco_quantity else crud.replicateForm(
+            Cisco(), cisco_quantity)
+        print(forms_cisco)
+        if cisco_quantity:
+            value = [Cisco() for x in range(int(cisco_quantity))]
             i = 0
             for val in value:
                 if i > 0:
@@ -126,13 +127,13 @@ def checklist():
             value = [form_cisco]
         print(request.form)
         # form.include_cisco.data = session["include_cisco"]
-        # print(form.include_vendor.data)
-        # print(session["include_cisco"])
-        # print(session)
+        print(form.include_vendor.data)
+        print(session["include_cisco"])
+        print(session)
         flash(
             f'initial information, added correctly {form.sales_force_id.data} {status}!', 'primary')
-        return render_template('checklist.html', form=form, form_vendor=form_vendor, form_software=form_software, form_cisco=form_cisco, status=status, pre_sales=pre_sales, value=value)
-    return render_template('checklist.html', form=form, form_vendor=form_vendor, form_software=form_software, form_cisco=form_cisco, status=status, pre_sales=pre_sales)
+        return render_template("checklist.html", form=form, form_vendor=form_vendor, form_software=form_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales, value=value)
+    return redirect("intial.html")
 
 
 @app.route('/test', methods=["GET", "POST"])

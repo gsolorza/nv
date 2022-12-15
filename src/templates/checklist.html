@@ -164,8 +164,13 @@
         {% if form.include_cisco.data==true%}
         <input type="number" id="cisco_quantity" name="cisco_quantity" value=1 hidden>
         <section id="cisco_vendor" , name="seccion-prueba" , class="col-md-12">
+<<<<<<< HEAD
             {# {% if value %}
             {% for form_cisco in value%} #}
+=======
+            {% if forms_cisco %}
+            {% for form_cisco in forms_cisco%}
+>>>>>>> 7468c9d (continue creating interaction between the javascript forms for Cisco Vendor, software with the flask application context called checklist)
             <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="form_cisco_vendor">
                 <legend class="text-center"><strong>CISCO VENDOR INFORMATION </strong></legend><br>
                 <hr>

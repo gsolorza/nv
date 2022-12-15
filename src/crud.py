@@ -430,3 +430,8 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
             return software_list
         else:
             return data.software
+
+
+def replicateForm(form: Union[Cisco, Vendor, Software], quantity: str):
+    forms = [form for x in range(int(quantity))]
+    return forms
