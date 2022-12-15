@@ -123,8 +123,6 @@ def checklist():
                         "vendor_deal_id"+str(i))
                     print(val.vendor_deal_id.data)
                 i += 1
-        else:
-            value = [form_cisco]
         print(request.form)
         # form.include_cisco.data = session["include_cisco"]
         print(form.include_vendor.data)
@@ -132,7 +130,7 @@ def checklist():
         print(session)
         flash(
             f'initial information, added correctly {form.sales_force_id.data} {status}!', 'primary')
-        return render_template("checklist.html", form=form, form_vendor=form_vendor, form_software=form_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales, value=value)
+        return render_template("checklist.html", form=form, form_vendor=form_vendor, form_software=form_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales)
     return redirect("intial.html")
 
 
