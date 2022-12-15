@@ -30,10 +30,10 @@
       <th> # </th>
       <th> Sales Force ID </th>
       <th> Quote Direct </th>
-      <th> Purchase Order </th>
-      <th> Sale Note ID </th>
+      <th> Purchase Order <i class="fa fa-picture" data-toggle="tooltip" title="(Orden de Compra"></i></th>
       <th> Date </th>
-      <th> Status </th>
+      <th> Status</th>
+      <th> Sale Note ID <i class="fa fa-picture" data-toggle="tooltip" title="(Nota de Venta)"></i></th>
 
     </thead>
     {% if form_history %}
@@ -44,9 +44,11 @@
       <td>{{form.sales_force_id}}</td>
       <td>{{form.quote_direct}}</td>
       <td>{{form.purchase_order}}</td>
-      <td>{{form.sale_note}}</td>
       <td>{{form.date}}</td>
+
       <td class="text-success">{{form.status}}</td>
+      <td>{{form.sale_note}}</td>
+
     </tbody>
     {% endif %}
     {% endfor %}

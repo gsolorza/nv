@@ -56,16 +56,16 @@ class ChecklistFormSales(FlaskForm):
                                 DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     customer_rut = StringField("Customer RUT", validators=[
                                DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    customer_address = StringField("Customer Address", validators=[
-                                   DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+    customer_address = TextAreaField("Customer Address", validators=[
+        DataRequired(), Length(min=5, max=300)], render_kw={"readonly": False})
     customer_contact_name = StringField("Customer Contact Name", validators=[
                                         DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     customer_contact_phone = StringField("Customer Contact Phone", validators=[
                                          DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     customer_contact_email = EmailField("Customer Contact Email", validators=[
                                         DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    dispatch_address = StringField("Dispatch Address", validators=[
-                                   DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+    dispatch_address = TextAreaField("Dispatch Address", validators=[
+        DataRequired(), Length(min=5, max=300)], render_kw={"readonly": False})
     dispatch_receiver_name = StringField("Dispatch Receiver Name", validators=[
                                          DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     dispatch_receiver_phone = StringField("Dispatch Receiver Phone", validators=[

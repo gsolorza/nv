@@ -105,7 +105,7 @@ def checklist():
     if request.form.get("include_cisco"):
         form.include_cisco.data = True
     # session["include_cisco"] = True
-    print(session["include_cisco"])
+    # print(session["include_cisco"])
     # request.form.get("include_cisco")
     # request.form.get("include_vendor")
     # request.form.get("include_software")
@@ -126,9 +126,9 @@ def checklist():
             value = [form_cisco]
         print(request.form)
         # form.include_cisco.data = session["include_cisco"]
-        print(form.include_vendor.data)
-        print(session["include_cisco"])
-        print(session)
+        # print(form.include_vendor.data)
+        # print(session["include_cisco"])
+        # print(session)
         flash(
             f'initial information, added correctly {form.sales_force_id.data} {status}!', 'primary')
         return render_template('checklist.html', form=form, form_vendor=form_vendor, form_software=form_software, form_cisco=form_cisco, status=status, pre_sales=pre_sales, value=value)
