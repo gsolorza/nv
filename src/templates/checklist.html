@@ -497,16 +497,17 @@
 
         <script>
 
-            function changeAttribute(elements, formnId, buttonId, quantity) {
+            function changeAttribute(elements, formId, buttonId, quantity) {
                 const hr = document.createElement("hr");
                 hr.className = "mt-3";
-                let form = document.querySelector(formnId);
+                let form = document.querySelector(formId);
                 form.appendChild(hr);
                 let btn = document.querySelector(buttonId);
                 for (element of elements) {
                     let field = document.querySelector(element).cloneNode(true);
                     var sectionLength = document.querySelectorAll(element).length
                     if (field) {
+                        console.log(field.children[0])
                         field.children[1].firstElementChild.setAttribute("name", element.replace("#", "") + sectionLength)
                         field.children[1].firstElementChild.value = ""
                         form.appendChild(field)
@@ -550,7 +551,6 @@
                     buttonId = "#btnvendor"
                     quantity = "#vendor_quantity"
                     changeAttribute(elementList, formId, buttonId, quantity)
-                    form.appendChild(btnvendor);
 
                 });
             });
@@ -561,7 +561,6 @@
                     buttonId = "#btnciscovendor"
                     quantity = "#cisco_quantity"
                     changeAttribute(elementList, formId, buttonId, quantity)
-                    form.appendChild(btnciscovendor);
 
                 });
             });

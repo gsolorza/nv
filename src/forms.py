@@ -75,7 +75,7 @@ class ChecklistFormSales(FlaskForm):
 
     include_software = BooleanField("Software", default='checked')
     include_vendor = BooleanField("Other Vendor", default='checked')
-    include_cisco = BooleanField(" Cisco Vendor", default='checked')
+    include_cisco = BooleanField("Cisco Vendor", default='checked')
     comments = TextAreaField("Comments", validators=[DataRequired(), Length(
         min=5, max=2000)], render_kw={"placeholder": "Enter your comments"})
 

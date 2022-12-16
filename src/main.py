@@ -100,38 +100,19 @@ def checklist():
         role for role in role_list]  # type: ignore
     if request.form.get("include_cisco"):
         form.include_cisco.data = True
-    # session["include_cisco"] = True
-    print(session["include_cisco"])
-    # request.form.get("include_cisco")
-    # request.form.get("include_vendor")
-    # request.form.get("include_software")
     if request.method == "POST":
         cisco_quantity = request.form.get("cisco_quantity")
         vendor_quantity = request.form.get("vendor_quantity")
         software_quantity = request.form.get("software_quantity")
-        print(cisco_quantity)
-        forms_cisco = [Cisco()] if not cisco_quantity else crud.replicateForm(
-            Cisco(), cisco_quantity)
-        print(forms_cisco)
-        if cisco_quantity:
-            value = [Cisco() for x in range(int(cisco_quantity))]
-            i = 0
-            for val in value:
-                if i > 0:
-                    val.vendor_deal_id.name = "vendor_deal_id"+str(i)
-                    val.vendor_deal_id.data = request.form.get(
-                        "vendor_deal_id"+str(i))
-                    print(val.vendor_deal_id.data)
-                i += 1
         print(request.form)
-        # form.include_cisco.data = session["include_cisco"]
-        print(form.include_vendor.data)
-        print(session["include_cisco"])
-        print(session)
+        print(cisco_quantity)
+        # forms_cisco = [Cisco()] if not cisco_quantity else crud.replicateForm(
+        #     Cisco(), cisco_quantity, request.form)
+        forms_cisco = [Cisco()]
         flash(
             f'initial information, added correctly {form.sales_force_id.data} {status}!', 'primary')
         return render_template("checklist.html", form=form, form_vendor=form_vendor, form_software=form_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales)
-    return redirect("intial.html")
+    return redirect(url_for("initial"))
 
 
 @app.route('/test', methods=["GET", "POST"])
