@@ -88,8 +88,6 @@ def initial():
 @login_required
 def checklist():
     form = ChecklistFormSales()
-    form_vendor = Vendor()
-    form_software = Software()
     status = Status()
     role_list = crud.get_role(schema.Query(), db())
     pre_sales_role = crud.get_role(schema.Query(
@@ -98,20 +96,20 @@ def checklist():
         pre_sales_role.id, db())  # type: ignore
     status.assignment.choices = [
         role for role in role_list]  # type: ignore
-    if request.form.get("include_cisco"):
-        form.include_cisco.data = True
     if request.method == "POST":
         cisco_quantity = request.form.get("cisco_quantity")
         vendor_quantity = request.form.get("vendor_quantity")
         software_quantity = request.form.get("software_quantity")
-        print(request.form)
-        print(cisco_quantity)
-        # forms_cisco = [Cisco()] if not cisco_quantity else crud.replicateForm(
-        #     Cisco(), cisco_quantity, request.form)
-        forms_cisco = [Cisco()]
+        pprint(request.form)
+        forms_cisco = [Cisco()] if not cisco_quantity else crud.replicateForm(
+            Cisco(), cisco_quantity, request.form)
+        forms_vendor = [Vendor()] if not vendor_quantity else crud.replicateForm(
+            Vendor(), vendor_quantity, request.form)
+        forms_software = [Software()] if not software_quantity else crud.replicateForm(
+            Software(), software_quantity, request.form)
         flash(
-            f'initial information, added correctly {form.sales_force_id.data} {status}!', 'primary')
-        return render_template("checklist.html", form=form, form_vendor=form_vendor, form_software=form_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales)
+            f'initial information, added correctly!', 'primary')
+        return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales)
     return redirect(url_for("initial"))
 
 

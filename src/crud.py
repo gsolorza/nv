@@ -393,9 +393,9 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
                 form_vendor = Vendor()
                 form_vendor.vendor_deal_id.data = vendor.vendor_deal_id
                 form_vendor.vendor_name.data = vendor.vendor_name
-                form_vendor.account_manager_name.data = vendor.account_manager_name
-                form_vendor.account_manager_phone.data = vendor.account_manager_phone
-                form_vendor.account_manager_email.data = vendor.account_manager_email
+                form_vendor.vendor_account_manager_name.data = vendor.account_manager_name
+                form_vendor.vendor_account_manager_phone.data = vendor.account_manager_phone
+                form_vendor.vendor_account_manager_email.data = vendor.account_manager_email
                 vendor_list.append(form_vendor)
             return vendor_list
         else:
@@ -405,12 +405,12 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
             cisco_list: list[Cisco] = []
             for cisco in data.cisco:
                 form_cisco = Cisco()
-                form_cisco.vendor_deal_id.data = cisco.vendor_deal_id
-                form_cisco.account_manager_name.data = cisco.account_manager_name
-                form_cisco.account_manager_phone.data = cisco.account_manager_phone
-                form_cisco.account_manager_email.data = cisco.account_manager_email
-                form_cisco.smart_account.data = cisco.smart_account
-                form_cisco.virtual_account.data = cisco.virtual_account
+                form_cisco.cisco_deal_id.data = cisco.vendor_deal_id
+                form_cisco.cisco_account_manager_name.data = cisco.account_manager_name
+                form_cisco.cisco_account_manager_phone.data = cisco.account_manager_phone
+                form_cisco.cisco_account_manager_email.data = cisco.account_manager_email
+                form_cisco.cisco_smart_account.data = cisco.smart_account
+                form_cisco.cisco_virtual_account.data = cisco.virtual_account
                 cisco_list.append(form_cisco)
             return cisco_list
         else:
@@ -433,12 +433,58 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
 
 
 def replicateForm(form, quantity: str, form_data: dict[str, str]):
-    forms = [form for x in range(int(quantity))]
-    i = 0
-    for form in forms:
-        if i > 0:
-            form.vendor_deal_id.name = form.vendor_deal_id.name+str(i)
-            print(form.vendor_deal_id.name)
-            form.vendor_deal_id.data = form_data.get(form.vendor_deal_id.name)
-
-    return forms
+    if isinstance(form, Cisco):
+        forms = [Cisco() for x in range(int(quantity))]
+        i = 0
+        for form in forms:
+            if i > 0:
+                form.cisco_deal_id.name = form.cisco_deal_id.name+str(i)
+                form.cisco_deal_id.data = form_data.get(form.cisco_deal_id.name)
+                form.cisco_account_manager_name.name = form.cisco_account_manager_name.name+str(i)
+                form.cisco_account_manager_name.data = form_data.get(form.cisco_account_manager_name.name)
+                form.cisco_account_manager_email.name = form.cisco_account_manager_email.name+str(i)
+                form.cisco_account_manager_email.data = form_data.get(form.cisco_account_manager_email.name)
+                form.cisco_account_manager_phone.name = form.cisco_account_manager_phone.name+str(i)
+                form.cisco_account_manager_phone.data = form_data.get(form.cisco_account_manager_phone.name)
+                form.cisco_smart_account.name = form.cisco_smart_account.name+str(i)
+                form.cisco_smart_account.data = form_data.get(form.cisco_smart_account.name)
+                form.cisco_virtual_account.name = form.cisco_virtual_account.name+str(i)
+                form.cisco_virtual_account.data = form_data.get(form.cisco_virtual_account.name)
+            i += 1
+        return forms
+    elif isinstance(form, Vendor):
+        forms = [Vendor() for x in range(int(quantity))]
+        i = 0
+        for form in forms:
+            if i > 0:
+                form.vendor_deal_id.name = form.vendor_deal_id.name+str(i)
+                form.vendor_deal_id.data = form_data.get(form.vendor_deal_id.name)
+                form.vendor_name.name = form.vendor_name.name+str(i)
+                form.vendor_name.data = form_data.get(form.vendor_name.name)
+                form.vendor_account_manager_name.name = form.vendor_account_manager_name.name+str(i)
+                form.vendor_account_manager_name.data = form_data.get(form.vendor_account_manager_name.name)
+                form.vendor_account_manager_email.name = form.vendor_account_manager_email.name+str(i)
+                form.vendor_account_manager_email.data = form_data.get(form.vendor_account_manager_email.name)
+                form.vendor_account_manager_phone.name = form.vendor_account_manager_phone.name+str(i)
+                form.vendor_account_manager_phone.data = form_data.get(form.vendor_account_manager_phone.name)
+            i += 1
+        return forms
+    elif isinstance(form, Software):
+        forms = [Software() for x in range(int(quantity))]
+        i = 0
+        for form in forms:
+            if i > 0:
+                form.software_type.name = form.software_type.name+str(i)
+                form.software_type.data = form_data.get(form.software_type.name)
+                form.duration_time.name = form.duration_time.name+str(i)
+                form.duration_time.data = form_data.get(form.duration_time.name)
+                form.customer_contact.name = form.customer_contact.name+str(i)
+                form.customer_contact.data = form_data.get(form.customer_contact.name)
+                form.subscription_id.name = form.subscription_id.name+str(i)
+                form.subscription_id.data = form_data.get(form.subscription_id.name)
+                form.start_date.name = form.start_date.name+str(i)
+                form.start_date.data = form_data.get(form.start_date.name)
+                form.type_of_purchase.name = form.type_of_purchase.name+str(i)
+                form.type_of_purchase.data = form_data.get(form.type_of_purchase.name)
+            i += 1
+        return forms

@@ -87,26 +87,26 @@ class Vendor(FlaskForm):
         "Deal ID", validators=[DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     vendor_name = StringField("Vendor Name", validators=[
                               DataRequired(), Length(min=5, max=10)])
-    account_manager_name = StringField("Account Manager Name", validators=[
+    vendor_account_manager_name = StringField("Account Manager Name", validators=[
                                        DataRequired(), Length(min=5, max=10)])
-    account_manager_phone = StringField("Account Manager Phone", validators=[
+    vendor_account_manager_phone = StringField("Account Manager Phone", validators=[
                                         DataRequired(), Length(min=5, max=15)])
-    account_manager_email = EmailField(
+    vendor_account_manager_email = EmailField(
         "Account Manager Email", validators=[DataRequired(), Email()])
 
 
 class Cisco(FlaskForm):
-    vendor_deal_id = StringField(
+    cisco_deal_id = StringField(
         "Deal ID", validators=[DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    account_manager_name = StringField("Account Manager Name", validators=[
+    cisco_account_manager_name = StringField("Account Manager Name", validators=[
                                        DataRequired(), Length(min=5, max=10), Regexp(f"[aA-zZ]+", message="The name must contain only letters")])
-    account_manager_phone = StringField("Account Manager Phone", validators=[
+    cisco_account_manager_phone = StringField("Account Manager Phone", validators=[
                                         DataRequired(), Length(min=5, max=15)])
-    account_manager_email = EmailField(
+    cisco_account_manager_email = EmailField(
         "Account Manager Email", validators=[DataRequired(), Email()])
-    smart_account = StringField("Smart Account", validators=[
+    cisco_smart_account = StringField("Smart Account", validators=[
                                 DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    virtual_account = StringField("Virtual Account", validators=[
+    cisco_virtual_account = StringField("Virtual Account", validators=[
                                   DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
 
 

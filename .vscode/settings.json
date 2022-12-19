@@ -1,7 +1,7 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSaveMode": "file",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "python.linting.pylintEnabled": true,
   "python.linting.mypyEnabled": true,
   "python.linting.enabled": true,
