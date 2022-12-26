@@ -111,17 +111,20 @@ class Cisco(FlaskForm):
 
 
 class Software(FlaskForm):
-    software_type = StringField(
-        "Subscription/ Software Type", validators=[DataRequired()])
-    duration_time = StringField(
-        "Duration Time / Months", validators=[DataRequired()])
-    customer_contact = StringField(
-        "End Costumer contact", validators=[DataRequired()])
+    software_type = SelectField(
+        "Subs/Software Type",choices=["SaaS","Embedded in Hardware","Subscription licence"], validators=[DataRequired()])
+    duration_time = SelectField(
+        "Duration Time in Months",choices=[("12"),("24"),("36"),("48"),("60")], validators=[DataRequired()])
+    customer_contact = TextAreaField(
+        "End Costumer contact", validators=[DataRequired()],render_kw={"placeholder": "Name/ Phone/ Email"})
     subscription_id = StringField("Subscription ID")
-    start_date = StringField("Start Day", validators=[DataRequired()])
-    type_of_purchase = StringField(
-        "Type of Purchase", validators=[DataRequired()])
 
+        
+    start_date = StringField("Start Day", validators=[DataRequired()])
+    type_of_purchase = SelectField(
+        "Type of Purchase",choices=[("New"),("Non-automatic Renewal "),("Automatic Renewal")] ,validators=[DataRequired()])
+   
+        
 
 class Status(FlaskForm):
     assignment = SelectField("Assign", validate_choice=False)
