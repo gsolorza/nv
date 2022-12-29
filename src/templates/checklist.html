@@ -8,7 +8,7 @@
     <form method="POST" action="" class="content-section">
 
         {{ form.hidden_tag() }}
-        {% if false %}
+        {% if true %}
         <div class="row shadow-lg p-3 mb-5 bg-body rounded">
             <legend class="text-center"><strong class="display-6 colorh2">Purchase Order Processing Checklist -
                     Chile</strong></legend>
@@ -69,49 +69,45 @@
 
 
                     </div>
-                    <div class="col-md-4">
-                        {{form.customer_rut.label(class="form-control-label", for="validationCustom01")}}
-                        {{form.customer_rut(class="form-control form-control-md validated " ,
+                    <div class="col-md-4 custome-select">
+                        {{form.customer.label(class="form-control-label", for="validationCustom01")}}
+                        {{form.customer(class="form-select form-control-md validated ",
                         id='validationcustome01')}}
 
 
                     </div>
-                    <div class="col-md-4">
-                        <div><br></div>
-                        <button id="btn_search" , class="btn btn-md btn-outline-success mt-1"> Search</button>
-
-                    </div>
+           
                 </div>
                 <div class="row">
                     <div class="col-md-2">
 
-                        {{form.customer_name.label(class="form-control-label mt-3 pt-0 mb-0",
+                        {{customer.customer_name.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
-                        {{form.customer_name(class="form-control form-control-md validated " ,
+                        {{customer.customer_name(class="form-control form-control-md validated " ,
                         id='validationcustome01')}}
                     </div>
                     <div class="col-md-2">
-                        {{form.customer_contact_name.label(class="form-control-label mt-3 pt-0 mb-0",
+                        {{customer.customer_contact_name.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
-                        {{form.customer_contact_name(class="form-control form-control-md validated " ,
+                        {{customer.customer_contact_name(class="form-control form-control-md validated " ,
                         id='validationcustome01')}}
                     </div>
                     <div class="col-md-2">
-                        {{form.customer_contact_email.label(class="form-control-label mt-3 pt-0 mb-0",
+                        {{customer.customer_contact_email.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
-                        {{form.customer_contact_email(class="form-control form-control-md validated " ,
+                        {{customer.customer_contact_email(class="form-control form-control-md validated " ,
                         id='validationcustome01')}}
                     </div>
                     <div class="col-md-2">
-                        {{form.customer_contact_phone.label(class="form-control-label mt-3 pt-0 mb-0",
+                        {{customer.customer_contact_phone.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
-                        {{form.customer_contact_phone(class="form-control form-control-md validated " ,
+                        {{customer.customer_contact_phone(class="form-control form-control-md validated " ,
                         id='validationcustome01')}}
                     </div>
                     <div class="col-md-3">
-                        {{form.customer_address.label(class="form-control-label mt-3 pt-0 mb-0",
+                        {{customer.customer_address.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
-                        {{form.customer_address(class="form-control form-control-md mb-4 ml-2 validated " ,
+                        {{customer.customer_address(class="form-control form-control-md mb-4 ml-2 validated " ,
                         id='validationcustome01')}}
                     </div>
                 </div>

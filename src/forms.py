@@ -38,6 +38,20 @@ class InitialFormSales(FlaskForm):
     include_cisco = BooleanField(" Cisco Vendor", default='checked')
     submit = SubmitField("Create Form")
 
+class CustomerForm(FlaskForm):
+    customer_name = StringField("Customer Name", validators=[
+                                DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+    customer_rut = StringField("Customer RUT", validators=[
+                               DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+    customer_address = TextAreaField("Customer Address", validators=[
+        DataRequired(), Length(min=5, max=300)], render_kw={"readonly": False})
+    customer_contact_name = StringField("Customer Contact Name", validators=[
+                                        DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+    customer_contact_phone = StringField("Customer Contact Phone", validators=[
+                                         DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+    customer_contact_email = EmailField("Customer Contact Email", validators=[
+                                        DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+    submit=SubmitField("Create Customer")
 
 class ChecklistFormSales(FlaskForm):
     sale_note = StringField("Sale Note ID", validators=[
@@ -52,18 +66,6 @@ class ChecklistFormSales(FlaskForm):
                                       DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     pre_sales_name = SelectField("Pre Sales Engineer", validate_choice=False)
     date = DateField("Date", validators=[DataRequired()])
-    customer_name = StringField("Customer Name", validators=[
-                                DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    customer_rut = StringField("Customer RUT", validators=[
-                               DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    customer_address = TextAreaField("Customer Address", validators=[
-        DataRequired(), Length(min=5, max=300)], render_kw={"readonly": False})
-    customer_contact_name = StringField("Customer Contact Name", validators=[
-                                        DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    customer_contact_phone = StringField("Customer Contact Phone", validators=[
-                                         DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    customer_contact_email = EmailField("Customer Contact Email", validators=[
-                                        DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     dispatch_address = TextAreaField("Dispatch Address", validators=[
         DataRequired(), Length(min=5, max=300)], render_kw={"readonly": False})
     dispatch_receiver_name = StringField("Dispatch Receiver Name", validators=[
@@ -78,6 +80,8 @@ class ChecklistFormSales(FlaskForm):
     include_cisco = BooleanField("Cisco Vendor", default='checked')
     comments = TextAreaField("Comments", validators=[DataRequired(), Length(
         min=5, max=2000)], render_kw={"placeholder": "Enter your comments"})
+    
+    customer = SelectField("Customer",choices=["google","facebook","bhp"] ,validators=[DataRequired()])
 
     submit = SubmitField("Submit")
 

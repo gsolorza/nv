@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from forms import LoginForm
-from forms import RegistrationForm, InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, Status
+from forms import RegistrationForm, InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, Status,CustomerForm
 # from src.database.schema import Status
 from db import SessionLocal, engine
 import crud
@@ -89,6 +89,7 @@ def initial():
 def checklist():
     form = ChecklistFormSales()
     status = Status()
+    customer= CustomerForm()
     role_list = crud.get_role(schema.Query(), db())
     pre_sales_role = crud.get_role(schema.Query(
         column="role_name", value="PreSales"), db())
@@ -109,7 +110,7 @@ def checklist():
             Software(), software_quantity, request.form)
         flash(
             f'initial information, added correctly!', 'primary')
-        return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales)
+        return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales, customer=customer)
     return redirect(url_for("initial"))
 
 
@@ -152,6 +153,12 @@ def form_update(form_id):
     form_cisco = crud.encap_form(Cisco(), form_data)
     form_software = crud.encap_form(Software(), form_data)
     return redirect(url_for("home"))
+
+@app.route("/CreateCustomer",methods=["GET","POST"])
+def CreateCustomer():
+    customer = CustomerForm()
+    return render_template("create_customer.html", title="Create Customer",customer=customer)
+
 
 
 if __name__ == "__main__":
