@@ -98,9 +98,6 @@ class Customer(Base):
     customer_contact_phone = Column(String, nullable=False)
     customer_contact_email = Column(String, nullable=False)
     form = relationship("Form", back_populates="customer")
-
-    def __str__(self):
-        return self.customer_name
         
 class Software(Base):
     __tablename__ = "software"

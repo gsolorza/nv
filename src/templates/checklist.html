@@ -46,10 +46,6 @@
             </div>
 
 
-
-
-
-
             <div class="row">
 
 
@@ -85,41 +81,27 @@
                     </div>
            
                 </div>
-                <div class="row">
-                    <div class="col-md-2">
 
-                        {{customer.customer_name.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{customer.customer_name(class="form-control form-control-md validated " ,
-                        id='customer_name', disabled=True)}}
-                    </div>
-                    <div class="col-md-2">
-                        {{customer.customer_contact_name.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{customer.customer_contact_name(class="form-control form-control-md validated " ,
-                        id='customer_contact_name', disabled=True)}}
-                    </div>
-                    <div class="col-md-2">
-                        {{customer.customer_contact_email.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{customer.customer_contact_email(class="form-control form-control-md validated " ,
-                        id='customer_contact_email', disabled=True)}}
-                    </div>
-                    <div class="col-md-2">
-                        {{customer.customer_contact_phone.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{customer.customer_contact_phone(class="form-control form-control-md validated " ,
-                        id='customer_contact_phone', disabled=True)}}
-                    </div>
-                    <div class="col-md-3">
-                        {{customer.customer_address.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{customer.customer_address(class="form-control form-control-md mb-4 ml-2 validated " ,
-                        id='customer_address', disabled=True)}}
-                    </div>
-                </div>
-
-
+                <table class="table" id="customer_table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Contact Name</th>
+                        <th scope="col">Contact Phone</th>
+                        <th scope="col">Contact Email</th>
+                        <th scope="col">Address</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="customer_data">
+                            <td id="customer_name_row"></td>
+                            <td id="customer_contact_name_row"></td>
+                            <td id="customer_contact_phone_row"></td>
+                            <td id="customer_contact_email_row"></td>
+                            <td id="customer_address_row"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <legend class="text-center"><strong><i class="fs-6">Dispatch Customer Information</i></strong></legend>
 
@@ -280,6 +262,15 @@
 {% endif %}
 
 {% endif %}
+{{ form.include_cisco(hidden=True) }}
+{{ form.include_vendor(hidden=True) }}
+{{ form.include_software(hidden=True) }}
+{{ customer.customer_name(hidden=True, id="customer_name") }}
+{{ customer.customer_contact_name(hidden=True, id="customer_contact_name") }}
+{{ customer.customer_contact_phone(hidden=True, id="customer_contact_phone") }}
+{{ customer.customer_contact_email(hidden=True, id="customer_contact_email") }}
+{{ customer.customer_address(hidden=True, id="customer_address") }}
+{{ form.customer_id(hidden=True, id="customer_id") }}
 </section>
 
 
@@ -514,11 +505,6 @@
     </fieldset>
 </div>
 
-{{ form.include_cisco(hidden=True) }}
-{{ form.include_vendor(hidden=True) }}
-{{ form.include_software(hidden=True) }}
-{{ form.customer_id(hidden=True, id="customer_id", disabled=True) }}
-
 <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
 
@@ -597,6 +583,9 @@
                         subscription_id[i].removeAttribute("disabled")
                     }
                 })
+                if(dropDown[i].value != "SaaS"){
+                    subscription_id[i].setAttribute("disabled", "")
+                }
             }
         }
         update_software_drop_down()
@@ -618,6 +607,23 @@ let customer_contact_email = document.querySelector("#customer_contact_email")
 let customer_contact_phone = document.querySelector("#customer_contact_phone")
 let customer_address = document.querySelector("#customer_address")
 let customer_id = document.querySelector("#customer_id")
+let customer_table = document.querySelector("#customer_table")
+let customer_data = document.querySelector("#customer_data")
+
+function update_customer_data(){
+    let customer_name_row = document.querySelector("#customer_name_row")
+    let customer_contact_row = document.querySelector("#customer_contact_name_row")
+    let customer_phone_row = document.querySelector("#customer_contact_phone_row")
+    let customer_email_row = document.querySelector("#customer_contact_email_row")
+    let customer_address_row = document.querySelector("#customer_address_row")
+
+    customer_name_row.innerText = customer_name.value
+    customer_contact_row.innerText = customer_contact_name.value
+    customer_phone_row.innerText = customer_contact_phone.value
+    customer_email_row.innerText = customer_contact_email.value
+    customer_address_row.innerText = customer_address.value
+}
+update_customer_data()
 
 function addCustomer(selectedCustomer) {
     options.innerHTML = "";
@@ -625,12 +631,13 @@ function addCustomer(selectedCustomer) {
         customerName = customer.customer_name+" - "+customer.customer_rut
         let isSelected = customerName == selectedCustomer ? "selected" : "";
         if(isSelected){
-            customer_name.value = customer.customer_name
-            customer_contact_name.value = customer.customer_contact_name
-            customer_contact_email.value = customer.customer_contact_email
-            customer_contact_phone.value = customer.customer_contact_phone
-            customer_address.value = customer.customer_address
+            customer_name.setAttribute("value", customer.customer_name)
+            customer_contact_name.setAttribute("value", customer.customer_contact_name)
+            customer_contact_email.setAttribute("value", customer.customer_contact_email)
+            customer_contact_phone.setAttribute("value", customer.customer_contact_phone)
+            customer_address.innerText = customer.customer_address
             customer_id.setAttribute("value", customer.id)
+            update_customer_data()
         }
         let li = `<li onclick="updateName(this)" class="${isSelected}">${customerName}</li>`;
         options.insertAdjacentHTML("beforeend", li);
@@ -657,7 +664,9 @@ searchInp.addEventListener("keyup", () => {
     }).join("");
     options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! Customer not found</p>`;
 });
-selectBtn.addEventListener("click", () => wrapper.classList.toggle("active"));
+selectBtn.addEventListener("click", () => {
+    wrapper.classList.toggle("active")
+});
 </script>
 
 {%endblock content%}

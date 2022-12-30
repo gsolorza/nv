@@ -98,7 +98,8 @@ def checklist():
     status.assignment.choices = [
         role for role in role_list]  # type: ignore
     if request.method == "POST":
-        customers = [dict(customer) for customer in crud.get_customer(schema.Query(), db())]      
+        pprint(request.form)
+        customers = [dict(customer) for customer in crud.get_customer(schema.Query(), db())] # type: ignore      
         cisco_quantity = request.form.get("cisco_quantity")
         vendor_quantity = request.form.get("vendor_quantity")
         software_quantity = request.form.get("software_quantity")
