@@ -57,9 +57,9 @@ async def get_user_role(query: schema.Id, db: Session = Depends(getDb)):
     return response
 
 
-@app.get("/get_customer", response_model=schema.Customer)
+@app.get("/get_customer", response_model=Any)
 async def get_customer(query: schema.Query, db: Session = Depends(getDb)):
-    response = crud.get_customer(query.column, query.value, db)
+    response = crud.get_customer(query, db)
     return response
 
 

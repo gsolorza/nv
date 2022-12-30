@@ -48,6 +48,10 @@ class Form(Base):
         "Software", back_populates="form", cascade="all, delete", passive_deletes=True)
     status = Column(String, nullable=False)
     date = Column(Date, nullable=False)
+    dispatch_address = Column(String, unique=True, nullable=False)
+    dispatch_receiver_name = Column(String, nullable=False)
+    dispatch_receiver_phone = Column(String, nullable=False)
+    dispatch_receiver_email = Column(String, nullable=False)
 
 
 class Cisco(Base):
@@ -56,13 +60,13 @@ class Cisco(Base):
     id = Column(
         Integer, index=True, primary_key=True, unique=True, nullable=False
     )
-    vendor_deal_id = Column(String, nullable=False)
+    cisco_deal_id = Column(String, nullable=False)
     vendor_name = Column(String, nullable=False, default="Cisco")
-    account_manager_name = Column(String, nullable=False)
-    account_manager_phone = Column(String, nullable=False)
-    account_manager_email = Column(String, nullable=False)
-    smart_account = Column(String, default="")
-    virtual_account = Column(String, default="")
+    cisco_account_manager_name = Column(String, nullable=False)
+    cisco_account_manager_phone = Column(String, nullable=False)
+    cisco_account_manager_email = Column(String, nullable=False)
+    cisco_smart_account = Column(String, default="")
+    cisco_virtual_account = Column(String, default="")
     form_id = Column(Integer, ForeignKey("form.id", ondelete="CASCADE"))
     form = relationship("Form", back_populates="cisco")
 
@@ -87,19 +91,17 @@ class Customer(Base):
     __tablename__ = "customer"
     id = Column(Integer, index=True, primary_key=True,
                 unique=True, nullable=False)
-    customer_name = Column(String, unique=True, nullable=False)
+    customer_name = Column(String, nullable=False)
     customer_rut = Column(String, unique=True, nullable=False)
     customer_address = Column(String, unique=True, nullable=False)
     customer_contact_name = Column(String, nullable=False)
     customer_contact_phone = Column(String, nullable=False)
     customer_contact_email = Column(String, nullable=False)
-    dispatch_address = Column(String, unique=True, nullable=False)
-    dispatch_receiver_name = Column(String, nullable=False)
-    dispatch_receiver_phone = Column(String, nullable=False)
-    dispatch_receiver_email = Column(String, nullable=False)
     form = relationship("Form", back_populates="customer")
 
-
+    def __str__(self):
+        return self.customer_name
+        
 class Software(Base):
     __tablename__ = "software"
     id = Column(Integer, index=True, primary_key=True,

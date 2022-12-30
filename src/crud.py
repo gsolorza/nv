@@ -108,16 +108,30 @@ def display_full_form(search: schema.Query, db: Session):
     return data
 
 
-def get_customer(column: str, value: Union[str, int], db: Session):
-    query = (
-        db.query(models.Customer)
-        .filter(models.Customer.__getattribute__(models.Customer, column) == value)
-        .first()
-    )
-    if query:
-        customer = schema.Customer.parse_obj(query.__dict__)
-        return customer
-    return query
+def get_customer(search: schema.Query, db: Session) -> Union[list[schema.Customer], None]:
+    data = []
+    if search.column and search.value:
+        query = (
+            db.query(models.Customer)
+            .filter(models.Customer.__getattribute__(models.Customer, search.column) == search.value)
+            .first()
+        )
+        if query:
+            customer = schema.Customer.parse_obj(query.__dict__)
+            data.append(query)
+            return data
+        return None
+    else:
+        query = (
+            db.query(models.Customer)
+            .all()
+        )
+        if query:
+            for table in query:
+                customer = schema.Customer.parse_obj(table.__dict__)
+                data.append(customer)
+            return data
+        return None
 
 
 def get_vendor(search: schema.Query, db: Session):
@@ -240,6 +254,10 @@ def create_form(form: schema.CreateForm, db: Session):
                 status=form.status,
                 date=form.date,
                 sale_note=form.sale_note,
+                dispatch_address=form.dispatch_address,
+                dispatch_receiver_name=form.dispatch_receiver_name,
+                dispatch_receiver_phone=form.dispatch_receiver_phone,
+                dispatch_receiver_email=form.dispatch_receiver_email,
             )
             db.add(new_form)
             db.commit()
@@ -252,7 +270,7 @@ def create_form(form: schema.CreateForm, db: Session):
 
 def create_customer(customer: schema.CreateCustomer, db: Session):
     message = schema.Message()
-    if get_customer("customer_rut", customer.customer_rut, db):
+    if get_customer(schema.Query(column="customer_rut", value=customer.customer_rut), db):
         message.add(MessageType.alreadyExist, customer.customer_rut)
     else:
         try:
@@ -262,11 +280,7 @@ def create_customer(customer: schema.CreateCustomer, db: Session):
                 customer_address=customer.customer_address,
                 customer_contact_name=customer.customer_contact_name,
                 customer_contact_phone=customer.customer_contact_phone,
-                customer_contact_email=customer.customer_contact_email,
-                dispatch_address=customer.dispatch_address,
-                dispatch_receiver_name=customer.dispatch_receiver_name,
-                dispatch_receiver_phone=customer.dispatch_receiver_phone,
-                dispatch_receiver_email=customer.dispatch_receiver_email,
+                customer_contact_email=customer.customer_contact_email
             )
             db.add(new_customer)
             db.commit()
@@ -298,12 +312,12 @@ def create_vendor(vendor: Union[schema.CreateVendor, schema.CreateCisco], db: Se
     else:
         try:
             new_vendor = models.Cisco(
-                vendor_deal_id=vendor.vendor_deal_id,
-                account_manager_name=vendor.account_manager_name,
-                account_manager_phone=vendor.account_manager_phone,
-                account_manager_email=vendor.account_manager_email,
-                smart_account=vendor.smart_account,
-                virtual_account=vendor.virtual_account,
+                cisco_deal_id=vendor.cisco_deal_id,
+                cisco_account_manager_name=vendor.cisco_account_manager_name,
+                cisco_account_manager_phone=vendor.cisco_account_manager_phone,
+                cisco_account_manager_email=vendor.cisco_account_manager_email,
+                cisco_smart_account=vendor.cisco_smart_account,
+                cisco_virtual_account=vendor.cisco_virtual_account,
                 form_id=vendor.form_id,
             )
             db.add(new_vendor)
@@ -372,16 +386,10 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
             form.quote_direct.data = data.form.quote_direct
             form.client_manager_name.data = data.form.client_manager_name
             form.pre_sales_name.data = data.form.pre_sales_name
-            form.customer_name.data = data.customer.customer_name
-            form.customer_rut.data = data.customer.customer_rut
-            form.customer_address.data = data.customer.customer_address
-            form.customer_contact_name.data = data.customer.customer_contact_name
-            form.customer_contact_phone.data = data.customer.customer_contact_phone
-            form.customer_contact_email.data = data.customer.customer_contact_email
-            form.dispatch_address.data = data.customer.dispatch_address
-            form.dispatch_receiver_name.data = data.customer.dispatch_receiver_name
-            form.dispatch_receiver_phone.data = data.customer.dispatch_receiver_phone
-            form.dispatch_receiver_email.data = data.customer.dispatch_receiver_email
+            form.dispatch_address.data = data.form.dispatch_address
+            form.dispatch_receiver_name.data = data.form.dispatch_receiver_name
+            form.dispatch_receiver_phone.data = data.form.dispatch_receiver_phone
+            form.dispatch_receiver_email.data = data.form.dispatch_receiver_email
             form.comments.data = data.form.comments
             return form
         else:
@@ -405,12 +413,12 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
             cisco_list: list[Cisco] = []
             for cisco in data.cisco:
                 form_cisco = Cisco()
-                form_cisco.cisco_deal_id.data = cisco.vendor_deal_id
-                form_cisco.cisco_account_manager_name.data = cisco.account_manager_name
-                form_cisco.cisco_account_manager_phone.data = cisco.account_manager_phone
-                form_cisco.cisco_account_manager_email.data = cisco.account_manager_email
-                form_cisco.cisco_smart_account.data = cisco.smart_account
-                form_cisco.cisco_virtual_account.data = cisco.virtual_account
+                form_cisco.cisco_deal_id.data = cisco.cisco_deal_id
+                form_cisco.cisco_account_manager_name.data = cisco.cisco_account_manager_name
+                form_cisco.cisco_account_manager_phone.data = cisco.cisco_account_manager_phone
+                form_cisco.cisco_account_manager_email.data = cisco.cisco_account_manager_email
+                form_cisco.cisco_smart_account.data = cisco.cisco_smart_account
+                form_cisco.cisco_virtual_account.data = cisco.cisco_virtual_account
                 cisco_list.append(form_cisco)
             return cisco_list
         else:

@@ -67,14 +67,21 @@
                 <div class="row">
                     <div class="col-md-4">
 
-
                     </div>
                     <div class="col-md-4 custome-select">
-                        {{form.customer.label(class="form-control-label", for="validationCustom01")}}
-                        {{form.customer(class="form-select form-control-md validated ",
-                        id='validationcustome01')}}
-
-
+                        <div class="wrapper">
+                            <div class="select-btn">
+                              <span>Select Customer</span>
+                              <i class="uil uil-angle-down"></i>
+                            </div>
+                            <div class="content">
+                              <div class="search">
+                                <i class="uil uil-search"></i>
+                                <input spellcheck="false" type="text" placeholder="Search">
+                              </div>
+                              <ul class="options"></ul>
+                            </div>
+                          </div>
                     </div>
            
                 </div>
@@ -84,31 +91,31 @@
                         {{customer.customer_name.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
                         {{customer.customer_name(class="form-control form-control-md validated " ,
-                        id='validationcustome01')}}
+                        id='customer_name', disabled=True)}}
                     </div>
                     <div class="col-md-2">
                         {{customer.customer_contact_name.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
                         {{customer.customer_contact_name(class="form-control form-control-md validated " ,
-                        id='validationcustome01')}}
+                        id='customer_contact_name', disabled=True)}}
                     </div>
                     <div class="col-md-2">
                         {{customer.customer_contact_email.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
                         {{customer.customer_contact_email(class="form-control form-control-md validated " ,
-                        id='validationcustome01')}}
+                        id='customer_contact_email', disabled=True)}}
                     </div>
                     <div class="col-md-2">
                         {{customer.customer_contact_phone.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
                         {{customer.customer_contact_phone(class="form-control form-control-md validated " ,
-                        id='validationcustome01')}}
+                        id='customer_contact_phone', disabled=True)}}
                     </div>
                     <div class="col-md-3">
                         {{customer.customer_address.label(class="form-control-label mt-3 pt-0 mb-0",
                         for="validationCustom01")}}
                         {{customer.customer_address(class="form-control form-control-md mb-4 ml-2 validated " ,
-                        id='validationcustome01')}}
+                        id='customer_address', disabled=True)}}
                     </div>
                 </div>
 
@@ -506,6 +513,7 @@
 
     </fieldset>
 </div>
+
 <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
 
@@ -570,18 +578,76 @@
 
 </script>
 <script>
-    let dropDown = document.getElementById('software_type_select')
-    let subs_id = document.getElementById('subs_id')
+    {% if form.include_software.data==true%}
+        let dropDown = document.getElementById('software_type_select')
+        let subs_id = document.getElementById('subs_id')
 
-    dropDown.addEventListener('change', function (event) {
-    if (dropDown.value != "SaaS"){
-        subs_id.setAttribute("disabled", "")         
-    }
-    else {
-        subs_id.removeAttribute("disabled")
-    }
-    }) 
+        dropDown.addEventListener('change', function (event) {
+        if (dropDown.value != "SaaS"){
+            subs_id.setAttribute("disabled", "")         
+        }
+        else {
+            subs_id.removeAttribute("disabled")
+        }
+        })
+    {% endif %}
 </script>
+
+<script>
+    // Script for the Autocomplete search bar for customer
+
+let customers = {{ customers | tojson }}
+console.log(customers)
+const wrapper = document.querySelector(".wrapper"),
+selectBtn = wrapper.querySelector(".select-btn"),
+searchInp = wrapper.querySelector("input"),
+options = wrapper.querySelector(".options");
+let customer_name = document.querySelector("#customer_name")
+let customer_contact_name = document.querySelector("#customer_contact_name")
+let customer_contact_email = document.querySelector("#customer_contact_email")
+let customer_contact_phone = document.querySelector("#customer_contact_phone")
+let customer_address = document.querySelector("#customer_address")
+
+function addCustomer(selectedCustomer) {
+    options.innerHTML = "";
+    customers.forEach(customer => {
+        customerName = customer.customer_name+" - "+customer.customer_rut
+        let isSelected = customerName == selectedCustomer ? "selected" : "";
+        if(isSelected){
+            customer_name.value = customer.customer_name
+            customer_contact_name.value = customer.customer_contact_name
+            customer_contact_email.value = customer.customer_contact_email
+            customer_contact_phone.value = customer.customer_contact_phone
+            customer_address.value = customer.customer_address
+        }
+        let li = `<li onclick="updateName(this)" class="${isSelected}">${customerName}</li>`;
+        options.insertAdjacentHTML("beforeend", li);
+    });
+}
+addCustomer();
+function updateName(selectedLi) {
+    searchInp.value = "";
+    addCustomer(selectedLi.innerText);
+    wrapper.classList.remove("active");
+    selectBtn.firstElementChild.innerText = selectedLi.innerText;
+
+}
+searchInp.addEventListener("keyup", () => {
+    let arr = [];
+    let searchWord = searchInp.value.toLowerCase();
+    arr = customers.filter(data => {
+        customerName = data.customer_name+" - "+data.customer_rut
+        return customerName.toLowerCase().startsWith(searchWord);
+    }).map(data => {
+        customerName = data.customer_name+" - "+data.customer_rut
+        let isSelected = data == selectBtn.firstElementChild.innerText ? "selected" : "";
+        return `<li onclick="updateName(this)" class="${isSelected}">${customerName}</li>`;
+    }).join("");
+    options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! Customer not found</p>`;
+});
+selectBtn.addEventListener("click", () => wrapper.classList.toggle("active"));
+</script>
+
 <div hidden>{{ form.include_cisco }} </div>
 <div hidden>{{ form.include_vendor }} </div>
 <div hidden>{{ form.include_software }} </div>

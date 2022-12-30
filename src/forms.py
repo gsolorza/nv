@@ -81,8 +81,6 @@ class ChecklistFormSales(FlaskForm):
     comments = TextAreaField("Comments", validators=[DataRequired(), Length(
         min=5, max=2000)], render_kw={"placeholder": "Enter your comments"})
     
-    customer = SelectField("Customer",choices=["google","facebook","bhp"] ,validators=[DataRequired()])
-
     submit = SubmitField("Submit")
 
 

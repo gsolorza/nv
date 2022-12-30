@@ -98,10 +98,10 @@ def checklist():
     status.assignment.choices = [
         role for role in role_list]  # type: ignore
     if request.method == "POST":
+        customers = [dict(customer) for customer in crud.get_customer(schema.Query(), db())]      
         cisco_quantity = request.form.get("cisco_quantity")
         vendor_quantity = request.form.get("vendor_quantity")
         software_quantity = request.form.get("software_quantity")
-        pprint(request.form)
         forms_cisco = [Cisco()] if not cisco_quantity else crud.replicateForm(
             Cisco(), cisco_quantity, request.form)
         forms_vendor = [Vendor()] if not vendor_quantity else crud.replicateForm(
@@ -110,7 +110,7 @@ def checklist():
             Software(), software_quantity, request.form)
         flash(
             f'initial information, added correctly!', 'primary')
-        return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales, customer=customer)
+        return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales, customer=customer, customers=customers)
     return redirect(url_for("initial"))
 
 

@@ -82,6 +82,10 @@ class CreateForm(BaseModel):
     status: str = Status.preSalesValidation.value
     sale_note: Union[str, None] = None
     date: datetime.date = datetime.date.today()
+    dispatch_address: str
+    dispatch_receiver_name: str
+    dispatch_receiver_phone: str
+    dispatch_receiver_email: str
 
     class Config:
         orm_mode = True
@@ -114,10 +118,6 @@ class CreateCustomer(BaseModel):
     customer_contact_name: str
     customer_contact_phone: str
     customer_contact_email: str
-    dispatch_address: str
-    dispatch_receiver_name: str
-    dispatch_receiver_phone: str
-    dispatch_receiver_email: str
 
     class Config:
         orm_mode = True
@@ -125,6 +125,9 @@ class CreateCustomer(BaseModel):
 
 class Customer(CreateCustomer):
     id: int
+
+    class Config:
+        orm_mode = True
 
 
 class CreateVendor(BaseModel):
@@ -145,17 +148,19 @@ class Vendor(CreateVendor):
 
 class CreateCisco(BaseModel):
     form_id: int
-    vendor_deal_id: str
-    account_manager_name: str
-    account_manager_phone: str
-    account_manager_email: str
-    smart_account: str = ""
-    virtual_account: str = ""
+    vendor_name: str = "Cisco"
+    cisco_deal_id: str
+    cisco_account_manager_name: str
+    cisco_account_manager_phone: str
+    cisco_account_manager_email: str
+    cisco_smart_account: str = ""
+    cisco_virtual_account: str = ""
 
+    class Config:
+        orm_mode = True
 
-class Cisco(CreateVendor):
+class Cisco(CreateCisco):
     id: int
-
 
 class CreateSoftware(BaseModel):
     form_id: int
@@ -175,11 +180,11 @@ class Software(CreateSoftware):
 
 
 class FullForm(BaseModel):
-    form: CreateForm
-    customer: CreateCustomer
-    vendor: Union[list[CreateVendor], None] = None
-    cisco: Union[list[CreateCisco], None] = None
-    software: Union[list[CreateSoftware], None] = None
+    form: Form
+    customer: Customer
+    vendor: Union[list[Vendor], None] = None
+    cisco: Union[list[Cisco], None] = None
+    software: Union[list[Software], None] = None
 
 
 class Message(BaseModel):
