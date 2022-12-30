@@ -420,7 +420,7 @@
                     {{form_software.subscription_id.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_software.subscription_id(class="form-control form-control-md validated " ,
-                    id='subs_id')}}
+                    id='subscription_id_field')}}
                 </div>
             </div>
         </div>
@@ -514,6 +514,11 @@
     </fieldset>
 </div>
 
+{{ form.include_cisco(hidden=True) }}
+{{ form.include_vendor(hidden=True) }}
+{{ form.include_software(hidden=True) }}
+{{ form.customer_id(hidden=True, id="customer_id", disabled=True) }}
+
 <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
 
@@ -529,9 +534,8 @@
         let btn = document.querySelector(buttonId);
         for (element of elements) {
             let field = document.querySelector(element).cloneNode(true);
-            var sectionLength = document.querySelectorAll(element).length
+            var sectionLength = parseInt(document.querySelector(quantity).value)
             if (field) {
-                field.id = element.replace("#", "") + sectionLength
                 field.children[0].firstElementChild.children[1].name = element.replace("#", "") + sectionLength
                 field.children[0].firstElementChild.children[1].value = ""
                 form.appendChild(field)
@@ -550,7 +554,7 @@
             buttonId = "#btnsoftware"
             quantity = "#software_quantity"
             changeAttribute(elementList, formId, buttonId, quantity)
-
+            update_software_drop_down()
         });
     });
 
@@ -579,17 +583,24 @@
 </script>
 <script>
     {% if form.include_software.data==true%}
-        let dropDown = document.getElementById('software_type_select')
-        let subs_id = document.getElementById('subs_id')
 
-        dropDown.addEventListener('change', function (event) {
-        if (dropDown.value != "SaaS"){
-            subs_id.setAttribute("disabled", "")         
+        function update_software_drop_down(){
+            let quantity = parseInt(document.querySelector("#software_quantity").value)
+            let dropDown = document.querySelectorAll("#software_type_select")
+            let subscription_id = document.querySelectorAll("#subscription_id_field")
+            for(let i = 0; i < quantity; i++){
+                dropDown[i].addEventListener("change", function(event){
+                    if (dropDown[i].value != "SaaS"){
+                        subscription_id[i].setAttribute("disabled", "")         
+                    }
+                    else {
+                        subscription_id[i].removeAttribute("disabled")
+                    }
+                })
+            }
         }
-        else {
-            subs_id.removeAttribute("disabled")
-        }
-        })
+        update_software_drop_down()
+
     {% endif %}
 </script>
 
@@ -597,7 +608,6 @@
     // Script for the Autocomplete search bar for customer
 
 let customers = {{ customers | tojson }}
-console.log(customers)
 const wrapper = document.querySelector(".wrapper"),
 selectBtn = wrapper.querySelector(".select-btn"),
 searchInp = wrapper.querySelector("input"),
@@ -607,6 +617,7 @@ let customer_contact_name = document.querySelector("#customer_contact_name")
 let customer_contact_email = document.querySelector("#customer_contact_email")
 let customer_contact_phone = document.querySelector("#customer_contact_phone")
 let customer_address = document.querySelector("#customer_address")
+let customer_id = document.querySelector("#customer_id")
 
 function addCustomer(selectedCustomer) {
     options.innerHTML = "";
@@ -619,6 +630,7 @@ function addCustomer(selectedCustomer) {
             customer_contact_email.value = customer.customer_contact_email
             customer_contact_phone.value = customer.customer_contact_phone
             customer_address.value = customer.customer_address
+            customer_id.setAttribute("value", customer.id)
         }
         let li = `<li onclick="updateName(this)" class="${isSelected}">${customerName}</li>`;
         options.insertAdjacentHTML("beforeend", li);
@@ -647,9 +659,5 @@ searchInp.addEventListener("keyup", () => {
 });
 selectBtn.addEventListener("click", () => wrapper.classList.toggle("active"));
 </script>
-
-<div hidden>{{ form.include_cisco }} </div>
-<div hidden>{{ form.include_vendor }} </div>
-<div hidden>{{ form.include_software }} </div>
 
 {%endblock content%}

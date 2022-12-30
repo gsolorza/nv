@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, BooleanField, EmailField, TextAreaField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, DateField, BooleanField, EmailField, TextAreaField, SelectField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
 
 
@@ -81,6 +81,7 @@ class ChecklistFormSales(FlaskForm):
     comments = TextAreaField("Comments", validators=[DataRequired(), Length(
         min=5, max=2000)], render_kw={"placeholder": "Enter your comments"})
     
+    customer_id = IntegerField("Customer ID", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
