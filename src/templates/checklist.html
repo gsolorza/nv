@@ -4,19 +4,19 @@
 
 <!--seccion INFORMACION INICIAL-->
 
-<div class="col-md-12 col-lg-12">
-    <form method="POST" action="" class="content-section">
+<div class="col-md-12">
+    <form method="POST" action="" class="">
 
         {{ form.hidden_tag() }}
         {% if true %}
-        <div class="row shadow-lg p-3 mb-5 bg-body rounded">
+        <div class="row p-3 mb-5 bg-body rounded content-section border border-5 border-primary-subtle">
             <legend class="text-center"><strong class="display-6 colorh2">Purchase Order Processing Checklist -
                     Chile</strong></legend>
-            <p>Welcome {{current_user.name}}</p>
+            <strong class="dislpay-6">Welcome {{current_user.name}}</strong>
 
             <div class="row">
                 <div class="col-md-3">
-                    {{form.sales_force_id.label(class="form-control-label mt-3 pt-0 mb-0",
+                    {{form.sales_force_id.label(class="form-control-label mt-3 pt-0 mb-0 ",
                     for="validationCustom01")}}
                     {{form.sales_force_id(class="form-control form-control-md validated ")}}
 
@@ -55,112 +55,116 @@
 
 
         <div class="col-md-12 ">
-            <div class="row border-2 border-primary border-opacity-25 border-2 bg-opacity-10 bg-primary bg-gradient">
+            <div class="row p-3 mb-5 bg-body rounded content-section border border-info">
 
 
-                <legend class="text-center"><strong><i class="fs-6">Customer Information</i></strong></legend>
+                <legend class="text-center"><strong>CUSTOMER INFORMATION </strong></legend>
                 <hr>
-                <div class="row">
-                    <div class="col-md-4">
-
-                    </div>
+                <div>
+                <div class="col-md-12 row">
+                   
                     <div class="col-md-4 custome-select">
                         <div class="wrapper">
                             <div class="select-btn">
-                              <span>Select Customer</span>
-                              <i class="uil uil-angle-down"></i>
+                                <span>Select Customer</span>
+                                <i class="uil uil-angle-down"></i>
                             </div>
                             <div class="content">
-                              <div class="search">
-                                <i class="uil uil-search"></i>
-                                <input spellcheck="false" type="text" placeholder="Search">
-                              </div>
-                              <ul class="options"></ul>
+                                <div class="search">
+                                    <i class="uil uil-search"></i>
+                                    <input spellcheck="false" type="text" placeholder="Search">
+                                </div>
+                                <ul class="options"></ul>
                             </div>
-                          </div>
+                        </div>
+
+
+                        <table class="table mt-2 table-bordered" id="customer_table">
+                            <tbody>
+                                <tr>
+                                    <th scope="col table-info">Customer Name</th>
+                                    <td id="customer_name_row"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col table-info">Contact Name</th>
+                                    <td id="customer_contact_name_row"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col table-info">Contact Phone</th>
+                                    <td id="customer_contact_phone_row"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col table-info">Contact Email</th>
+                                    <td id="customer_contact_email_row"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col table-info">Address</th>
+                                    <td id="customer_address_row"></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-           
+                
+                    <div class="col-md-8 row">
+                        <legend class="text-center"><strong><i class="fs-6">Dispatch Customer Information</i></strong>
+                        </legend>
+
+                      
+
+                            <div class="col-md-6">
+
+                                {{form.dispatch_receiver_name.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.dispatch_receiver_name(class="form-control form-control-md validated " ,
+                                id='validationcustome01')}}
+
+                            </div>
+                            <div class="col-md-6">
+                                {{form.dispatch_receiver_phone.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.dispatch_receiver_phone(class="form-control form-control-md validated " ,
+                                id='validationcustome01')}}
+
+
+                            </div>
+                            <div class="col-md-6">
+
+                                {{form.dispatch_receiver_email.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.dispatch_receiver_email(class="form-control form-control-md validated " ,
+                                id='validationcustome01')}}
+
+                            </div>
+                            <div class="col-md-6">
+                                {{form.dispatch_address.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.dispatch_address(class="form-control form-control-md mb-4 ml-2 validated " ,
+                                id='validationcustome01')}}
+
+                            </div>
+                        </div>
+
+                  </div>
                 </div>
-
-                <table class="table" id="customer_table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Contact Name</th>
-                        <th scope="col">Contact Phone</th>
-                        <th scope="col">Contact Email</th>
-                        <th scope="col">Address</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="customer_data">
-                            <td id="customer_name_row"></td>
-                            <td id="customer_contact_name_row"></td>
-                            <td id="customer_contact_phone_row"></td>
-                            <td id="customer_contact_email_row"></td>
-                            <td id="customer_address_row"></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <legend class="text-center"><strong><i class="fs-6">Dispatch Customer Information</i></strong></legend>
-
-                <div class="row">
-                    <div class="col-md-2">
-                    </div>
-                    <div class="col-md-2">
-
-                        {{form.dispatch_receiver_name.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{form.dispatch_receiver_name(class="form-control form-control-md validated " ,
-                        id='validationcustome01')}}
-
-                    </div>
-                    <div class="col-md-2">
-                        {{form.dispatch_receiver_phone.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{form.dispatch_receiver_phone(class="form-control form-control-md validated " ,
-                        id='validationcustome01')}}
-
-
-                    </div>
-                    <div class="col-md-2">
-
-                        {{form.dispatch_receiver_email.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{form.dispatch_receiver_email(class="form-control form-control-md validated " ,
-                        id='validationcustome01')}}
-
-                    </div>
-                    <div class="col-md-3">
-                        {{form.dispatch_address.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{form.dispatch_address(class="form-control form-control-md mb-4 ml-2 validated " ,
-                        id='validationcustome01')}}
-
-                    </div>
-                </div>
-
-
             </div>
+            {% endif %}
         </div>
-        {% endif %}
+
         <!--SECCION CISCO-->
 
         {% if form.include_cisco.data==true%}
         <input type="number" id="cisco_quantity" name="cisco_quantity" value="{{forms_cisco|length}}" hidden>
         <section id="cisco_vendor" , name="seccion-prueba" , class="col-md-12">
             {% if forms_cisco %}
-            <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="form_cisco_vendor">
+            <div class="row shadow-sm  mb-5 bg-body rounded content-section border border-info " id="form_cisco_vendor">
                 {% for form_cisco in forms_cisco%}
                 <legend class="text-center"><strong>CISCO VENDOR INFORMATION </strong></legend><br>
                 <hr>
 
+                <div class="col-md-12 row">
 
 
-
-
-                <div id="cisco_deal_id" , class="col-md-1 row">
+                <div id="cisco_deal_id" , class="col-md-2 row">
                     <div class="">
                         <div class="form-group  border-1 needs-validation" novalidate>
                             {{form_cisco.cisco_deal_id.label(class="form-control-label", for="validationCustom01")}}
@@ -176,7 +180,7 @@
 
                 </div>
 
-                <div id="cisco_account_manager_name" , class="col-md-2 row">
+                <div id="cisco_account_manager_name" , class="col-md-auto row">
                     <div class="">
                         <div class="form-group  needs-validation" novalidate>
                             {{form_cisco.cisco_account_manager_name.label(class="form-control-label",
@@ -187,7 +191,7 @@
                     </div>
 
                 </div>
-                <div id="cisco_account_manager_phone" , class="col-md-2 row ">
+                <div id="cisco_account_manager_phone" , class="col-md-auto row ">
                     <div class="">
                         <div class="form-group  needs-validation" novalidate>
                             {{form_cisco.cisco_account_manager_phone.label(class="form-control-label",
@@ -199,7 +203,7 @@
 
                 </div>
 
-                <div id="cisco_account_manager_email" , class="col-md-2 row">
+                <div id="cisco_account_manager_email" , class="col-md-auto row">
                     <div class="">
                         <div class="form-group  needs-validation" novalidate>
                             {{form_cisco.cisco_account_manager_email.label(class="form-control-label",
@@ -210,7 +214,7 @@
                     </div>
 
                 </div>
-                <div id="cisco_smart_account" , class="col-md-2 row ">
+                <div id="cisco_smart_account" , class="col-md-auto row ">
                     <div class="">
                         <div class="form-group  needs-validation" novalidate>
                             {{form_cisco.cisco_smart_account.label(class="form-control-label",
@@ -222,7 +226,7 @@
 
                 </div>
 
-                <div id="cisco_virtual_account" , class="col-md-2 row ">
+                <div id="cisco_virtual_account" , class="col-md-auto row ">
                     <div class="">
                         <div class="form-group  needs-validation" novalidate>
                             {{form_cisco.cisco_virtual_account.label(class="form-control-label",
@@ -237,40 +241,44 @@
 
 
 
-                <div id="delete_cisco" , class="col-md-1  ">
+                <div id="delete_cisco" , class=" col-md-1 row ">
                     <div class="">
                         <div class="form-group  needs-validation" novalidate>
                             <br>
-                            <button type="button" name="delete_cisco" class="btn btn-outline-danger mt-2"> X</button>
+                            <button type="button" name="delete_cisco" class="btn btn-outline-danger"> X</button>
 
 
                         </div>
                     </div>
                 </div>
+                </div>
 
 
+                {% endfor %}
+                <div class="row">
+                    <button id="btnciscovendor" , class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add Other Deal
+                        ID</button>
+                </div>
             </div>
+            {% endif %}
+
+            {% endif %}
+            {{ form.include_cisco(hidden=True) }}
+            {{ form.include_vendor(hidden=True) }}
+            {{ form.include_software(hidden=True) }}
+            {{ customer.customer_name(hidden=True, id="customer_name") }}
+            {{ customer.customer_contact_name(hidden=True, id="customer_contact_name") }}
+            {{ customer.customer_contact_phone(hidden=True, id="customer_contact_phone") }}
+            {{ customer.customer_contact_email(hidden=True, id="customer_contact_email") }}
+            {{ customer.customer_address(hidden=True, id="customer_address") }}
+            {{ form.customer_id(hidden=True, id="customer_id") }}
+
+</div>
+
 
 </div>
 </div>
 
-{% endfor %}
-<div class="row">
-    <button id="btnciscovendor" , class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add Other Deal ID</button>
-</div>
-</div>
-{% endif %}
-
-{% endif %}
-{{ form.include_cisco(hidden=True) }}
-{{ form.include_vendor(hidden=True) }}
-{{ form.include_software(hidden=True) }}
-{{ customer.customer_name(hidden=True, id="customer_name") }}
-{{ customer.customer_contact_name(hidden=True, id="customer_contact_name") }}
-{{ customer.customer_contact_phone(hidden=True, id="customer_contact_phone") }}
-{{ customer.customer_contact_email(hidden=True, id="customer_contact_email") }}
-{{ customer.customer_address(hidden=True, id="customer_address") }}
-{{ form.customer_id(hidden=True, id="customer_id") }}
 </section>
 
 
@@ -279,7 +287,7 @@
 <input type="number" id="vendor_quantity" name="vendor_quantity" value="{{forms_vendor|length}}" hidden>
 <section id="vendor" , name="seccion-prueba" , class="col-md-12">
     {% if forms_vendor %}
-    <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="form_vendor">
+    <div class="row shadow-sm p-3 mb-5 bg-body rounded content-section border border-info" id="form_vendor">
         {% for form_vendor in forms_vendor%}
         <legend class="text-center"><strong>VENDOR INFORMATION </strong></legend><br>
         <hr>
@@ -370,11 +378,11 @@
 <input type="number" id="software_quantity" name="software_quantity" value="{{forms_software|length}}" hidden>
 <section id="software" , name="seccion-prueba" , class="col-md-12">
     {% if forms_software %}
-    <div class="row shadow-sm p-3 mb-5 bg-body rounded" id="Form_Software">
+    <div class="row shadow-sm p-3 mb-5 bg-body rounded content-section border border-info" id="Form_Software">
         {% for form_software in forms_software %}
         <legend class="text-center"><strong>SOFTWARE INFORMATION </strong></legend><br>
         <hr>
-        <div id="software_type" , class="col-md-2 row">
+        <div id="software_type" , class="col-md-auto row">
             <div class=" ">
                 <div class="custome-select  needs-validation" novalidate>
                     {{form_software.software_type.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -384,7 +392,7 @@
                 </div>
             </div>
         </div>
-        <div id="duration_time" , class="col-md-2 row">
+        <div id="duration_time" , class="col-md-auto row">
             <div class=" ">
                 <div class="custome-select needs-validation" novalidate>
                     {{form_software.duration_time.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -394,7 +402,7 @@
                 </div>
             </div>
         </div>
-        <div id="customer_contact" , class="col-md-2 row ">
+        <div id="customer_contact" , class="col-md-auto row ">
             <div class=" ">
                 <div class="form-group  needs-validation" novalidate>
                     {{form_software.customer_contact.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -405,7 +413,7 @@
             </div>
         </div>
 
-        <div id="subscription_id" , class="col-md-1 row">
+        <div id="subscription_id" , class="col-md-auto row">
             <div class=" ">
                 <div class="form-group  needs-validation" novalidate>
                     {{form_software.subscription_id.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -415,7 +423,7 @@
                 </div>
             </div>
         </div>
-        <div id="start_date" , class="col-md-2 row ">
+        <div id="start_date" , class="col-md-auto row ">
             <div class=" ">
                 <div class="form-group  needs-validation" novalidate>
                     {{form_software.start_date.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -425,7 +433,7 @@
                 </div>
             </div>
         </div>
-        <div id="type_of_purchase" , class="col-md-2 row ">
+        <div id="type_of_purchase" , class="col-md-auto row ">
             <div class=" ">
                 <div class="custome-select  needs-validation" novalidate>
                     {{form_software.type_of_purchase.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -436,7 +444,7 @@
                 </div>
             </div>
         </div>
-        <div id="delete_software" , class="col-md-1  ">
+        <div id="delete_software" , class="col-md-auto  ">
             <div class="">
                 <div class="form-group  needs-validation" novalidate>
                     <br>
@@ -449,7 +457,7 @@
 
         {% endfor %}
         <div class="row">
-            <button id="btnsoftware" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-3 mt-4">
+            <button id="btnsoftware" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
                 Add a new Software</button>
         </div>
     </div>
@@ -458,7 +466,7 @@
 </section>
 
 
-<div class="col-md-12 shadow-sm p-3 mb-5 bg-body rounded ">
+<div class="col-md-12 shadow-sm p-3 mb-5 bg-body rounded content-section">
     <div class="row bg-primary p-2 text-dark bg-opacity-10">
         <legend class=""><i class="fs-6">Please add your Comments</i></legend>
 
@@ -496,7 +504,7 @@
 
 
 
-    <div class="form-group">
+    <div class="form-group content-section">
         {{ form.submit(class="btn btn-md btn-primary ") }}
     </div>
 
@@ -504,6 +512,8 @@
 
     </fieldset>
 </div>
+
+</form>
 
 <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
@@ -568,27 +578,27 @@
 
 </script>
 <script>
-    {% if form.include_software.data==true%}
+    {% if form.include_software.data == true %}
 
-        function update_software_drop_down(){
-            let quantity = parseInt(document.querySelector("#software_quantity").value)
-            let dropDown = document.querySelectorAll("#software_type_select")
-            let subscription_id = document.querySelectorAll("#subscription_id_field")
-            for(let i = 0; i < quantity; i++){
-                dropDown[i].addEventListener("change", function(event){
-                    if (dropDown[i].value != "SaaS"){
-                        subscription_id[i].setAttribute("disabled", "")         
-                    }
-                    else {
-                        subscription_id[i].removeAttribute("disabled")
-                    }
-                })
-                if(dropDown[i].value != "SaaS"){
+    function update_software_drop_down() {
+        let quantity = parseInt(document.querySelector("#software_quantity").value)
+        let dropDown = document.querySelectorAll("#software_type_select")
+        let subscription_id = document.querySelectorAll("#subscription_id_field")
+        for (let i = 0; i < quantity; i++) {
+            dropDown[i].addEventListener("change", function (event) {
+                if (dropDown[i].value != "SaaS") {
                     subscription_id[i].setAttribute("disabled", "")
                 }
+                else {
+                    subscription_id[i].removeAttribute("disabled")
+                }
+            })
+            if (dropDown[i].value != "SaaS") {
+                subscription_id[i].setAttribute("disabled", "")
             }
         }
-        update_software_drop_down()
+    }
+    update_software_drop_down()
 
     {% endif %}
 </script>
@@ -596,77 +606,77 @@
 <script>
     // Script for the Autocomplete search bar for customer
 
-let customers = {{ customers | tojson }}
-const wrapper = document.querySelector(".wrapper"),
-selectBtn = wrapper.querySelector(".select-btn"),
-searchInp = wrapper.querySelector("input"),
-options = wrapper.querySelector(".options");
-let customer_name = document.querySelector("#customer_name")
-let customer_contact_name = document.querySelector("#customer_contact_name")
-let customer_contact_email = document.querySelector("#customer_contact_email")
-let customer_contact_phone = document.querySelector("#customer_contact_phone")
-let customer_address = document.querySelector("#customer_address")
-let customer_id = document.querySelector("#customer_id")
-let customer_table = document.querySelector("#customer_table")
-let customer_data = document.querySelector("#customer_data")
+    let customers = {{ customers | tojson }}
+    const wrapper = document.querySelector(".wrapper"),
+        selectBtn = wrapper.querySelector(".select-btn"),
+        searchInp = wrapper.querySelector("input"),
+        options = wrapper.querySelector(".options");
+    let customer_name = document.querySelector("#customer_name")
+    let customer_contact_name = document.querySelector("#customer_contact_name")
+    let customer_contact_email = document.querySelector("#customer_contact_email")
+    let customer_contact_phone = document.querySelector("#customer_contact_phone")
+    let customer_address = document.querySelector("#customer_address")
+    let customer_id = document.querySelector("#customer_id")
+    let customer_table = document.querySelector("#customer_table")
+    let customer_data = document.querySelector("#customer_data")
 
-function update_customer_data(){
-    let customer_name_row = document.querySelector("#customer_name_row")
-    let customer_contact_row = document.querySelector("#customer_contact_name_row")
-    let customer_phone_row = document.querySelector("#customer_contact_phone_row")
-    let customer_email_row = document.querySelector("#customer_contact_email_row")
-    let customer_address_row = document.querySelector("#customer_address_row")
+    function update_customer_data() {
+        let customer_name_row = document.querySelector("#customer_name_row")
+        let customer_contact_row = document.querySelector("#customer_contact_name_row")
+        let customer_phone_row = document.querySelector("#customer_contact_phone_row")
+        let customer_email_row = document.querySelector("#customer_contact_email_row")
+        let customer_address_row = document.querySelector("#customer_address_row")
 
-    customer_name_row.innerText = customer_name.value
-    customer_contact_row.innerText = customer_contact_name.value
-    customer_phone_row.innerText = customer_contact_phone.value
-    customer_email_row.innerText = customer_contact_email.value
-    customer_address_row.innerText = customer_address.value
-}
-update_customer_data()
+        customer_name_row.innerText = customer_name.value
+        customer_contact_row.innerText = customer_contact_name.value
+        customer_phone_row.innerText = customer_contact_phone.value
+        customer_email_row.innerText = customer_contact_email.value
+        customer_address_row.innerText = customer_address.value
+    }
+    update_customer_data()
 
-function addCustomer(selectedCustomer) {
-    options.innerHTML = "";
-    customers.forEach(customer => {
-        customerName = customer.customer_name+" - "+customer.customer_rut
-        let isSelected = customerName == selectedCustomer ? "selected" : "";
-        if(isSelected){
-            customer_name.setAttribute("value", customer.customer_name)
-            customer_contact_name.setAttribute("value", customer.customer_contact_name)
-            customer_contact_email.setAttribute("value", customer.customer_contact_email)
-            customer_contact_phone.setAttribute("value", customer.customer_contact_phone)
-            customer_address.innerText = customer.customer_address
-            customer_id.setAttribute("value", customer.id)
-            update_customer_data()
-        }
-        let li = `<li onclick="updateName(this)" class="${isSelected}">${customerName}</li>`;
-        options.insertAdjacentHTML("beforeend", li);
+    function addCustomer(selectedCustomer) {
+        options.innerHTML = "";
+        customers.forEach(customer => {
+            customerName = customer.customer_name + " - " + customer.customer_rut
+            let isSelected = customerName == selectedCustomer ? "selected" : "";
+            if (isSelected) {
+                customer_name.setAttribute("value", customer.customer_name)
+                customer_contact_name.setAttribute("value", customer.customer_contact_name)
+                customer_contact_email.setAttribute("value", customer.customer_contact_email)
+                customer_contact_phone.setAttribute("value", customer.customer_contact_phone)
+                customer_address.innerText = customer.customer_address
+                customer_id.setAttribute("value", customer.id)
+                update_customer_data()
+            }
+            let li = `<li onclick="updateName(this)" class="${isSelected}">${customerName}</li>`;
+            options.insertAdjacentHTML("beforeend", li);
+        });
+    }
+    addCustomer();
+    function updateName(selectedLi) {
+        searchInp.value = "";
+        addCustomer(selectedLi.innerText);
+        wrapper.classList.remove("active");
+        selectBtn.firstElementChild.innerText = selectedLi.innerText;
+
+    }
+    searchInp.addEventListener("keyup", () => {
+        let arr = [];
+        let searchWord = searchInp.value.toLowerCase();
+        arr = customers.filter(data => {
+            customerName = data.customer_name + " - " + data.customer_rut
+            return customerName.toLowerCase().startsWith(searchWord);
+        }).map(data => {
+            customerName = data.customer_name + " - " + data.customer_rut
+            let isSelected = data == selectBtn.firstElementChild.innerText ? "selected" : "";
+            return `<li onclick="updateName(this)" class="${isSelected}">${customerName}</li>`;
+        }).join("");
+        options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! Customer not found</p>`;
     });
-}
-addCustomer();
-function updateName(selectedLi) {
-    searchInp.value = "";
-    addCustomer(selectedLi.innerText);
-    wrapper.classList.remove("active");
-    selectBtn.firstElementChild.innerText = selectedLi.innerText;
-
-}
-searchInp.addEventListener("keyup", () => {
-    let arr = [];
-    let searchWord = searchInp.value.toLowerCase();
-    arr = customers.filter(data => {
-        customerName = data.customer_name+" - "+data.customer_rut
-        return customerName.toLowerCase().startsWith(searchWord);
-    }).map(data => {
-        customerName = data.customer_name+" - "+data.customer_rut
-        let isSelected = data == selectBtn.firstElementChild.innerText ? "selected" : "";
-        return `<li onclick="updateName(this)" class="${isSelected}">${customerName}</li>`;
-    }).join("");
-    options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! Customer not found</p>`;
-});
-selectBtn.addEventListener("click", () => {
-    wrapper.classList.toggle("active")
-});
+    selectBtn.addEventListener("click", () => {
+        wrapper.classList.toggle("active")
+    });
 </script>
 
 {%endblock content%}

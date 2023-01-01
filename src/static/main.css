@@ -51,60 +51,6 @@ strong label {
   margin-right: 15px;
 }
 
-.article-title {
-  color: #444444;
-}
-
-a.article-title:hover {
-  color: #428bca;
-  text-decoration: none;
-}
-
-.article-content {
-  white-space: pre-line;
-}
-
-.article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
-}
-
-.article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3;
-}
-
-.article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
-}
-
-.article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
-}
-
-.account-img {
-  height: 125px;
-  width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
-}
-
-.account-heading {
-  font-size: 2.5rem;
-}
-.borderclass {
-  -webkit-border-radius: 50px;
-  -webkit-border-bottom-right-radius: 0;
-  -moz-border-radius: 50px;
-  -moz-border-radius-bottomright: 0;
-  border-radius: 50px;
-  border-bottom-right-radius: 0;
-}
 
 .sinborde {
   border: 0;
@@ -139,7 +85,7 @@ a.article-title:hover {
 }
 
 /*IE*/
-.myselect::-ms-expand {
+/* .myselect::-ms-expand {
   display: none;
 }
 
@@ -147,10 +93,9 @@ a.article-title:hover {
   outline: 0;
   border-color: #7bbaff;
   box-shadow: 0 0 0 3px rgba(0, 121, 250, 0.3);
-}
+} */
 
 /*CSS FOR AUTOCOMPLETE SEARCH BAR*/
-
 *{
   margin: 0;
   padding: 0;
@@ -162,8 +107,8 @@ a.article-title:hover {
   background: #4285f4;
 }
 .wrapper{
-  width: 370px;
-  margin: 85px auto 0;
+  width: auto;
+  margin: 22px auto 0;
 }
 .select-btn, li{
   display: flex;
@@ -173,14 +118,14 @@ a.article-title:hover {
 .select-btn{
   height: 65px;
   padding: 0 20px;
-  font-size: 22px;
+  font-size: 20px;
   background: #fff;
   border-radius: 7px;
   justify-content: space-between;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 .select-btn i{
-  font-size: 31px;
+  font-size: 20px;
   transition: transform 0.3s linear;
 }
 .wrapper.active .select-btn i{
@@ -188,11 +133,11 @@ a.article-title:hover {
 }
 .content{
   display: none;
-  padding: 20px;
-  margin-top: 15px;
-  background: #fff;
+  padding: 10px;
+  margin-top: 0px;
+  background: rgba(125, 178, 232, 0.504);
   border-radius: 7px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
 }
 .wrapper.active .content{
   display: block;
@@ -250,8 +195,11 @@ a.article-title:hover {
   padding: 0 13px;
   font-size: 21px;
 }
+.options ol, ul{
+  padding-left: 0px !important;
+}
 .options li:hover, li.selected{
   border-radius: 5px;
   background: #f2f2f2;
 }
-
+ 
