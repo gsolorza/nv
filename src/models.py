@@ -38,7 +38,6 @@ class Form(Base):
     pre_sales_name = Column(String, nullable=False)
     sale_note = Column(String, nullable=True, default=None)
     customer_id = Column(Integer, ForeignKey("customer.id"), nullable=False)
-    comments = Column(String, nullable=False)
     customer = relationship("Customer", back_populates="form")
     vendor = relationship("Vendor", back_populates="form",
                           cascade="all, delete", passive_deletes=True)
@@ -46,12 +45,17 @@ class Form(Base):
                          cascade="all, delete", passive_deletes=True)
     software = relationship(
         "Software", back_populates="form", cascade="all, delete", passive_deletes=True)
-    status = Column(String, nullable=False)
-    date = Column(Date, nullable=False)
+    customer_address = Column(String, unique=True, nullable=False)
+    customer_contact_name = Column(String, nullable=False)
+    customer_contact_phone = Column(String, nullable=False)
+    customer_contact_email = Column(String, nullable=False)
     dispatch_address = Column(String, unique=True, nullable=False)
     dispatch_receiver_name = Column(String, nullable=False)
     dispatch_receiver_phone = Column(String, nullable=False)
     dispatch_receiver_email = Column(String, nullable=False)
+    status = Column(String, nullable=False)
+    date = Column(Date, nullable=False)
+    comments = Column(String, nullable=False)
 
 
 class Cisco(Base):
@@ -93,10 +97,6 @@ class Customer(Base):
                 unique=True, nullable=False)
     customer_name = Column(String, nullable=False)
     customer_rut = Column(String, unique=True, nullable=False)
-    customer_address = Column(String, unique=True, nullable=False)
-    customer_contact_name = Column(String, nullable=False)
-    customer_contact_phone = Column(String, nullable=False)
-    customer_contact_email = Column(String, nullable=False)
     form = relationship("Form", back_populates="customer")
         
 class Software(Base):

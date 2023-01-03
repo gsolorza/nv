@@ -102,20 +102,8 @@
                                     <td id="customer_name_row"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col table-info">Contact Name</th>
-                                    <td id="customer_contact_name_row"></td>
-                                </tr>
-                                <tr>
-                                    <th scope="col table-info">Contact Phone</th>
-                                    <td id="customer_contact_phone_row"></td>
-                                </tr>
-                                <tr>
-                                    <th scope="col table-info">Contact Email</th>
-                                    <td id="customer_contact_email_row"></td>
-                                </tr>
-                                <tr>
-                                    <th scope="col table-info">Address</th>
-                                    <td id="customer_address_row"></td>
+                                    <th scope="col table-info">Customer RUT </th>
+                                    <td id="customer_rut_row"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -126,6 +114,71 @@
                         </legend>
 
                       
+
+                            <div class="col-md-6">
+                                {{form.customer_address.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.customer_address(class="form-control form-control-md mb-4 ml-2 validated " ,
+                                id='validationcustome01')}}
+                                {% if form.customer_address.errors and form.customer_address.data %}
+                                    {% for error in form.customer_address.errors %}
+                                        <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
+
+                            <div class="col-md-6">
+                                {{form.customer_contact_name.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.customer_contact_name(class="form-control form-control-md mb-4 ml-2 validated " ,
+                                id='validationcustome01')}}
+                                {% if form.customer_contact_name.errors and form.customer_contact_name.data %}
+                                    {% for error in form.customer_contact_name.errors %}
+                                        <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
+
+                            <div class="col-md-6">
+                                {{form.customer_contact_phone.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.customer_contact_phone(class="form-control form-control-md mb-4 ml-2 validated " ,
+                                id='validationcustome01')}}
+                                {% if form.customer_contact_phone.errors and form.customer_contact_phone.data %}
+                                    {% for error in form.customer_contact_phone.errors %}
+                                        <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
+
+                            <div class="col-md-6">
+                                {{form.customer_contact_email.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.customer_contact_email(class="form-control form-control-md mb-4 ml-2 validated " ,
+                                id='validationcustome01')}}
+                                {% if form.customer_contact_email.errors and form.customer_contact_email.data %}
+                                    {% for error in form.customer_contact_email.errors %}
+                                        <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
+
+                            <div class="col-md-6">
+                                {{form.dispatch_address.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form.dispatch_address(class="form-control form-control-md mb-4 ml-2 validated " ,
+                                id='validationcustome01')}}
+                                {% if form.dispatch_address.errors and form.dispatch_address.data %}
+                                    {% for error in form.dispatch_address.errors %}
+                                        <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
 
                             <div class="col-md-6">
 
@@ -166,18 +219,7 @@
                                 {% endif %}
 
                             </div>
-                            <div class="col-md-6">
-                                {{form.dispatch_address.label(class="form-control-label mt-3 pt-0 mb-0",
-                                for="validationCustom01")}}
-                                {{form.dispatch_address(class="form-control form-control-md mb-4 ml-2 validated " ,
-                                id='validationcustome01')}}
-                                {% if form.dispatch_address.errors and form.dispatch_address.data %}
-                                    {% for error in form.dispatch_address.errors %}
-                                        <p class="text-danger"> {{error}}</p>
-                                    {% endfor %}
-                                {% endif %}
 
-                            </div>
                         </div>
 
                   </div>
@@ -303,10 +345,7 @@
             {{ form.include_vendor(hidden=True) }}
             {{ form.include_software(hidden=True) }}
             {{ customer.customer_name(hidden=True, id="customer_name") }}
-            {{ customer.customer_contact_name(hidden=True, id="customer_contact_name") }}
-            {{ customer.customer_contact_phone(hidden=True, id="customer_contact_phone") }}
-            {{ customer.customer_contact_email(hidden=True, id="customer_contact_email") }}
-            {{ customer.customer_address(hidden=True, id="customer_address") }}
+            {{ customer.customer_rut(hidden=True, id="customer_rut") }}
             {{ form.customer_id(hidden=True, id="customer_id") }}
 
 </div>
@@ -725,26 +764,17 @@
         searchInp = wrapper.querySelector("input"),
         options = wrapper.querySelector(".options");
     let customer_name = document.querySelector("#customer_name")
-    let customer_contact_name = document.querySelector("#customer_contact_name")
-    let customer_contact_email = document.querySelector("#customer_contact_email")
-    let customer_contact_phone = document.querySelector("#customer_contact_phone")
-    let customer_address = document.querySelector("#customer_address")
+    let customer_rut = document.querySelector("#customer_rut")
     let customer_id = document.querySelector("#customer_id")
     let customer_table = document.querySelector("#customer_table")
     let customer_data = document.querySelector("#customer_data")
 
     function update_customer_data() {
         let customer_name_row = document.querySelector("#customer_name_row")
-        let customer_contact_row = document.querySelector("#customer_contact_name_row")
-        let customer_phone_row = document.querySelector("#customer_contact_phone_row")
-        let customer_email_row = document.querySelector("#customer_contact_email_row")
-        let customer_address_row = document.querySelector("#customer_address_row")
+        let customer_contact_row = document.querySelector("#customer_rut_row")
 
         customer_name_row.innerText = customer_name.value
-        customer_contact_row.innerText = customer_contact_name.value
-        customer_phone_row.innerText = customer_contact_phone.value
-        customer_email_row.innerText = customer_contact_email.value
-        customer_address_row.innerText = customer_address.value
+        customer_rut_row.innerText = customer_rut.value
     }
     update_customer_data()
 
@@ -755,10 +785,7 @@
             let isSelected = customerName == selectedCustomer ? "selected" : "";
             if (isSelected) {
                 customer_name.setAttribute("value", customer.customer_name)
-                customer_contact_name.setAttribute("value", customer.customer_contact_name)
-                customer_contact_email.setAttribute("value", customer.customer_contact_email)
-                customer_contact_phone.setAttribute("value", customer.customer_contact_phone)
-                customer_address.innerText = customer.customer_address
+                customer_rut.setAttribute("value", customer.customer_rut)
                 customer_id.setAttribute("value", customer.id)
                 update_customer_data()
             }

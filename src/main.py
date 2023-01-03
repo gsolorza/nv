@@ -114,20 +114,24 @@ def checklist():
         forms_software = crud.replicateForm(Software(), request.form) if not software_quantity \
         else crud.replicateForm(Software(),  request.form, int(software_quantity))
         if form.validate_on_submit():
-            new_form = schema.CreateForm(
-                sales_force_id = form.sales_force_id.data,
-                purchase_order = form.purchase_order.data,
-                quote_direct = form.quote_direct.data,
-                client_manager_name = current_user.name,
-                pre_sales_name = form.pre_sales_name.data,
-                customer_id = form.customer_id.data,
-                comments = form.comments.data,
-                status = status.assignment.data,
-                dispatch_address = form.dispatch_address.data,
-                dispatch_receiver_name = form.dispatch_receiver_name.data,
-                dispatch_receiver_phone = form.dispatch_receiver_phone.data,
-                dispatch_receiver_email = form.dispatch_receiver_email.data
-            )
+            # new_form = schema.CreateForm(
+            #     sales_force_id = form.sales_force_id.data,
+            #     purchase_order = form.purchase_order.data,
+            #     quote_direct = form.quote_direct.data,
+            #     client_manager_name = current_user.name,
+            #     pre_sales_name = form.pre_sales_name.data,
+            #     customer_id = form.customer_id.data,
+            #     comments = form.comments.data,
+            #     status = status.assignment.data,
+            #     customer_address = form.customer_address,
+            #     customer_contact_name = form.customer_contact_name,
+            #     customer_contact_phone = form.customer_contact_phone,
+            #     customer_contact_email = form.customer_contact_email,
+            #     dispatch_address = form.dispatch_address.data,
+            #     dispatch_receiver_name = form.dispatch_receiver_name.data,
+            #     dispatch_receiver_phone = form.dispatch_receiver_phone.data,
+            #     dispatch_receiver_email = form.dispatch_receiver_email.data
+            # )
             flash(f"data validated successfully", "primary")
             print("VALIDATED")
             return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, customer=customer, customers=customers)

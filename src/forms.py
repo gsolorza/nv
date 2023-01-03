@@ -31,7 +31,7 @@ class InitialFormSales(FlaskForm):
                                  validators=[DataRequired(), Length(min=5, max=30), Regexp(r"^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]+$", message="Should include letters and numbers")])
     purchase_order = StringField("Purchase Order", render_kw={"placeholder": "NoPO"})
     quote_direct = StringField("Quote Direct", validators=[
-                               DataRequired(), Length(min=5, max=30), Regexp(r"^[a-zA-Z0-9.]+$", message="Only Letters and numbers with no spaces")])
+                               DataRequired(), Length(min=5, max=30), Regexp(r"^[0-9.]+$", message="Only numbers with no spaces")])
     include_software = BooleanField("Software", default='checked')
     include_vendor = BooleanField("Other Vendor", default='checked')
     include_cisco = BooleanField(" Cisco Vendor", default='checked')
@@ -42,14 +42,6 @@ class CustomerForm(FlaskForm):
                                 DataRequired(), Length(min=5, max=30)])
     customer_rut = StringField("Customer RUT", validators=[
                                DataRequired(), Length(min=5, max=30)])
-    customer_address = TextAreaField("Customer Address", validators=[
-        DataRequired(), Length(min=5, max=300)])
-    customer_contact_name = StringField("Customer Contact Name", validators=[
-                                        DataRequired(), Length(min=5, max=30)])
-    customer_contact_phone = StringField("Customer Contact Phone", validators=[
-                                         DataRequired(), Length(min=5, max=30)])
-    customer_contact_email = EmailField("Customer Contact Email", validators=[
-                                        DataRequired(), Length(min=5, max=30)])
     submit=SubmitField("Create Customer")
 
 class ChecklistFormSales(FlaskForm):
@@ -57,12 +49,19 @@ class ChecklistFormSales(FlaskForm):
                                  DataRequired(), Length(min=5, max=30), Regexp(r"^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]+$", message="Sales Force ID should include letters and numbers")])
     purchase_order = StringField("Purchase Order", render_kw={"placeholder": "NoPO"})
     quote_direct = StringField("Quote Direct", validators=[
-                               DataRequired(), Length(min=5, max=30), Regexp(r"^[a-zA-Z0-9.]+$", message="Only Letters and numbers with no spaces")])
+                               DataRequired(), Length(min=5, max=30), Regexp(r"^[0-9.]+$", message="Only numbers with no spaces")])
     pre_sales_name = SelectField("Pre Sales Engineer", choices=[])
-    dispatch_address = TextAreaField("Dispatch Address", validators=[
+    customer_address = TextAreaField("Customer Address", validators=[
         DataRequired(), Length(min=5, max=300)])
+    customer_contact_name = StringField("Customer Contact Name", validators=[
+                                        DataRequired(), Length(min=4, max=30), Regexp(r"^[A-Za-z\s]+$", message="The name should only include letters")])
+    customer_contact_phone = StringField("Customer Contact Phone", validators=[
+                                         DataRequired(), Length(min=5, max=30), Regexp(r"^[0-9]+$", message="The phone should only include numbers")])
+    customer_contact_email = EmailField("Customer Contact Email", validators=[
+                                        DataRequired(), Length(min=5, max=30), Email()])
+    dispatch_address = TextAreaField("Dispatch Address", validators=[DataRequired(), Length(min=5, max=300)])                                    
     dispatch_receiver_name = StringField("Dispatch Receiver Name", validators=[
-                                         DataRequired(), Length(min=5, max=30), Regexp(r"^[A-Za-z\s]+$", message="The phone should only include letters")])
+                                         DataRequired(), Length(min=4, max=30), Regexp(r"^[A-Za-z\s]+$", message="The name should only include letters")])
     dispatch_receiver_phone = StringField("Dispatch Receiver Phone", validators=[
                                           DataRequired(), Length(min=6, max=10), Regexp(r"^[0-9]+$", message="The phone should only include numbers")])
     dispatch_receiver_email = EmailField("Dispatch Receiver Email", validators=[

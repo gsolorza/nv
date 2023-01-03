@@ -84,6 +84,10 @@ class CreateForm(BaseModel):
     status: str = Status.preSalesValidation.value
     sale_note: Union[str, None] = None
     date: datetime.date = datetime.date.today()
+    customer_address: str
+    customer_contact_name: str
+    customer_contact_phone: str
+    customer_contact_email: str
     dispatch_address: str
     dispatch_receiver_name: str
     dispatch_receiver_phone: str
@@ -116,10 +120,6 @@ class UpdateForm(BaseModel):
 class CreateCustomer(BaseModel):
     customer_name: str
     customer_rut: str
-    customer_address: str
-    customer_contact_name: str
-    customer_contact_phone: str
-    customer_contact_email: str
 
     class Config:
         orm_mode = True

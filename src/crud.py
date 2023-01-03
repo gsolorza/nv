@@ -254,6 +254,10 @@ def create_form(form: schema.CreateForm, db: Session):
                 status=form.status,
                 date=form.date,
                 sale_note=form.sale_note,
+                customer_address = form.customer_address,
+                customer_contact_name = form.customer_contact_name,
+                customer_contact_phone = form.customer_contact_phone,
+                customer_contact_email = form.customer_contact_email,
                 dispatch_address=form.dispatch_address,
                 dispatch_receiver_name=form.dispatch_receiver_name,
                 dispatch_receiver_phone=form.dispatch_receiver_phone,
@@ -276,11 +280,7 @@ def create_customer(customer: schema.CreateCustomer, db: Session):
         try:
             new_customer = models.Customer(
                 customer_name=customer.customer_name,
-                customer_rut=customer.customer_rut,
-                customer_address=customer.customer_address,
-                customer_contact_name=customer.customer_contact_name,
-                customer_contact_phone=customer.customer_contact_phone,
-                customer_contact_email=customer.customer_contact_email
+                customer_rut=customer.customer_rut
             )
             db.add(new_customer)
             db.commit()
