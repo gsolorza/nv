@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, BooleanField, EmailField, TextAreaField, SelectField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, DateField, BooleanField, EmailField, TextAreaField, SelectField, IntegerField, ValidationError
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
-
+import re
 
 class LoginForm(FlaskForm):
 
@@ -64,14 +64,14 @@ class ChecklistFormSales(FlaskForm):
                                DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
     client_manager_name = StringField("Sales Engineer Name", validators=[
                                       DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
-    pre_sales_name = SelectField("Pre Sales Engineer", validate_choice=False)
+    pre_sales_name = SelectField("Pre Sales Engineer", choices=[])
     date = DateField("Date", validators=[DataRequired()])
     dispatch_address = TextAreaField("Dispatch Address", validators=[
         DataRequired(), Length(min=5, max=300)], render_kw={"readonly": False})
     dispatch_receiver_name = StringField("Dispatch Receiver Name", validators=[
-                                         DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+                                         DataRequired(), Length(min=5, max=30), Regexp(r"^[A-Za-z\s]+$", message="The name must only contain letters")], render_kw={"readonly": False})
     dispatch_receiver_phone = StringField("Dispatch Receiver Phone", validators=[
-                                          DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
+                                          DataRequired(), Length(min=6, max=10), Regexp(r'\d+', message="The phone must only contain numbers")], render_kw={"readonly": False})
     dispatch_receiver_email = EmailField("Dispatch Receiver Email", validators=[
                                          DataRequired(), Length(min=5, max=30)], render_kw={"readonly": False})
 
@@ -84,6 +84,8 @@ class ChecklistFormSales(FlaskForm):
     customer_id = IntegerField("Customer ID", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
+    def set_choices(self, choices):
+        self.pre_sales_name.choices = choices
 
 class Vendor(FlaskForm):
     vendor_deal_id = StringField(

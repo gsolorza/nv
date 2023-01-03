@@ -36,11 +36,8 @@
                 <div class="col-md-3">
                     {{form.pre_sales_name.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
-                    <select name="pre_sales_name" class="custom-select" id="inputGroupSelect04">
-                        {% if pre_sales %} {% for engineer in pre_sales%}
-                        <option value="{{engineer.name}}">{{engineer.name}}</option>
-                        {% endfor %} {% endif %}
-                    </select>
+                    {{form.pre_sales_name(class="custom-select", id="inputGroupSelect04",
+                    for="validationCustom01")}}
                 </div>
 
             </div>
@@ -117,6 +114,12 @@
                                 for="validationCustom01")}}
                                 {{form.dispatch_receiver_name(class="form-control form-control-md validated " ,
                                 id='validationcustome01')}}
+                                {% if form.dispatch_receiver_name.errors%}
+                                    {% for error in form.dispatch_receiver_name.errors %}
+                                    <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
+
 
                             </div>
                             <div class="col-md-6">
@@ -124,7 +127,11 @@
                                 for="validationCustom01")}}
                                 {{form.dispatch_receiver_phone(class="form-control form-control-md validated " ,
                                 id='validationcustome01')}}
-
+                                {% if form.dispatch_receiver_phone.errors %}
+                                    {% for error in form.dispatch_receiver_phone.errors %}
+                                        <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
 
                             </div>
                             <div class="col-md-6">
@@ -156,20 +163,21 @@
         <input type="number" id="cisco_quantity" name="cisco_quantity" value="{{forms_cisco|length}}" hidden>
         <section id="cisco_vendor" , name="seccion-prueba" , class="col-md-12">
             {% if forms_cisco %}
-            <div class="row shadow-sm  mb-5 bg-body rounded content-section border border-info " id="form_cisco_vendor">
+            <div class="row shadow-sm  mb-5 bg-body rounded content-section border border-info " id="form_cisco">
                 {% for form_cisco in forms_cisco%}
                 <legend class="text-center"><strong>CISCO VENDOR INFORMATION </strong></legend><br>
+                
+                <div id="all_cisco_forms" class="row">
+
+                <div class="col-md-12 row" id="form_section_cisco_0" hidden>
                 <hr>
-
-                <div class="col-md-12 row">
-
 
                 <div id="cisco_deal_id" , class="col-md-2 row">
                     <div class="">
                         <div class="form-group  border-1 needs-validation" novalidate>
                             {{form_cisco.cisco_deal_id.label(class="form-control-label", for="validationCustom01")}}
                             {{form_cisco.cisco_deal_id(class="form-control form-control-md validated " ,
-                            id='validationcustome01')}}
+                            id='validationcustome01', disabled=true)}}
                             <button id="btn_search_deal_id" , class="btn btn-md btn-outline-success mt-3">
                                 Search</button>
 
@@ -186,7 +194,7 @@
                             {{form_cisco.cisco_account_manager_name.label(class="form-control-label",
                             for="validationCustom01")}}
                             {{form_cisco.cisco_account_manager_name(class="form-control form-control-md validated " ,
-                            id='validationcustome01')}}
+                            id='validationcustome01', disabled=true)}}
                         </div>
                     </div>
 
@@ -197,7 +205,7 @@
                             {{form_cisco.cisco_account_manager_phone.label(class="form-control-label",
                             for="validationCustom01")}}
                             {{form_cisco.cisco_account_manager_phone(class="form-control form-control-md validated " ,
-                            id='validationcustome01')}}
+                            id='validationcustome01', disabled=true)}}
                         </div>
                     </div>
 
@@ -209,7 +217,7 @@
                             {{form_cisco.cisco_account_manager_email.label(class="form-control-label",
                             for="validationCustom01")}}
                             {{form_cisco.cisco_account_manager_email(class="form-control form-control-md validated " ,
-                            id='validationcustome01')}}
+                            id='validationcustome01', disabled=true)}}
                         </div>
                     </div>
 
@@ -220,7 +228,7 @@
                             {{form_cisco.cisco_smart_account.label(class="form-control-label",
                             for="validationCustom01")}}
                             {{form_cisco.cisco_smart_account(class="form-control form-control-md validated " ,
-                            id='validationcustome01')}}
+                            id='validationcustome01', disabled=true)}}
                         </div>
                     </div>
 
@@ -232,7 +240,7 @@
                             {{form_cisco.cisco_virtual_account.label(class="form-control-label",
                             for="validationCustom01")}}
                             {{form_cisco.cisco_virtual_account(class="form-control form-control-md validated " ,
-                            id='validationcustome01')}}
+                            id='validationcustome01', disabled=true)}}
 
 
                         </div>
@@ -245,19 +253,19 @@
                     <div class="">
                         <div class="form-group  needs-validation" novalidate>
                             <br>
-                            <button type="button" name="delete_cisco" class="btn btn-outline-danger"> X</button>
+                            <button id="delete_form" type="button" name="delete_cisco" class="btn btn-outline-danger" onclick="deleteForm('#form_section_cisco_0')"> X</button>
 
 
                         </div>
                     </div>
                 </div>
                 </div>
+                </div>
 
 
                 {% endfor %}
                 <div class="row">
-                    <button id="btnciscovendor" , class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add Other Deal
-                        ID</button>
+                    <button id="btnciscovendor" , class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add Cisco Vendor </button>
                 </div>
             </div>
             {% endif %}
@@ -290,6 +298,10 @@
     <div class="row shadow-sm p-3 mb-5 bg-body rounded content-section border border-info" id="form_vendor">
         {% for form_vendor in forms_vendor%}
         <legend class="text-center"><strong>VENDOR INFORMATION </strong></legend><br>
+        
+        <div id="all_vendor_forms" class="row">
+
+        <div class="col-md-12 row" id="form_section_vendor_0" hidden disable>
         <hr>
         <div id="vendor_name" , class="col-md-2 row">
             <div class="">
@@ -297,7 +309,7 @@
                     {{form_vendor.vendor_name.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_vendor.vendor_name(class="form-control form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
 
@@ -308,7 +320,7 @@
                     {{form_vendor.vendor_deal_id.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_vendor.vendor_deal_id(class="form-control form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
 
@@ -321,7 +333,7 @@
                     {{form_vendor.vendor_account_manager_name.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_vendor.vendor_account_manager_name(class="form-control form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
 
@@ -333,7 +345,7 @@
                     {{form_vendor.vendor_account_manager_phone.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_vendor.vendor_account_manager_phone(class="form-control form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
 
@@ -344,22 +356,22 @@
                     {{form_vendor.vendor_account_manager_email.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_vendor.vendor_account_manager_email(class="form-control form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
 
         </div>
 
-        <div id="delete_vendor" , class="col-md-1  ">
+        <div id="delete_vendor" , class=" col-md-1 row ">
             <div class="">
                 <div class="form-group  needs-validation" novalidate>
                     <br>
-                    <button type="button" name="delete_vendor" class="btn btn-outline-danger mt-3"> X</button>
-
-
+                    <button id="delete_form" type="button" name="delete_cisco" class="btn btn-outline-danger" onclick="deleteForm('#form_section_vendor_0')"> X</button>
                 </div>
             </div>
         </div>
+        </div>
+    </div>
 
         {% endfor %}
         <div class="row">
@@ -378,9 +390,13 @@
 <input type="number" id="software_quantity" name="software_quantity" value="{{forms_software|length}}" hidden>
 <section id="software" , name="seccion-prueba" , class="col-md-12">
     {% if forms_software %}
-    <div class="row shadow-sm p-3 mb-5 bg-body rounded content-section border border-info" id="Form_Software">
+    <div class="row shadow-sm p-3 mb-5 bg-body rounded content-section border border-info" id="form_software">
         {% for form_software in forms_software %}
         <legend class="text-center"><strong>SOFTWARE INFORMATION </strong></legend><br>
+        
+        <div id="all_software_forms" class="row">
+
+        <div class="col-md-12 row" id="form_section_software_0" hidden disable>
         <hr>
         <div id="software_type" , class="col-md-auto row">
             <div class=" ">
@@ -388,7 +404,7 @@
                     {{form_software.software_type.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_software.software_type(class="form-select form-control-md validated " ,
-                    id='software_type_select')}}
+                    id='software_type_select', disabled=true)}}
                 </div>
             </div>
         </div>
@@ -398,7 +414,7 @@
                     {{form_software.duration_time.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_software.duration_time(class="form-select form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
         </div>
@@ -408,7 +424,7 @@
                     {{form_software.customer_contact.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_software.customer_contact(class="form-control form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
         </div>
@@ -419,7 +435,7 @@
                     {{form_software.subscription_id.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_software.subscription_id(class="form-control form-control-md validated " ,
-                    id='subscription_id_field')}}
+                    id='subscription_id_field', disabled=true)}}
                 </div>
             </div>
         </div>
@@ -429,7 +445,7 @@
                     {{form_software.start_date.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form_software.start_date(class="form-control form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
         </div>
@@ -440,7 +456,7 @@
                     for="validationCustom01")}}
 
                     {{form_software.type_of_purchase(class="form-select form-control-md validated " ,
-                    id='validationcustome01')}}
+                    id='validationcustome01', disabled=true)}}
                 </div>
             </div>
         </div>
@@ -448,12 +464,13 @@
             <div class="">
                 <div class="form-group  needs-validation" novalidate>
                     <br>
-                    <button type="button" name="delete_software" class="btn btn-outline-danger mt-3"> X</button>
-
+                    <button id="delete_form" type="button" name="delete_software" class="btn btn-outline-danger mt-3" onclick="deleteForm('#form_section_software_0')"> X</button>
 
                 </div>
             </div>
         </div>
+        </div>
+    </div>
 
         {% endfor %}
         <div class="row">
@@ -505,7 +522,7 @@
 
 
     <div class="form-group content-section">
-        {{ form.submit(class="btn btn-md btn-primary ") }}
+        {{ form.submit(class="btn btn-md btn-primary ", id="submit") }}
     </div>
 
 
@@ -522,66 +539,131 @@
 
 <script>
 
-    function changeAttribute(elements, formId, buttonId, quantity) {
-        const hr = document.createElement("hr");
-        hr.className = "mt-3";
-        let form = document.querySelector(formId);
-        form.appendChild(hr);
-        let btn = document.querySelector(buttonId);
-        for (element of elements) {
-            let field = document.querySelector(element).cloneNode(true);
-            var sectionLength = parseInt(document.querySelector(quantity).value)
-            if (field) {
-                field.children[0].firstElementChild.children[1].name = element.replace("#", "") + sectionLength
-                field.children[0].firstElementChild.children[1].value = ""
-                form.appendChild(field)
+    let elementList = {"cisco": ["#cisco_deal_id", "#cisco_account_manager_name", "#cisco_account_manager_phone", "#cisco_account_manager_email", "#cisco_smart_account", "#cisco_virtual_account", "#delete_cisco"],
+    "software":["#software_type", "#duration_time", "#customer_contact", "#subscription_id", "#start_date", "#type_of_purchase", "#delete_software"],
+    "vendor":["#vendor_name", "#vendor_deal_id", "#vendor_account_manager_name", "#vendor_account_manager_phone", "#vendor_account_manager_email", "#delete_vendor"]}
+
+    function changeAttribute(elements, formId, buttonId, sectionId, allFormsId) {
+        
+        var sectionLength = parseInt(document.querySelector(allForms).children.length)
+        let isHidden = document.querySelector(`#${sectionId}_0`).hasAttribute("hidden")
+        if(sectionLength == 1 && isHidden){
+            selectedForm = document.querySelector(allFormsId).children[0]
+            for (element of elements) {
+                field = selectedForm.querySelector(element).children[0].firstElementChild.children[1]
+                field.removeAttribute("disabled")
             }
-            form.appendChild(btn);
-
-
+            document.querySelector(`#${sectionId}_0`).removeAttribute("hidden")
         }
-        document.querySelector(quantity).value = sectionLength + 1
-    }
+        else{
+            const hr = document.createElement("hr");
+            hr.className = "mt-3";
+            let form = document.querySelector(formId);
+            let btn = document.querySelector(buttonId);
+            let allForms = document.querySelector(allFormsId);
+            const div = document.createElement("div")
+            div.className = "col-md-12 row"
+            form_section = `${sectionId}_${sectionLength}`
+            div.id = form_section
+            div.appendChild(hr)
+            for (element of elements) {
+                let field = document.querySelector(element).cloneNode(true);
+                if (field) {
+                    field.children[0].firstElementChild.children[1].name = element.replace("#", "") + sectionLength
+                    field.children[0].firstElementChild.children[1].value = ""
+                    if(field.id.includes("delete")){
+                        console.log(field.querySelector("#delete_form"))
+                        field.querySelector("#delete_form").setAttribute("onclick", `deleteForm('#${form_section}')`)
+                    }
+                    div.appendChild(field)
+                }
+                allForms.appendChild(div);
+                form.appendChild(btn);
+    
+    
+            }
+        }
 
+    }
+    
     $(function () {
-        $('#btnsoftware').on('click', function () {
-            let elementList = ["#software_type", "#duration_time", "#customer_contact", "#subscription_id", "#start_date", "#type_of_purchase", "#delete_software"]
-            formId = "#Form_Software"
+        $('#btnsoftware').on('click', function () {      
+            formId = "#form_software"
             buttonId = "#btnsoftware"
-            quantity = "#software_quantity"
-            changeAttribute(elementList, formId, buttonId, quantity)
+            sectionId = "form_section_software"
+            allForms = "#all_software_forms"
+            changeAttribute(elementList.software, formId, buttonId, sectionId, allForms)
             update_software_drop_down()
         });
     });
 
     $(function () {
         $('#btnvendor').on('click', function () {
-            let elementList = ["#vendor_name", "#vendor_deal_id", "#vendor_account_manager_name", "#vendor_account_manager_phone", "#vendor_account_manager_email", "#delete_vendor"]
             formId = "#form_vendor"
             buttonId = "#btnvendor"
-            quantity = "#vendor_quantity"
-            changeAttribute(elementList, formId, buttonId, quantity)
+            sectionId = "form_section_vendor"
+            allForms = "#all_vendor_forms"
+            changeAttribute(elementList.vendor, formId, buttonId, sectionId, allForms)
 
         });
     });
     $(function () {
         $('#btnciscovendor').on('click', function () {
-            let elementList = ["#cisco_deal_id", "#cisco_account_manager_name", "#cisco_account_manager_phone", "#cisco_account_manager_email", "#cisco_smart_account", "#cisco_virtual_account", "#delete_cisco"]
-            formId = "#form_cisco_vendor"
+            formId = "#form_cisco"
             buttonId = "#btnciscovendor"
-            quantity = "#cisco_quantity"
-            changeAttribute(elementList, formId, buttonId, quantity)
+            sectionId = "form_section_cisco"
+            allForms = "#all_cisco_forms"
+            changeAttribute(elementList.cisco, formId, buttonId, sectionId, allForms)
 
         });
     });
+    $(function () {
+        $('#submit').on('click', function () {
+            cisco_quantity = document.querySelector("#all_cisco_forms").children.length
+            vendor_quantity = document.querySelector("#all_vendor_forms").children.length
+            software_quantity = document.querySelector("#all_software_forms").children.length
+            document.querySelector("#cisco_quantity").value = cisco_quantity
+            document.querySelector("#vendor_quantity").value = vendor_quantity
+            document.querySelector("#software_quantity").value = software_quantity
+        });
+    });
 
+    // Function to delete Forms
+    function deleteForm(elementId){
+        let form_name = elementId.split("_")[2]
+        let form = document.querySelector(elementId)
+        let allForms = document.querySelector(`#all_${form_name}_forms`)
+        let sectionLength = allForms.children.length
+        if(sectionLength == 1){
+            form.setAttribute("hidden", "")
+            for(element of elementList[form_name]){
+                field = form.querySelector(element).children[0].firstElementChild.children[1]
+                field.setAttribute("disabled", "")
+            }
+        }
+        else{
+            for(i=0; i<=sectionLength-1; i++){
+                form.remove()
+                let form_section = `form_section_${form_name}_${i}`;
+                let selectedForm = allForms.children[i]
+                selectedForm.id = form_section
+                for(element of elementList[form_name]){
+                    field = selectedForm.querySelector(element).children[0].firstElementChild.children[1]
+                    field.name = element.replace("#", "") + i
+                    if(field.id.includes("delete")){
+                        field.setAttribute("onclick", `deleteForm('#${form_section}')`)
+                    }
+                }
+            }
+        }
+    }
 
 </script>
 <script>
     {% if form.include_software.data == true %}
 
     function update_software_drop_down() {
-        let quantity = parseInt(document.querySelector("#software_quantity").value)
+        let quantity = parseInt(document.querySelector("#all_software_forms").children.length)
         let dropDown = document.querySelectorAll("#software_type_select")
         let subscription_id = document.querySelectorAll("#subscription_id_field")
         for (let i = 0; i < quantity; i++) {

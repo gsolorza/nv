@@ -95,6 +95,7 @@ def checklist():
         column="role_name", value="PreSales"), db())
     pre_sales = crud.get_user_role(
         pre_sales_role.id, db())  # type: ignore
+    form.set_choices([(pre_sale.name) for pre_sale in pre_sales])
     status.assignment.choices = [
         role for role in role_list]  # type: ignore
     if request.method == "POST":
@@ -103,15 +104,19 @@ def checklist():
         cisco_quantity = request.form.get("cisco_quantity")
         vendor_quantity = request.form.get("vendor_quantity")
         software_quantity = request.form.get("software_quantity")
-        forms_cisco = [Cisco()] if not cisco_quantity else crud.replicateForm(
-            Cisco(), cisco_quantity, request.form)
-        forms_vendor = [Vendor()] if not vendor_quantity else crud.replicateForm(
-            Vendor(), vendor_quantity, request.form)
-        forms_software = [Software()] if not software_quantity else crud.replicateForm(
-            Software(), software_quantity, request.form)
+        forms_cisco = crud.replicateForm(Cisco(), request.form) if not cisco_quantity \
+        else crud.replicateForm(Cisco(),  request.form, int(cisco_quantity))
+        forms_vendor = crud.replicateForm(Vendor(), request.form) if not vendor_quantity \
+        else crud.replicateForm(Vendor(),  request.form, int(vendor_quantity))
+        forms_software = crud.replicateForm(Software(), request.form) if not software_quantity \
+        else crud.replicateForm(Software(),  request.form, int(software_quantity))
+        if form.validate_on_submit():
+            flash(f"data validated successfully", "primary")
+            print("VALIDATED")
+            return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, customer=customer, customers=customers)
         flash(
             f'initial information, added correctly!', 'primary')
-        return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, pre_sales=pre_sales, customer=customer, customers=customers)
+        return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, customer=customer, customers=customers)
     return redirect(url_for("initial"))
 
 

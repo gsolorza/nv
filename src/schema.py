@@ -47,7 +47,9 @@ class Id(BaseModel):
 class UserQuery(BaseModel):
     id: int
     name: str
-
+    
+    class Config:
+        orm_mode = True
 
 class RoleQuery(BaseModel):
     id: int
