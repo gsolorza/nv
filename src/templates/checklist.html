@@ -19,25 +19,44 @@
                     {{form.sales_force_id.label(class="form-control-label mt-3 pt-0 mb-0 ",
                     for="validationCustom01")}}
                     {{form.sales_force_id(class="form-control form-control-md validated ")}}
+                    {% if form.sales_force_id.errors and form.sales_force_id.data%}
+                        {% for error in form.sales_force_id.errors %}
+                            <p class="text-danger"> {{error}}</p>
+                        {% endfor %}
+                    {% endif %}
 
                 </div>
                 <div class="col-md-3">
                     {{form.purchase_order.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form.purchase_order(class="form-control form-control-md validated " , id='validationcustome01')}}
-
+                    {% if form.purchase_order.errors and form.purchase_order.data%}
+                        {% for error in form.purchase_order.errors %}
+                            <p class="text-danger"> {{error}}</p>
+                        {% endfor %}
+                    {% endif %}
 
                 </div>
                 <div class="col-md-3">
                     {{form.quote_direct.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form.quote_direct(class="form-control form-control-md validated " , id='validationcustome01')}}
+                    {% if form.quote_direct.errors and form.quote_direct.data%}
+                        {% for error in form.quote_direct.errors %}
+                            <p class="text-danger"> {{error}}</p>
+                        {% endfor %}
+                    {% endif %}
                 </div>
                 <div class="col-md-3">
                     {{form.pre_sales_name.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
                     {{form.pre_sales_name(class="custom-select", id="inputGroupSelect04",
                     for="validationCustom01")}}
+                    {% if form.pre_sales_name.errors and form.pre_sales_name.data%}
+                        {% for error in form.pre_sales_name.errors %}
+                            <p class="text-danger"> {{error}}</p>
+                        {% endfor %}
+                    {% endif %}
                 </div>
 
             </div>
@@ -101,7 +120,7 @@
                             </tbody>
                         </table>
                     </div>
-                
+
                     <div class="col-md-8 row">
                         <legend class="text-center"><strong><i class="fs-6">Dispatch Customer Information</i></strong>
                         </legend>
@@ -114,7 +133,7 @@
                                 for="validationCustom01")}}
                                 {{form.dispatch_receiver_name(class="form-control form-control-md validated " ,
                                 id='validationcustome01')}}
-                                {% if form.dispatch_receiver_name.errors%}
+                                {% if form.dispatch_receiver_name.errors and form.dispatch_receiver_name.data%}
                                     {% for error in form.dispatch_receiver_name.errors %}
                                     <p class="text-danger"> {{error}}</p>
                                     {% endfor %}
@@ -127,7 +146,7 @@
                                 for="validationCustom01")}}
                                 {{form.dispatch_receiver_phone(class="form-control form-control-md validated " ,
                                 id='validationcustome01')}}
-                                {% if form.dispatch_receiver_phone.errors %}
+                                {% if form.dispatch_receiver_phone.errors and form.dispatch_receiver_phone.data%}
                                     {% for error in form.dispatch_receiver_phone.errors %}
                                         <p class="text-danger"> {{error}}</p>
                                     {% endfor %}
@@ -140,6 +159,11 @@
                                 for="validationCustom01")}}
                                 {{form.dispatch_receiver_email(class="form-control form-control-md validated " ,
                                 id='validationcustome01')}}
+                                {% if form.dispatch_receiver_email.errors and form.dispatch_receiver_email.data %}
+                                    {% for error in form.dispatch_receiver_email.errors %}
+                                        <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
 
                             </div>
                             <div class="col-md-6">
@@ -147,6 +171,11 @@
                                 for="validationCustom01")}}
                                 {{form.dispatch_address(class="form-control form-control-md mb-4 ml-2 validated " ,
                                 id='validationcustome01')}}
+                                {% if form.dispatch_address.errors and form.dispatch_address.data %}
+                                    {% for error in form.dispatch_address.errors %}
+                                        <p class="text-danger"> {{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
 
                             </div>
                         </div>
@@ -156,7 +185,6 @@
             </div>
             {% endif %}
         </div>
-
         <!--SECCION CISCO-->
 
         {% if form.include_cisco.data==true%}
@@ -490,9 +518,11 @@
 
         <div class="col-md-12 ">
             {{form.comments(class="form-control form-control-md validated " , id='validationcustome01')}}
-            <div class="invalid-feedback">
-                COMPLETE THIS FIELD!!!
-            </div>
+            {% if form.comments.errors and form.comments.data %}
+                {% for error in form.comments.errors %}
+                    <p class="text-danger"> {{error}}</p>
+                {% endfor %}
+            {% endif %}
         </div>
         <br>
 
@@ -502,12 +532,13 @@
     <br>
     <div class="input-group col-md-2" for="validationcustome01">
 
-        <select name="status" class="custom-select" id="inputGroupSelect04">
-            {% if status.assignment.choices %} {% for role in status.assignment.choices
-            %} {% if current_user.role_id != role.id %}
-            <option value="{{role.role_name}}">{{role.role_name}}</option>
-            {% endif %} {% endfor %} {% endif %}
-        </select>
+            {{status.assignment(class="custom-select", id="inputGroupSelect04",
+            for="validationCustom01")}}
+            {% if status.assignment.errors %}
+                {% for error in status.assignment.errors %}
+                    <p class="text-danger"> {{error}}</p>
+                {% endfor %}
+            {% endif %}
         <br>
         <br>
 

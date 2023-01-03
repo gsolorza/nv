@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 from forms import LoginForm
 from forms import RegistrationForm, InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, Status,CustomerForm
 # from src.database.schema import Status
@@ -34,6 +34,10 @@ def db():
 def load_user(user_id):
     return crud.get_user("id", user_id, db())
 
+# @app.before_request
+# def get_role():
+#     role = crud.get_role(schema.Query(column="id", value=current_user.role_id), db())
+#     current_user.role_name = role.role_name
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -89,15 +93,14 @@ def initial():
 def checklist():
     form = ChecklistFormSales()
     status = Status()
-    customer= CustomerForm()
+    customer = CustomerForm()
     role_list = crud.get_role(schema.Query(), db())
     pre_sales_role = crud.get_role(schema.Query(
         column="role_name", value="PreSales"), db())
     pre_sales = crud.get_user_role(
         pre_sales_role.id, db())  # type: ignore
-    form.set_choices([(pre_sale.name) for pre_sale in pre_sales])
-    status.assignment.choices = [
-        role for role in role_list]  # type: ignore
+    form.set_choices([pre_sale.name for pre_sale in pre_sales])
+    status.set_choices([role.role_name for role in role_list if role.id != current_user.role_id])  # type: ignore
     if request.method == "POST":
         pprint(request.form)
         customers = [dict(customer) for customer in crud.get_customer(schema.Query(), db())] # type: ignore      
@@ -111,6 +114,20 @@ def checklist():
         forms_software = crud.replicateForm(Software(), request.form) if not software_quantity \
         else crud.replicateForm(Software(),  request.form, int(software_quantity))
         if form.validate_on_submit():
+            new_form = schema.CreateForm(
+                sales_force_id = form.sales_force_id.data,
+                purchase_order = form.purchase_order.data,
+                quote_direct = form.quote_direct.data,
+                client_manager_name = current_user.name,
+                pre_sales_name = form.pre_sales_name.data,
+                customer_id = form.customer_id.data,
+                comments = form.comments.data,
+                status = status.assignment.data,
+                dispatch_address = form.dispatch_address.data,
+                dispatch_receiver_name = form.dispatch_receiver_name.data,
+                dispatch_receiver_phone = form.dispatch_receiver_phone.data,
+                dispatch_receiver_email = form.dispatch_receiver_email.data
+            )
             flash(f"data validated successfully", "primary")
             print("VALIDATED")
             return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, status=status, customer=customer, customers=customers)

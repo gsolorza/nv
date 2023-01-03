@@ -9,14 +9,17 @@
     <div class="col-md-4">
         <form method="POST" action="{{url_for('checklist')}}" class="content-section">
             {{ form.hidden_tag() }}
+            {{ form.errors }}
             <fieldset class="form-group">
                 <h1 class="display-5  .colorh2 ">Initial Information</h1>
                 <div class="form-group  needs-validation" novalidate>
                     {{form.sales_force_id.label(class="form-control-label", for="validationCustom01")}}
                     {{form.sales_force_id(class="form-control form-control-md validated " , id='validationcustome01')}}
-                    <div class="invalid-feedback">
-                        COMPLETE THIS FIELD!!!
-                    </div>
+                    {% if form.sales_force_id.errors and form.sales_force_id.data%}
+                        {% for error in form.sales_force_id.errors %}
+                            <p class="text-danger"> {{error}}</p>
+                        {% endfor %}
+                    {% endif %}
                 </div>
 
 
@@ -28,8 +31,13 @@
                     )}} </div>
                 <div class="form-group  needs-validation" novalidate>
                     {{form.quote_direct.label(class="form-control-label", for="validationCustom01")}}
-                    {{form.quote_direct(class="form-control form-control-md validated " ,
+                    {{form.quote_direct(class="form-control form-control-md" ,
                     id='validationcustome01')}}
+                    {% if form.quote_direct.errors and form.quote_direct.data%}
+                        {% for error in form.quote_direct.errors %}
+                            <p class="text-danger"> {{error}}</p>
+                        {% endfor %}
+                    {% endif %}
 
                 </div>
                 <hr>
