@@ -84,23 +84,23 @@ class Vendor(FlaskForm):
         "Deal ID", validators=[DataRequired(), Length(min=5, max=30)])
     vendor_name = StringField("Vendor Name", validators=[
                               DataRequired(), Length(min=5, max=10)])
-    vendor_account_manager_name = StringField("Account Manager Name", validators=[
+    vendor_account_manager_name = StringField(" Manager Name", validators=[
                                        DataRequired(), Length(min=5, max=10)])
-    vendor_account_manager_phone = StringField("Account Manager Phone", validators=[
-                                        DataRequired(), Length(min=5, max=15)])
+    vendor_account_manager_phone = StringField(" Manager Phone", validators=[
+                                        DataRequired(), Length(min=5, max=15)],render_kw={"placeholder": "5690000000"})
     vendor_account_manager_email = EmailField(
-        "Account Manager Email", validators=[DataRequired(), Email()])
+        " Manager Email", validators=[DataRequired(), Email()],render_kw={"placeholder": "email@vendor.com"})
 
 
 class Cisco(FlaskForm):
     cisco_deal_id = StringField(
         "Deal ID", validators=[DataRequired(), Length(min=5, max=30)])
-    cisco_account_manager_name = StringField("Account Manager Name", validators=[
+    cisco_account_manager_name = StringField(" Manager Name", validators=[
                                        DataRequired(), Length(min=5, max=10), Regexp(f"[aA-zZ]+", message="The name must contain only letters")])
-    cisco_account_manager_phone = StringField("Account Manager Phone", validators=[
-                                        DataRequired(), Length(min=5, max=15)])
+    cisco_account_manager_phone = StringField(" Manager Phone", validators=[
+                                        DataRequired(), Length(min=5, max=15)],render_kw={"placeholder": "5690000000"})
     cisco_account_manager_email = EmailField(
-        "Account Manager Email", validators=[DataRequired(), Email()])
+        " Manager Email", validators=[DataRequired(), Email()],render_kw={"placeholder": "email@cisco.com"})
     cisco_smart_account = StringField("Smart Account", validators=[
                                 DataRequired(), Length(min=5, max=30)])
     cisco_virtual_account = StringField("Virtual Account", validators=[
