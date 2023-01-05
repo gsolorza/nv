@@ -90,7 +90,7 @@ class Vendor(FlaskForm):
                                         DataRequired(), Length(min=5, max=15)],render_kw={"placeholder": "5690000000"})
     vendor_account_manager_email = EmailField(
         " Manager Email", validators=[DataRequired(), Email()],render_kw={"placeholder": "email@vendor.com"})
-
+    index = IntegerField("Index", default=0)
 
 class Cisco(FlaskForm):
     cisco_deal_id = StringField(
@@ -105,6 +105,7 @@ class Cisco(FlaskForm):
                                 DataRequired(), Length(min=5, max=30)])
     cisco_virtual_account = StringField("Virtual Account", validators=[
                                   DataRequired(), Length(min=5, max=30)])
+    index = IntegerField("Index", default=0)
 
 
 class Software(FlaskForm):
@@ -120,7 +121,7 @@ class Software(FlaskForm):
     start_date = StringField("Start Day", validators=[DataRequired()])
     type_of_purchase = SelectField(
         "Type of Purchase",choices=[("New"),("Non-automatic Renewal "),("Automatic Renewal")] ,validators=[DataRequired()])
-   
+    index = IntegerField("Index", default=0)
 
 class Status(FlaskForm):
     assignment = SelectField("Assign", choices=[])

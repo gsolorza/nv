@@ -457,6 +457,7 @@ def replicateForm(form, form_data: dict[str, str], quantity: int = 1):
             form.cisco_smart_account.data = form_data.get(form.cisco_smart_account.name)
             form.cisco_virtual_account.name = form.cisco_virtual_account.name+str(i)
             form.cisco_virtual_account.data = form_data.get(form.cisco_virtual_account.name)
+            form.index.data = i
             i += 1
         return forms
     elif isinstance(form, Vendor):
@@ -473,6 +474,7 @@ def replicateForm(form, form_data: dict[str, str], quantity: int = 1):
             form.vendor_account_manager_email.data = form_data.get(form.vendor_account_manager_email.name)
             form.vendor_account_manager_phone.name = form.vendor_account_manager_phone.name+str(i)
             form.vendor_account_manager_phone.data = form_data.get(form.vendor_account_manager_phone.name)
+            form.index.data = i
             i += 1
         return forms
     elif isinstance(form, Software):
@@ -491,5 +493,6 @@ def replicateForm(form, form_data: dict[str, str], quantity: int = 1):
             form.start_date.data = form_data.get(form.start_date.name)
             form.type_of_purchase.name = form.type_of_purchase.name+str(i)
             form.type_of_purchase.data = form_data.get(form.type_of_purchase.name)
+            form.index.data = i
             i += 1
         return forms
