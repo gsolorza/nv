@@ -6,7 +6,7 @@ function formHasData(elements, form_group) {
             inputHasData.push(true)
         }
         // Substracting one from the array because the delete button does not have input value so we have to remove that element from the validation
-        if (inputHasData.length == elements.length-1) {
+        if (inputHasData.length > 4) {
             return true
         }
     }
@@ -15,15 +15,16 @@ function formHasData(elements, form_group) {
 
 
 function updateForm(section) { 
-    let form_name = section.split("_")[2];
+    let formName = section.split("_")[2];
     let form_group = document.querySelector(section);
-    if (!formHasData(elementList[form_name], form_group)) {
+    if (!formHasData(elementList[formName], form_group)) {
         form_group.setAttribute("hidden", "")
-        for (element of elementList[form_name]) {
+        for (element of elementList[formName]) {
             field = form_group.querySelector(element).children[0].firstElementChild.children[1]
             field.setAttribute("disabled", "")
         }
     }
+    
 }
 
 window.onload = function () {

@@ -1,10 +1,9 @@
-from src.db import Base
+from db import Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Boolean, Date
 from sqlalchemy.orm import relationship
-from flask_login import UserMixin
 
 
-class User(Base, UserMixin):
+class User(Base):
 
     __tablename__ = "user"
 
@@ -45,11 +44,11 @@ class Form(Base):
                          cascade="all, delete", passive_deletes=True)
     software = relationship(
         "Software", back_populates="form", cascade="all, delete", passive_deletes=True)
-    customer_address = Column(String, nullable=False)
+    customer_address = Column(String, unique=True, nullable=False)
     customer_contact_name = Column(String, nullable=False)
     customer_contact_phone = Column(String, nullable=False)
     customer_contact_email = Column(String, nullable=False)
-    dispatch_address = Column(String, nullable=False)
+    dispatch_address = Column(String, unique=True, nullable=False)
     dispatch_receiver_name = Column(String, nullable=False)
     dispatch_receiver_phone = Column(String, nullable=False)
     dispatch_receiver_email = Column(String, nullable=False)

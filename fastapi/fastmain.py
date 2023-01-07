@@ -33,7 +33,7 @@ async def get_role(query: schema.Query, db: Session = Depends(getDb)):
     return response
 
 
-@app.get("/get_form", response_model=schema.Form)
+@app.get("/get_form", response_model=Any)
 async def get_form(query: schema.Query, db: Session = Depends(getDb)):
     response = crud.get_form(query.column, query.value, db)
     return response

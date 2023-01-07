@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from src.schema import MessageType
-from src import models, schema, bcrypt
+from schema import MessageType
+import models, schema, bcrypt
 from typing import Any, Union
 
 

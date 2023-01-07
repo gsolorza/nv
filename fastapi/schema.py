@@ -23,6 +23,13 @@ class MessageType(Enum):
     softwareCreated = "Software have been created successfully"
     data = "data"
 
+
+class FormType(Enum):
+    cisco = 1
+    vendor = 2
+    software = 3
+    checklist = 4
+
 class Status(Enum):
     preSalesValidation = "Pre Sales Validation"
     insidePreSalesValidation = "Inside Pre Sales Validation"
