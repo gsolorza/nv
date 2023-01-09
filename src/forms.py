@@ -74,13 +74,14 @@ class ChecklistFormSales(FlaskForm):
     dispatch_receiver_email = EmailField("Dispatch Receiver Email", validators=[
                                          DataRequired(), Length(min=5, max=30), Email()])
     
-    sale_note = StringField("Sale Note", validators=[Regexp(r"^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]+$", message="The Sale Note should include letters and numbers")])
+    sale_note = StringField("Sale Note")
     date = DateField("Date")
     comments = TextAreaField("Comments", validators=[DataRequired(), Length(
         min=5, max=2000)], render_kw={"placeholder": "Enter your comments"})
     
     status = SelectField("Assign", choices=[])
     customer_id = IntegerField("Customer ID", validators=[DataRequired()])
+    db_validation = True
     submit = SubmitField("Submit")
 
     def set_choices(self, choices, field_name, default_value=""):
@@ -92,7 +93,7 @@ class ChecklistFormSales(FlaskForm):
             self.status.default = default_value
 
     def validate_quote_direct(self, quote_direct):
-        if(get_form("quote_direct", quote_direct.data, db())):
+        if(get_form("quote_direct", quote_direct.data, db()) and self.db_validation):
             raise ValidationError("The quote from direct already exist in the Database")
 
 class Vendor(FlaskForm):
@@ -150,7 +151,7 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
             form.purchase_order.data = data.form.purchase_order
             form.quote_direct.data = data.form.quote_direct
             form.client_manager_name.data = data.form.client_manager_name
-            form.pre_sales_name.default = data.form.pre_sales_name
+            form.pre_sales_name.data = data.form.pre_sales_name
             form.customer_id.data = data.form.customer_id
             form.customer_address.data = data.form.customer_address
             form.customer_contact_name.data = data.form.customer_contact_name
@@ -161,6 +162,7 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
             form.dispatch_receiver_phone.data = data.form.dispatch_receiver_phone
             form.dispatch_receiver_email.data = data.form.dispatch_receiver_email
             form.date.data = data.form.date
+            form.status.data = data.form.status
             form.sale_note.data = data.form.sale_note
             form.comments.data = data.form.comments
             return form
@@ -174,9 +176,9 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
                 form_vendor = Vendor()
                 form_vendor.vendor_deal_id.data = vendor.vendor_deal_id
                 form_vendor.vendor_name.data = vendor.vendor_name
-                form_vendor.vendor_account_manager_name.data = vendor.account_manager_name
-                form_vendor.vendor_account_manager_phone.data = vendor.account_manager_phone
-                form_vendor.vendor_account_manager_email.data = vendor.account_manager_email
+                form_vendor.vendor_account_manager_name.data = vendor.vendor_account_manager_name
+                form_vendor.vendor_account_manager_phone.data = vendor.vendor_account_manager_phone
+                form_vendor.vendor_account_manager_email.data = vendor.vendor_account_manager_email
                 form_vendor.vendor_deal_id.name = form_vendor.vendor_deal_id.name+str(i)
                 form_vendor.vendor_name.name = form_vendor.vendor_name.name+str(i)
                 form_vendor.vendor_account_manager_name.name = form_vendor.vendor_account_manager_name.name+str(i)
@@ -200,6 +202,7 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
                 form_cisco.cisco_account_manager_email.data = cisco.cisco_account_manager_email
                 form_cisco.cisco_smart_account.data = cisco.cisco_smart_account
                 form_cisco.cisco_virtual_account.data = cisco.cisco_virtual_account
+                form_cisco.cisco_deal_id.name = form_cisco.cisco_deal_id.name+str(i)
                 form_cisco.cisco_account_manager_name.name = form_cisco.cisco_account_manager_name.name+str(i)
                 form_cisco.cisco_account_manager_phone.name = form_cisco.cisco_account_manager_phone.name+str(i)
                 form_cisco.cisco_account_manager_email.name = form_cisco.cisco_account_manager_email.name+str(i)
@@ -302,3 +305,6 @@ def is_data_validated(forms: list[Union[ChecklistFormSales, Cisco, Vendor, Softw
         else:
             is_valid = False
     return is_valid
+
+
+        

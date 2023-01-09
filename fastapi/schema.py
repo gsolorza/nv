@@ -87,7 +87,7 @@ class CreateForm(BaseModel):
     pre_sales_name: str
     customer_id: int
     comments: str
-    status: str = Status.preSalesValidation.value
+    status: str
     sale_note: Union[str, None] = None
     date: datetime.date = datetime.date.today()
     customer_address: str
@@ -142,9 +142,9 @@ class CreateVendor(BaseModel):
     form_id: int
     vendor_deal_id: str
     vendor_name: str
-    account_manager_name: str
-    account_manager_phone: str
-    account_manager_email: str
+    vendor_account_manager_name: str
+    vendor_account_manager_phone: str
+    vendor_account_manager_email: str
 
     class Config:
         orm_mode = True
@@ -175,7 +175,7 @@ class CreateSoftware(BaseModel):
     software_type: str
     duration_time: str
     customer_contact: str
-    subscription_id: str
+    subscription_id: Union[str, None]
     start_date: str
     type_of_purchase: str
 
@@ -186,6 +186,20 @@ class CreateSoftware(BaseModel):
 class Software(CreateSoftware):
     id: int
 
+class PartialForm(BaseModel):
+    id: str
+    quote_direct: str
+    sales_force_id: str
+    purchase_order: Union[str, None]
+    date: datetime.date
+    status: str
+    sale_note: Union[str, None]
+    client_manager_name: str
+    pre_sales_name: str
+    customer_name: str
+
+    class Config:
+        orm_mode = True
 
 class FullForm(BaseModel):
     form: Form

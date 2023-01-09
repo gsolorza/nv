@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Any, Union
 import datetime
-from enum import Enum
+from enum import Enum, auto
 
 
 class MessageType(Enum):
@@ -24,11 +24,13 @@ class MessageType(Enum):
     data = "data"
 
 class Status(Enum):
-    preSalesValidation = "Pre Sales Validation"
-    insidePreSalesValidation = "Inside Pre Sales Validation"
-    plValidation = "P&L Valdiation"
-    approved = "Approved"
+    completed = "Completed"
 
+class FormTypes(Enum):
+    checklist = "Checklist"
+    cisco = "Cisco"
+    vendor = "Vendor"
+    software = "Software"
 
 class Query(BaseModel):
     column: Union[str, None] = None
@@ -80,7 +82,7 @@ class CreateForm(BaseModel):
     pre_sales_name: str
     customer_id: int
     comments: str
-    status: str = Status.preSalesValidation.value
+    status: str
     sale_note: Union[str, None] = None
     date: datetime.date = datetime.date.today()
     customer_address: str
@@ -114,6 +116,7 @@ class UpdateForm(BaseModel):
     id: int
     value: str
     column: str
+    form_type: FormTypes
 
 
 class CreateCustomer(BaseModel):
@@ -135,9 +138,9 @@ class CreateVendor(BaseModel):
     form_id: int
     vendor_deal_id: str
     vendor_name: str
-    account_manager_name: str
-    account_manager_phone: str
-    account_manager_email: str
+    vendor_account_manager_name: str
+    vendor_account_manager_phone: str
+    vendor_account_manager_email: str
 
     class Config:
         orm_mode = True
@@ -168,7 +171,7 @@ class CreateSoftware(BaseModel):
     software_type: str
     duration_time: str
     customer_contact: str
-    subscription_id: str
+    subscription_id: Union[str, None]
     start_date: str
     type_of_purchase: str
 
@@ -187,6 +190,20 @@ class FullForm(BaseModel):
     cisco: Union[list[Cisco], None] = None
     software: Union[list[Software], None] = None
 
+class PartialForm(BaseModel):
+    id: str
+    quote_direct: str
+    sales_force_id: str
+    purchase_order: Union[str, None]
+    date: datetime.date
+    status: str
+    sale_note: Union[str, None]
+    client_manager_name: str
+    pre_sales_name: str
+    customer_name: str
+
+    class Config:
+        orm_mode = True
 
 class Message(BaseModel):
     message: dict[MessageType, list] = {}

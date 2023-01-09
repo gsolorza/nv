@@ -18,7 +18,7 @@
                 <div class="col-md-3">
                     {{form.sales_force_id.label(class="form-control-label mt-3 pt-0 mb-0 ",
                     for="validationCustom01")}}
-                    {{form.sales_force_id(class="form-control form-control-md validated")}}
+                    {{form.sales_force_id(class="form-control form-control-md validated", disabled="")}}
                     {% if form.sales_force_id.errors and form.sales_force_id.data%}
                     {% for error in form.sales_force_id.errors %}
                     <p id="error" class="text-danger"> {{error}}</p>
@@ -29,7 +29,7 @@
                 <div class="col-md-3">
                     {{form.purchase_order.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
-                    {{form.purchase_order(class="form-control form-control-md validated " , id='validationcustome01')}}
+                    {{form.purchase_order(class="form-control form-control-md validated ", disabled="")}}
                     {% if form.purchase_order.errors and form.purchase_order.data%}
                     {% for error in form.purchase_order.errors %}
                     <p id="error" class="text-danger"> {{error}}</p>
@@ -40,7 +40,7 @@
                 <div class="col-md-3">
                     {{form.quote_direct.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
-                    {{form.quote_direct(class="form-control form-control-md validated " , id='validationcustome01')}}
+                    {{form.quote_direct(class="form-control form-control-md validated ", disabled="")}}
                     {% if form.quote_direct.errors and form.quote_direct.data%}
                     {% for error in form.quote_direct.errors %}
                     <p id="error" class="text-danger"> {{error}}</p>
@@ -51,8 +51,7 @@
                 <div class="col-md-3">
                     {{form.pre_sales_name.label(class="form-control-label mt-3 pt-0 mb-0",
                     for="validationCustom01")}}
-                    {{form.pre_sales_name(class="custom-select", id="inputGroupSelect04",
-                    for="validationCustom01")}}
+                    {{form.pre_sales_name(class="custom-select", disabled="")}}
                     {% if form.pre_sales_name.errors and form.pre_sales_name.data%}
                     {% for error in form.pre_sales_name.errors %}
                     <p id="error" class="text-danger"> {{error}}</p>
@@ -92,7 +91,6 @@
                                 </div>
                             </div>
 
-
                             <table class="table mt-2 border-end" id="customer_table">
                                 <tbody>
                                     <tr class="table-primary">
@@ -119,7 +117,7 @@
                                 {{form.customer_address.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form.customer_address(class="form-control form-control-md mb-4 ml-2 validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form.customer_address.errors and form.customer_address.data %}
                                 {% for error in form.customer_address.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -133,7 +131,7 @@
                                 {{form.customer_contact_name.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form.customer_contact_name(class="form-control form-control-md mb-4 ml-2 validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form.customer_contact_name.errors and form.customer_contact_name.data %}
                                 {% for error in form.customer_contact_name.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -147,7 +145,7 @@
                                 for="validationCustom01")}}
                                 {{form.customer_contact_phone(class="form-control form-control-md mb-4 ml-2 validated "
                                 ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form.customer_contact_phone.errors and form.customer_contact_phone.data %}
                                 {% for error in form.customer_contact_phone.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -161,7 +159,7 @@
                                 for="validationCustom01")}}
                                 {{form.customer_contact_email(class="form-control form-control-md mb-4 ml-2 validated "
                                 ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form.customer_contact_email.errors and form.customer_contact_email.data %}
                                 {% for error in form.customer_contact_email.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -177,7 +175,7 @@
                                 {{form.dispatch_address.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form.dispatch_address(class="form-control form-control-md mb-4 ml-2 validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form.dispatch_address.errors and form.dispatch_address.data %}
                                 {% for error in form.dispatch_address.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -191,7 +189,7 @@
                                 {{form.dispatch_receiver_name.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form.dispatch_receiver_name(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form.dispatch_receiver_name.errors and form.dispatch_receiver_name.data%}
                                 {% for error in form.dispatch_receiver_name.errors %}
                                 <p class="text-danger is-invalid"> {{error}}</p>
@@ -204,7 +202,7 @@
                                 {{form.dispatch_receiver_phone.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form.dispatch_receiver_phone(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form.dispatch_receiver_phone.errors and form.dispatch_receiver_phone.data%}
                                 {% for error in form.dispatch_receiver_phone.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -217,7 +215,7 @@
                                 {{form.dispatch_receiver_email.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form.dispatch_receiver_email(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form.dispatch_receiver_email.errors and form.dispatch_receiver_email.data %}
                                 {% for error in form.dispatch_receiver_email.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -251,15 +249,13 @@
                                             {{form_cisco.cisco_deal_id.label(class="form-control-label",
                                             for="validationCustom01")}}
                                             {{form_cisco.cisco_deal_id(class="form-control form-control-md validated " ,
-                                            id='validationcustome01')}}
+                                            id='validationcustome01', disabled="")}}
                                             {% if form_cisco.cisco_deal_id.errors and form_cisco.cisco_deal_id.data %}
                                             {% for error in form_cisco.cisco_deal_id.errors %}
                                             <p id="error" class="text-danger"> {{error}}</p>
                                             {% endfor %}
                                             {% endif %}
-                                        
-                                            <button id="btn_search_deal_id" , class="btn btn-md btn-outline-success mt-3">
-                                                Search</button>
+                                    
 
 
                                         </div>
@@ -275,7 +271,7 @@
                                             for="validationCustom01")}}
                                             {{form_cisco.cisco_account_manager_name(class="form-control form-control-md
                                             validated " ,
-                                            id='validationcustome01')}}
+                                            id='validationcustome01', disabled="")}}
                                             {% if form_cisco.cisco_account_manager_name.errors and form_cisco.cisco_account_manager_name.data %}
                                             {% for error in form_cisco.cisco_account_manager_name.errors %}
                                             <p id="error" class="text-danger"> {{error}}</p>
@@ -293,7 +289,7 @@
                                             for="validationCustom01")}}
                                             {{form_cisco.cisco_account_manager_phone(class="form-control form-control-md
                                             validated " ,
-                                            id='validationcustome01')}}
+                                            id='validationcustome01', disabled="")}}
                                             {% if form_cisco.cisco_account_manager_phone.errors and form_cisco.cisco_account_manager_phone.data %}
                                             {% for error in form_cisco.cisco_account_manager_phone.errors %}
                                             <p id="error" class="text-danger"> {{error}}</p>
@@ -312,7 +308,7 @@
                                             for="validationCustom01")}}
                                             {{form_cisco.cisco_account_manager_email(class="form-control form-control-md
                                             validated " ,
-                                            id='validationcustome01')}}
+                                            id='validationcustome01', disabled="")}}
                                             {% if form_cisco.cisco_account_manager_email.errors and form_cisco.cisco_account_manager_email.data %}
                                             {% for error in form_cisco.cisco_account_manager_email.errors %}
                                             <p id="error" class="text-danger"> {{error}}</p>
@@ -328,7 +324,7 @@
                                             {{form_cisco.cisco_smart_account.label(class="form-control-label",
                                             for="validationCustom01")}}
                                             {{form_cisco.cisco_smart_account(class="form-control form-control-md validated " ,
-                                            id='validationcustome01')}}
+                                            id='validationcustome01', disabled="")}}
                                             {% if form_cisco.cisco_smart_account.errors and form_cisco.cisco_smart_account.data %}
                                             {% for error in form_cisco.cisco_smart_account.errors %}
                                             <p id="error" class="text-danger"> {{error}}</p>
@@ -345,7 +341,7 @@
                                             {{form_cisco.cisco_virtual_account.label(class="form-control-label",
                                             for="validationCustom01")}}
                                             {{form_cisco.cisco_virtual_account(class="form-control form-control-md validated " ,
-                                            id='validationcustome01')}}
+                                            id='validationcustome01', disabled="")}}
                                             {% if form_cisco.cisco_virtual_account.errors and form_cisco.cisco_virtual_account.data %}
                                             {% for error in form_cisco.cisco_virtual_account.errors %}
                                             <p id="error" class="text-danger"> {{error}}</p>
@@ -355,27 +351,9 @@
                                     </div>
                                 </div>
 
-
-
-                                <div id="delete_cisco" , class=" col-md-1 row ">
-                                    <div class="">
-                                        <div class="form-group  needs-validation">
-                                            <br>
-                                            <button id="delete_form" type="button" name="delete_cisco"
-                                                class="btn btn-outline-danger" onclick="deleteForm('#form_section_cisco_{{form_cisco.index.data}}')">
-                                                X</button>
-
-
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         {% endfor %}
                     </div>
-                <div class="row">
-                    <button id="btnciscovendor" type="button" class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add Cisco
-                        Vendor </button>
-                </div>
             </div>
             {% endif %}
 
@@ -405,7 +383,7 @@
                                 {{form_vendor.vendor_deal_id.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_vendor.vendor_deal_id(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_vendor.vendor_deal_id.errors and form_vendor.vendor_deal_id.data %}
                                 {% for error in form_vendor.vendor_deal_id.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -422,7 +400,7 @@
                                 {{form_vendor.vendor_name.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_vendor.vendor_name(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_vendor.vendor_name.errors and form_vendor.vendor_name.data %}
                                 {% for error in form_vendor.vendor_name.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -440,7 +418,7 @@
                                 {{form_vendor.vendor_account_manager_name.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_vendor.vendor_account_manager_name(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_vendor.vendor_account_manager_name.errors and form_vendor.vendor_account_manager_name.data %}
                                 {% for error in form_vendor.vendor_account_manager_name.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -457,7 +435,7 @@
                                 {{form_vendor.vendor_account_manager_phone.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_vendor.vendor_account_manager_phone(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_vendor.vendor_account_manager_phone.errors and form_vendor.vendor_account_manager_phone.data %}
                                 {% for error in form_vendor.vendor_account_manager_phone.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -473,7 +451,7 @@
                                 {{form_vendor.vendor_account_manager_email.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_vendor.vendor_account_manager_email(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_vendor.vendor_account_manager_email.errors and form_vendor.vendor_account_manager_email.data %}
                                 {% for error in form_vendor.vendor_account_manager_email.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -484,24 +462,10 @@
 
                     </div>
 
-                    <div id="delete_vendor" , class=" col-md-1 row ">
-                        <div class="">
-                            <div class="form-group " >
-                                <br>
-                                <button id="delete_form" type="button" name="delete_cisco" class="btn btn-outline-danger"
-                                    onclick="deleteForm('#form_section_vendor_{{form_vendor.index.data}}')" value="test"> X</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             {% endfor %}
         </div>
 
-     
-        <div class="row">
-            <button id="btnvendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-3 mt-4">
-                Add a new Vendor</button>
-        </div>
     </div>
     {%endif%}
 
@@ -525,7 +489,7 @@
                                 {{form_software.software_type.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_software.software_type(class="form-select form-control-md validated " ,
-                                id='software_type_select')}}
+                                id='software_type_select', disabled="")}}
                                 {% if form_software.software_type.errors and form_software.software_type.data %}
                                 {% for error in form_software.software_type.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -540,7 +504,7 @@
                                 {{form_software.duration_time.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_software.duration_time(class="form-select form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_software.duration_time.errors and form_software.duration_time.data %}
                                 {% for error in form_software.duration_time.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -555,7 +519,7 @@
                                 {{form_software.customer_contact.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_software.customer_contact(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_software.customer_contact.errors and form_software.customer_contact.data %}
                                 {% for error in form_software.customer_contact.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -571,7 +535,7 @@
                                 {{form_software.subscription_id.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_software.subscription_id(class="form-control form-control-md validated " ,
-                                id='subscription_id_field')}}
+                                id='subscription_id_field', disabled="")}}
                                 {% if form_software.subscription_id.errors and form_software.subscription_id.data %}
                                 {% for error in form_software.subscription_id.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -586,7 +550,7 @@
                                 {{form_software.start_date.label(class="form-control-label mt-3 pt-0 mb-0",
                                 for="validationCustom01")}}
                                 {{form_software.start_date(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_software.start_date.errors and form_software.start_date.data %}
                                 {% for error in form_software.start_date.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -602,7 +566,7 @@
                                 for="validationCustom01")}}
 
                                 {{form_software.type_of_purchase(class="form-select form-control-md validated " ,
-                                id='validationcustome01')}}
+                                id='validationcustome01', disabled="")}}
                                 {% if form_software.type_of_purchase.errors and form_software.type_of_purchase.data %}
                                 {% for error in form_software.type_of_purchase.errors %}
                                 <p id="error" class="text-danger"> {{error}}</p>
@@ -611,24 +575,8 @@
                             </div>
                         </div>
                     </div>
-                    <div id="delete_software" , class="col-md-auto  ">
-                        <div class="">
-                            <div class="form-group ">
-                                <br>
-                                <button id="delete_form" type="button" name="delete_software"
-                                    class="btn btn-outline-danger mt-3" onclick="deleteForm('#form_section_software_{{form_software.index.data}}')">
-                                    X</button>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             {% endfor %}
-        </div>
-
-        <div class="row">
-            <button id="btnsoftware" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
-                Add a new Software</button>
         </div>
     </div>
     {% endif%}
@@ -641,7 +589,7 @@
 
 
         <div class="col-md-12 ">
-            {{form.comments(class="form-control form-control-md validated " , id='validationcustome01')}}
+            {{form.comments(class="form-control form-control-md validated " , id='validationcustome01', disabled="")}}
             {% if form.comments.errors and form.comments.data %}
             {% for error in form.comments.errors %}
             <p id="error" class="text-danger"> {{error}}</p>
@@ -654,10 +602,12 @@
 
     </div>
     <br>
-    <div class="input-group col-md-2" for="validationcustome01">
+    <div class="container col-md-3 " for="validationcustome01">
 
-        {{form.status(class="custom-select", id="inputGroupSelect04",
+        {{form.status.label(class="form-control-label mt-3 pt-0 mb-0", id="inputGroupSelect04",
         for="validationCustom01")}}
+        {{form.status(class="custom-select", id="inputGroupSelect04",
+        for="validationCustom01", id="status", disabled="")}}
         {% if form.status.errors and form.status.data %}
         {% for error in form.status.errors %}
         <p id="error" class="text-danger"> {{error}}</p>
@@ -665,14 +615,28 @@
         {% endif %}
         <br>
         <br>
-
-
-    </div>
-</div>
-
-<div class="row">
-    <div class="form-group content-section">
-        {{ form.submit(class="btn btn-md btn-primary ", id="submit") }}
+        
+        
+        <div class=" ">
+            <div id="sale_note_group" class="form-group ">
+                {% if current_user.role_id == pl_role.id %}
+                    {{form.sale_note.label(class="form-control-label mt-3 pt-0 mb-0",
+                    for="validationCustom01")}}
+                    {{form.sale_note(class="form-control form-control-md validated " ,
+                    id='validationcustome01', id="sale_note", disabled="")}}
+                {% else %}
+                    {{form.sale_note.label(class="form-control-label mt-3 pt-0 mb-0",
+                    for="validationCustom01", disabled="")}}
+                    {{form.sale_note(class="form-control form-control-md validated " ,
+                    id='validationcustome01', disabled="")}}
+                {% endif %}
+                {% if form.sale_note.errors and form.sale_note.data %}
+                    {% for error in form.sale_note.errors %}
+                    <p id="error" class="text-danger"> {{error}}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 
@@ -685,9 +649,9 @@
 <script>
 
     let elementList = {
-        "cisco": ["#cisco_deal_id", "#cisco_account_manager_name", "#cisco_account_manager_phone", "#cisco_account_manager_email", "#cisco_smart_account", "#cisco_virtual_account", "#delete_cisco"],
-        "software": ["#software_type", "#duration_time", "#customer_contact", "#subscription_id", "#start_date", "#type_of_purchase", "#delete_software"],
-        "vendor": ["#vendor_deal_id", "#vendor_name", "#vendor_account_manager_name", "#vendor_account_manager_phone", "#vendor_account_manager_email", "#delete_vendor"]
+        "cisco": ["#cisco_deal_id", "#cisco_account_manager_name", "#cisco_account_manager_phone", "#cisco_account_manager_email", "#cisco_smart_account", "#cisco_virtual_account"],
+        "software": ["#software_type", "#duration_time", "#customer_contact", "#subscription_id", "#start_date", "#type_of_purchase"],
+        "vendor": ["#vendor_deal_id", "#vendor_name", "#vendor_account_manager_name", "#vendor_account_manager_phone", "#vendor_account_manager_email"]
     }
 
     function changeAttribute(elements, formId, buttonId, sectionId, allFormsId) {
@@ -808,7 +772,6 @@
             dropDown[i].addEventListener("change", function (event) {
                 if (dropDown[i].value != "SaaS") {
                     subscription_id[i].setAttribute("disabled", "")
-                    subscription_id[i].value = ""
                 }
                 else {
                     subscription_id[i].removeAttribute("disabled")
@@ -816,11 +779,34 @@
             })
             if (dropDown[i].value != "SaaS") {
                 subscription_id[i].setAttribute("disabled", "")
-                subscription_id[i].value = ""
             }
         }
     }
     update_software_drop_down()
+
+</script>
+
+<script>
+
+    function validate_sale_note_input(){
+        // Once Sales Note has input the "Assigned" field should be "Completed"
+        let status_options = document.querySelector("#status")
+        let sale_note = document.querySelector("#sale_note")
+        let sale_note_group = document.querySelector("#sale_note_group")
+        let sale_note_error = document.querySelector("#sale_note_error")
+
+        if(status_options.selectedOptions[0].value == "Completed" && sale_note.value){
+            return true
+        }
+        else if(status_options.selectedOptions[0].value != "Completed" && !sale_note.value){
+            return true
+        }
+        if(!sale_note_error){
+            var error = `<p id="sale_note_error" class="text-danger text-center mt-3"> When Sale Note is provided the Assigned select field should marked as "Completed" </p>`
+            sale_note_group.innerHTML += error
+        }
+        return false
+    }
 
 </script>
 
@@ -894,21 +880,16 @@
         }
         })
 
-
-    selectBtn.addEventListener("click", () => {
-        wrapper.classList.toggle("active")
-    });
-
     // Function that validate on submit if a customer has been selected and also updates the quantity of the forms for the backend once submitted
     $(function () {
-        $('#submit').on('click', function () {
+        $('#submit').on('click', function (event) {
             if(selectBtn.firstElementChild.innerText == "Select Customer"){
                 let checklist = document.querySelector("#checklist");
                 checklist.scrollIntoView()
                 var error = `<p id="customer_select_error" class="text-danger text-center"> Please Select a Customer </p>`
                 wrapper.insertAdjacentHTML("afterbegin", error)
             }
-            else{
+            else if(validate_sale_note_input()){
                 cisco_quantity = document.querySelector("#all_cisco_forms").children.length
                 vendor_quantity = document.querySelector("#all_vendor_forms").children.length
                 software_quantity = document.querySelector("#all_software_forms").children.length
@@ -925,9 +906,14 @@
                     document.querySelector("#software_has_data").value = "true"
                 }
             }
+            else{
+                event.preventDefault()
+            }
         });
     });
 
 </script>
+
+
 
 {%endblock content%}

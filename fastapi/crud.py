@@ -1,8 +1,18 @@
 from sqlalchemy.orm import Session
 from schema import MessageType
-import models, schema, bcrypt
+import models, schema
+import bcrypt
 from typing import Any, Union
 
+
+def generate_password_hash(password):
+    # Hash the password
+    password_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashed_password_bytes = bcrypt.hashpw(password_bytes, salt)
+    hashed_password = hashed_password_bytes.decode('utf-8')
+
+    return hashed_password
 
 def get_user(column: str, value: Union[str, int], db: Session):
     query = (
@@ -50,7 +60,8 @@ def get_form(column: str, value: Union[str, int], db: Session):
     return query
 
 
-def display_partial_form(search: schema.Query, db: Session):
+def display_partial_form(search: schema.Query, db: Session) -> Union[list[schema.PartialForm], list]:
+    result = []
     if search.value and search.column:
         query = (
             db.query(
@@ -60,8 +71,13 @@ def display_partial_form(search: schema.Query, db: Session):
                 models.Form.purchase_order,
                 models.Form.date,
                 models.Form.status,
-                models.Form.sale_note
-            ).filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+                models.Form.sale_note,
+                models.Form.client_manager_name,
+                models.Form.pre_sales_name,
+                models.Customer.customer_name
+            ).select_from(models.Form)
+            .filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+            .join(models.Customer)
             .all()
         )
     else:
@@ -73,10 +89,16 @@ def display_partial_form(search: schema.Query, db: Session):
                 models.Form.purchase_order,
                 models.Form.date,
                 models.Form.status,
-                models.Form.sale_note
-            )
-            .all()
+                models.Form.sale_note,
+                models.Form.client_manager_name,
+                models.Form.pre_sales_name,
+                models.Customer.customer_name
+            ).select_from(models.Form).join(models.Customer).all()
         )
+    if query:
+        for form in query:
+            result.append(schema.PartialForm.parse_obj(form.__dict__))
+        return result
     return query
 
 
@@ -189,8 +211,8 @@ def create_user(users: list[schema.CreateUser], db: Session):
             message.add(MessageType.alreadyExist, query)
         elif get_role(schema.Query(column="id", value=user.role_id), db):
             try:
-                hash_password = bcrypt.generate_password_hash(
-                    user.password).decode("utf-8")
+                hash_password = generate_password_hash(
+                    user.password)
                 new_user = models.User(
                     name=user.name,
                     email=user.email,
@@ -372,3 +394,4 @@ def delete_form(id: schema.Id, db: Session):
     db.commit()
 
     return message
+

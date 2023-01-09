@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from src.schema import MessageType
 from src import models, schema, bcrypt
 from typing import Any, Union
-
+from pprint import pprint
 
 def get_user(column: str, value: Union[str, int], db: Session):
     query = (
@@ -50,7 +50,8 @@ def get_form(column: str, value: Union[str, int], db: Session):
     return query
 
 
-def display_partial_form(search: schema.Query, db: Session):
+def display_partial_form(search: schema.Query, db: Session) -> Union[list[schema.PartialForm], list]:
+    result = []
     if search.value and search.column:
         query = (
             db.query(
@@ -60,8 +61,13 @@ def display_partial_form(search: schema.Query, db: Session):
                 models.Form.purchase_order,
                 models.Form.date,
                 models.Form.status,
-                models.Form.sale_note
-            ).filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+                models.Form.sale_note,
+                models.Form.client_manager_name,
+                models.Form.pre_sales_name,
+                models.Customer.customer_name
+            ).select_from(models.Form)
+            .filter(models.Form.__getattribute__(models.Form, search.column) == search.value)
+            .join(models.Customer)
             .all()
         )
     else:
@@ -73,10 +79,16 @@ def display_partial_form(search: schema.Query, db: Session):
                 models.Form.purchase_order,
                 models.Form.date,
                 models.Form.status,
-                models.Form.sale_note
-            )
-            .all()
+                models.Form.sale_note,
+                models.Form.client_manager_name,
+                models.Form.pre_sales_name,
+                models.Customer.customer_name
+            ).select_from(models.Form).join(models.Customer).all()
         )
+    if query:
+        for form in query:
+            result.append(schema.PartialForm.parse_obj(form))
+        return result
     return query
 
 
@@ -172,13 +184,38 @@ def get_user_role(roleId: int, db: Session):
 
 
 def update_form(data: schema.UpdateForm, db: Session):
-    query = (
-        db.query(models.Form)
-        .filter(models.Form.id == data.id)
-        .update({data.column: data.value}, synchronize_session=False)
-    )
-    db.commit()
-    return query
+    if data.form_type == schema.FormTypes.checklist:
+        query = (
+            db.query(models.Form)
+            .filter(models.Form.id == data.id)
+            .update({data.column: data.value}, synchronize_session=False)
+        )
+        db.commit()
+        return query
+    elif data.form_type == schema.FormTypes.cisco:
+        query = (
+            db.query(models.Cisco)
+            .filter(models.Cisco.id == data.id)
+            .update({data.column: data.value}, synchronize_session=False)
+        )
+        db.commit()
+        return query
+    elif data.form_type == schema.FormTypes.vendor:
+        query = (
+            db.query(models.Vendor)
+            .filter(models.Vendor.id == data.id)
+            .update({data.column: data.value}, synchronize_session=False)
+        )
+        db.commit()
+        return query
+    elif data.form_type == schema.FormTypes.software:
+        query = (
+            db.query(models.Software)
+            .filter(models.Software.id == data.id)
+            .update({data.column: data.value}, synchronize_session=False)
+        )
+        db.commit()
+        return query
 
 
 def create_user(users: list[schema.CreateUser], db: Session):
@@ -295,9 +332,9 @@ def create_vendor(vendor: Union[schema.CreateVendor, schema.CreateCisco], db: Se
             new_vendor = models.Vendor(
                 vendor_deal_id=vendor.vendor_deal_id,
                 vendor_name=vendor.vendor_name,
-                account_manager_name=vendor.account_manager_name,
-                account_manager_phone=vendor.account_manager_phone,
-                account_manager_email=vendor.account_manager_email,
+                vendor_account_manager_name=vendor.vendor_account_manager_name,
+                vendor_account_manager_phone=vendor.vendor_account_manager_phone,
+                vendor_account_manager_email=vendor.vendor_account_manager_email,
                 form_id=vendor.form_id,
             )
             db.add(new_vendor)
@@ -372,3 +409,29 @@ def delete_form(id: schema.Id, db: Session):
     db.commit()
 
     return message
+
+def apply_form_changes(form_data: schema.FullForm, input_data: dict[str, str], db:Session) -> Any:
+    for label, form_value in dict(form_data.form).items():
+        input_value = input_data.get(label)
+        if input_value:
+            if str(form_value).lower() != str(input_value).lower():
+                new_data = schema.UpdateForm(form_type=schema.FormTypes.checklist, column=label, value=input_value, id=form_data.form.id)
+                update_form(new_data, db)
+
+    forms = [(schema.FormTypes.cisco, form_data.cisco), 
+    (schema.FormTypes.vendor, form_data.vendor),
+    (schema.FormTypes.software, form_data.software)]
+    for form_type, form in forms:
+        if form:
+            i = 0
+            while i < len(form):
+                for label, form_value in dict(form[i]).items():
+                    input_value = input_data.get(label+str(i))
+                    if input_value:
+                        # print(f"{label} -> {form_value} and {input_value}")
+                        # print(form[i].id)
+                        if str(form_value).lower() != str(input_value).lower():
+                            new_data = schema.UpdateForm(form_type=form_type, column=label, value=input_value, id=form[i].id)
+                            pprint(new_data)
+                            update_form(new_data, db)
+                i += 1

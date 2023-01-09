@@ -357,7 +357,7 @@
 
 
 
-                                <div id="delete_cisco" , class=" col-md-1 row ">
+                                <div id="delete_cisco" , class=" col-md-1 row " hidden>
                                     <div class="">
                                         <div class="form-group  needs-validation">
                                             <br>
@@ -372,7 +372,7 @@
                             </div>
                         {% endfor %}
                     </div>
-                <div class="row">
+                <div class="row" hidden>
                     <button id="btnciscovendor" type="button" class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add Cisco
                         Vendor </button>
                 </div>
@@ -484,7 +484,7 @@
 
                     </div>
 
-                    <div id="delete_vendor" , class=" col-md-1 row ">
+                    <div id="delete_vendor" , class=" col-md-1 row " hidden>
                         <div class="">
                             <div class="form-group " >
                                 <br>
@@ -498,7 +498,7 @@
         </div>
 
      
-        <div class="row">
+        <div class="row" hidden>
             <button id="btnvendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-3 mt-4">
                 Add a new Vendor</button>
         </div>
@@ -611,7 +611,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="delete_software" , class="col-md-auto  ">
+                    <div id="delete_software" , class="col-md-auto  " hidden>
                         <div class="">
                             <div class="form-group ">
                                 <br>
@@ -626,7 +626,7 @@
             {% endfor %}
         </div>
 
-        <div class="row">
+        <div class="row" hidden>
             <button id="btnsoftware" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
                 Add a new Software</button>
         </div>
@@ -654,10 +654,12 @@
 
     </div>
     <br>
-    <div class="input-group col-md-2" for="validationcustome01">
+    <div class="container col-md-3 " for="validationcustome01">
 
-        {{form.status(class="custom-select", id="inputGroupSelect04",
+        {{form.status.label(class="form-control-label mt-3 pt-0 mb-0", id="inputGroupSelect04",
         for="validationCustom01")}}
+        {{form.status(class="custom-select", id="inputGroupSelect04",
+        for="validationCustom01", id="status")}}
         {% if form.status.errors and form.status.data %}
         {% for error in form.status.errors %}
         <p id="error" class="text-danger"> {{error}}</p>
@@ -665,14 +667,34 @@
         {% endif %}
         <br>
         <br>
-
-
+        
+        
+        <div class=" ">
+            <div id="sale_note_group" class="form-group ">
+                {% if current_user.role_id == pl_role.id or current_user.role_id == g.admin.id %}
+                    {{form.sale_note.label(class="form-control-label mt-3 pt-0 mb-0",
+                    for="validationCustom01")}}
+                    {{form.sale_note(class="form-control form-control-md validated " ,
+                    id='validationcustome01', id="sale_note")}}
+                {% else %}
+                    {{form.sale_note.label(class="form-control-label mt-3 pt-0 mb-0",
+                    for="validationCustom01", disabled="")}}
+                    {{form.sale_note(class="form-control form-control-md validated " ,
+                    id='validationcustome01', disabled="")}}
+                {% endif %}
+                {% if form.sale_note.errors and form.sale_note.data %}
+                    {% for error in form.sale_note.errors %}
+                    <p id="error" class="text-danger"> {{error}}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="row">
     <div class="form-group content-section">
-        {{ form.submit(class="btn btn-md btn-primary ", id="submit") }}
+        {{ form.submit(class="btn btn-md btn-primary", id="submit") }}
     </div>
 </div>
 
@@ -808,6 +830,7 @@
             dropDown[i].addEventListener("change", function (event) {
                 if (dropDown[i].value != "SaaS") {
                     subscription_id[i].setAttribute("disabled", "")
+                    subscription_id[i].value = ""
                 }
                 else {
                     subscription_id[i].removeAttribute("disabled")
@@ -815,10 +838,35 @@
             })
             if (dropDown[i].value != "SaaS") {
                 subscription_id[i].setAttribute("disabled", "")
+                subscription_id[i].value = ""
             }
         }
     }
     update_software_drop_down()
+
+</script>
+
+<script>
+
+    function validate_sale_note_input(){
+        // Once Sales Note has input the "Assigned" field should be "Completed"
+        let status_options = document.querySelector("#status")
+        let sale_note = document.querySelector("#sale_note")
+        let sale_note_group = document.querySelector("#sale_note_group")
+        let sale_note_error = document.querySelector("#sale_note_error")
+
+        if(status_options.selectedOptions[0].value == "Completed" && sale_note.value){
+            return true
+        }
+        else if(status_options.selectedOptions[0].value != "Completed" && !sale_note.value){
+            return true
+        }
+        if(!sale_note_error){
+            var error = `<p id="sale_note_error" class="text-danger text-center mt-3"> When Sale Note is provided the Assigned select field should marked as "Completed" </p>`
+            sale_note_group.innerHTML += error
+        }
+        return false
+    }
 
 </script>
 
@@ -899,14 +947,14 @@
 
     // Function that validate on submit if a customer has been selected and also updates the quantity of the forms for the backend once submitted
     $(function () {
-        $('#submit').on('click', function () {
+        $('#submit').on('click', function (event) {
             if(selectBtn.firstElementChild.innerText == "Select Customer"){
                 let checklist = document.querySelector("#checklist");
                 checklist.scrollIntoView()
                 var error = `<p id="customer_select_error" class="text-danger text-center"> Please Select a Customer </p>`
                 wrapper.insertAdjacentHTML("afterbegin", error)
             }
-            else{
+            else if(validate_sale_note_input()){
                 cisco_quantity = document.querySelector("#all_cisco_forms").children.length
                 vendor_quantity = document.querySelector("#all_vendor_forms").children.length
                 software_quantity = document.querySelector("#all_software_forms").children.length
@@ -923,9 +971,14 @@
                     document.querySelector("#software_has_data").value = "true"
                 }
             }
+            else{
+                event.preventDefault()
+            }
         });
     });
 
 </script>
+
+
 
 {%endblock content%}

@@ -39,7 +39,7 @@ async def get_form(query: schema.Query, db: Session = Depends(getDb)):
     return response
 
 
-@app.get("/display_partial_form", response_model=list[schema.DisplayForm])
+@app.get("/display_partial_form", response_model=Any)
 async def display_partial_form(query: schema.Query, db: Session = Depends(getDb)):
     response = crud.display_partial_form(query, db)
     return response

@@ -82,9 +82,9 @@ class Vendor(Base):
     )
     vendor_deal_id = Column(String, nullable=False)
     vendor_name = Column(String, nullable=False)
-    account_manager_name = Column(String, nullable=False)
-    account_manager_phone = Column(String, nullable=False)
-    account_manager_email = Column(String, nullable=False)
+    vendor_account_manager_name = Column(String, nullable=False)
+    vendor_account_manager_phone = Column(String, nullable=False)
+    vendor_account_manager_email = Column(String, nullable=False)
     form_id = Column(Integer, ForeignKey("form.id", ondelete="CASCADE"))
     form = relationship("Form", back_populates="vendor")
 

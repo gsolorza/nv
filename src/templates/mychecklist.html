@@ -3,56 +3,115 @@
 <div class="container col-md-6">
   <h1 class="display-6  .colorh2 ">My Checklist {{current_user.name}} !</h1>
   <strong>
-    <hr class="hrclass">
-    <br><br>
+  <hr class="hrclass">
+  <br><br>
+</div>
 
-</div>
-</div>
 <div class="">
-
   <nav class="navbar navbar-expand-md  ">
-    <form class="container col-md-3 " method="POST" role="search">
-      <input class="form-control me-2" type="search" placeholder="Search by Sales Force ID" aria-label="Search"
+      <input id="search" class="container col-md-3" type="search" placeholder="Search by Sales Force ID" aria-label="Search"
         name="sales_force_id">
-      <button class="btn btn-outline-primary" type="submit">Search</button>
-    </form>
+  </nav>
 </div>
-</div>
-</nav>
-</div>
-  <table class="table">
 
-    <thead class="table-primary">
-      <th> Sales Force ID </th>
-      <th> Quote Direct </th>
-      <th> Purchase Order </th>
-      <th> Sale Note ID </th>
-      <th> Date </th>
-      <th> Status </th>
-      <th> Edit </th>
-    </thead>
-    {% if form_history %}
-    {% for form in form_history %}
-    {% if form.status != "Approved" %}
-    <tbody>
-      <form method="POST" action="{{ url_for('form_update', form_id=form.id) }}" class="container ">
-      <td hidden>{{form.id}}</td>
-      <td>{{form.sales_force_id}}</td>
-      <td>{{form.quote_direct}}</td>
-      <td>{{form.purchase_order}}</td>
-      <td>{{form.sale_note}}</td>
-      <td>{{form.date}}</td>
-      <td>{{form.status}}</td>
-      <td> <button class="btn btn-outline-primary" type="submit">EDIT</button> </td>
-      </form>
-    </tbody>
-    {% endif %}
-    {% endfor %}
-    {% endif %}
-  </table>
-  </header>
+<table class="table">
+  <thead class="table-primary">
+    <th> Client Manager </th>
+    <th> Pre Sales Engineer </th>
+    <th> Customer </th>
+    <th> Sales Force ID </th>
+    <th> Quote Direct </th>
+    <th> Purchase Order </th>
+    <th> Date </th>
+    <th> Assigned </th>
+    <th></th>
+  </thead>
+  <tbody id="table_body">
+  </tbody>
+</table>
 
+<script>
+  
+  var forms = {{form_history | tojson }}
+  
+  var tableBody = document.querySelector("#table_body")
+  var search = document.querySelector("#search")
 
+  function findTableMatch(searchWord, values){
+    for(value of values){
+      if(value && value.toLowerCase().startsWith(searchWord.toLowerCase()))
+      return true
+    }
+    return false
+  }
 
+  function updateTableForm(searchWord){
+    if(!searchWord){
+      tableBody.innerHTML = ""
+      for(form of forms){
+        let tr = document.createElement("tr")
+        let td = document.createElement("td")
+        let tdForm = document.createElement("form")
+        tdForm.className = "container"
+        tdForm.method = "GET"
+        tdForm.action = `/form/${form.id}`
+        let button = document.createElement("button")
+        button.className = "btn btn-outline-primary"
+        button.innerText = "EDIT"
+        button.type = "submit"
+        tr.innerHTML += `<td>${form.client_manager_name}</td>`
+        tr.innerHTML += `<td>${form.pre_sales_name}</td>`
+        tr.innerHTML += `<td>${form.customer_name}</td>`
+        tr.innerHTML += `<td>${form.sales_force_id}</td>`
+        tr.innerHTML += `<td>${form.quote_direct}</td>`
+        tr.innerHTML += `<td>${form.purchase_order}</td>`
+        tr.innerHTML += `<td>${form.date.replace("00:00:00 GMT", "")}</td>`
+        tr.innerHTML += `<td>${form.status}</td>`
+        td.appendChild(tdForm)
+        tdForm.appendChild(button)
+        tr.appendChild(td)
+        tableBody.appendChild(tr)
+      }
+    }
+    else if(searchWord){
+      tableBody.innerHTML = ""
+      for(form of forms){
+        if(findTableMatch(searchWord, Object.values(form))){
+          let tr = document.createElement("tr")
+          let td = document.createElement("td")
+          let tdForm = document.createElement("form")
+          tdForm.className = "container"
+          tdForm.method = "GET"
+          tdForm.action = `/form/${form.id}`
+          let button = document.createElement("button")
+          button.className = "btn btn-outline-primary"
+          button.innerText = "EDIT"
+          button.type = "submit"
+          tr.innerHTML += `<td>${form.client_manager_name}</td>`
+          tr.innerHTML += `<td>${form.pre_sales_name}</td>`
+          tr.innerHTML += `<td>${form.customer_name}</td>`
+          tr.innerHTML += `<td>${form.sales_force_id}</td>`
+          tr.innerHTML += `<td>${form.quote_direct}</td>`
+          tr.innerHTML += `<td>${form.purchase_order}</td>`
+          tr.innerHTML += `<td>${form.date.replace("00:00:00 GMT", "")}</td>`
+          tr.innerHTML += `<td>${form.status}</td>`
+          td.appendChild(tdForm)
+          tdForm.appendChild(button)
+          tr.appendChild(td)
+          tableBody.appendChild(tr)
+        }
+      }
+    }
+  }
 
-  {%endblock content%}
+  search.addEventListener("keyup", () => {
+    searchWord = search.value;
+    updateTableForm(searchWord);
+  })
+
+  window.onload = function (){
+    updateTableForm();
+  }
+</script>
+
+{%endblock content%}
