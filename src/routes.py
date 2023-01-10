@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, session, g
 from flask_login import login_required, logout_user, current_user, login_user
-from src.forms import LoginForm, InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, CustomerForm, replicateForm, is_data_validated, encap_form
+from src.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm,InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, CustomerForm, replicateForm, is_data_validated, encap_form
 from src import app, login_manager, bcrypt, schema
 from src.schema import Status
 from src.crud import get_user, get_role, get_customer, create_form, create_vendor, create_software, display_partial_form, display_full_form, get_user_role, apply_form_changes
@@ -276,3 +276,13 @@ def form_update(form_id):
 def CreateCustomer():
     customer = CustomerForm()
     return render_template("create_customer.html", title="Create Customer",customer=customer)
+
+@app.route("/RequestResetForm",methods=["GET","POST"])
+def requestresetform():
+    form = RequestResetForm()
+    return render_template("RequestResetForm.html", title="Forgot Password ",form=form)
+
+@app.route("/ResetPassword",methods=["GET","POST"])
+def ResetPassword():
+    form = RegistrationForm()
+    return render_template("reset_password.html", title="Reset Password",form=form)

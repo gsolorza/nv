@@ -1,36 +1,39 @@
 {% extends 'layout.html'%}
 {%block content%}
+
 <div class="container col-md-6">
-  <h1 class="display-6  .colorh2 ">Checklist History {{current_user.name}} !</h1>
+  <h1 class="display-6  ">Checklist History {{current_user.name}} !</h1>
   <strong>
   <hr class="hrclass">
   <br><br>
 </div>
+<div class="content-section">
+  <div class="">
+    <nav class="navbar navbar-expand-md  ">
+        <input id="search" class="container col-md-3" type="search" placeholder="Search by Sales Force ID" aria-label="Search"
+          name="sales_force_id">
+    </nav>
+  </div>
 
-<div class="">
-  <nav class="navbar navbar-expand-md  ">
-      <input id="search" class="container col-md-3" type="search" placeholder="Search by Sales Force ID" aria-label="Search"
-        name="sales_force_id">
-  </nav>
+  <table id="" class="table content-section table-bordered table-hover border-primary pt-2">
+    <thead class="table-primary ">
+      <th> Client Manager </th>
+      <th> Pre Sales Engineer </th>
+      <th> Customer </th>
+      <th> Sales Force ID </th>
+      <th> Quote Direct </th>
+      <th> Purchase Order </th>
+      <th> Date </th>
+      <th> Assigned </th>
+      <th></th>
+    </thead>
+    <tbody id="table_body" class="text-wrap">
+    </tbody>
+  </table>
 </div>
 
-<table class="table">
-  <thead class="table-primary">
-    <th> Client Manager </th>
-    <th> Pre Sales Engineer </th>
-    <th> Customer </th>
-    <th> Sales Force ID </th>
-    <th> Quote Direct </th>
-    <th> Purchase Order </th>
-    <th> Date </th>
-    <th> Assigned </th>
-    <th></th>
-  </thead>
-  <tbody id="table_body">
-  </tbody>
-</table>
 
-<script>
+  <script>
   
   var forms = {{form_history | tojson }}
   
@@ -112,6 +115,9 @@
   window.onload = function (){
     updateTableForm();
   }
+
+
 </script>
+
 
 {%endblock content%}

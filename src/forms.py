@@ -30,6 +30,22 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
 
+class RequestResetForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+   
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+
+
+
+
 class InitialFormSales(FlaskForm):
     sales_force_id = StringField("Sales Force ID",
                                  validators=[DataRequired(), Length(min=5, max=30), Regexp(r"^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]+$", message="Should include letters and numbers")])
@@ -100,9 +116,9 @@ class Vendor(FlaskForm):
     vendor_deal_id = StringField(
         "Deal ID", validators=[DataRequired(), Length(min=5, max=30)])
     vendor_name = StringField("Vendor Name", validators=[
-                              DataRequired(), Length(min=1, max=10), Regexp(r"^[0-9a-zA-Z]+$", message="The Vendor name should only include letters and numbers")])
+                              DataRequired(), Length(min=1, max=20), Regexp(r"^[0-9a-zA-Z]+$", message="The Vendor name should only include letters and numbers")])
     vendor_account_manager_name = StringField(" Manager Name", validators=[
-                                       DataRequired(), Length(min=3, max=10), Regexp(r"^[A-Za-z\s]+$", message="The name should only include letters")])
+                                       DataRequired(), Length(min=3, max=20), Regexp(r"^[A-Za-z\s]+$", message="The name should only include letters")])
     vendor_account_manager_phone = StringField(" Manager Phone", validators=[
                                         DataRequired(), Length(min=5, max=15), Regexp(r"^[0-9]+$", message="The phone should only include numbers")],render_kw={"placeholder": "5690000000"})
     vendor_account_manager_email = EmailField(
@@ -113,7 +129,7 @@ class Cisco(FlaskForm):
     cisco_deal_id = StringField(
         "Deal ID", validators=[DataRequired(), Length(min=5, max=30)])
     cisco_account_manager_name = StringField(" Manager Name", validators=[
-                                       DataRequired(), Length(min=3, max=10), Regexp(r"^[A-Za-z\s]+$", message="The name should only include letters")])
+                                       DataRequired(), Length(min=3, max=20), Regexp(r"^[A-Za-z\s]+$", message="The name should only include letters")])
     cisco_account_manager_phone = StringField(" Manager Phone", validators=[
                                         DataRequired(), Length(min=5, max=15), Regexp(r"^[0-9]+$", message="The phone should only include numbers")],render_kw={"placeholder": "5690000000"})
     cisco_account_manager_email = EmailField(
@@ -135,7 +151,7 @@ class Software(FlaskForm):
     subscription_id = StringField("Subscription ID")
 
         
-    start_date = StringField("Start Day", validators=[DataRequired()])
+    start_date = StringField("Start Date", validators=[DataRequired()])
     type_of_purchase = SelectField(
         "Type of Purchase",choices=[("New"),("Non-automatic Renewal "),("Automatic Renewal")] ,validators=[DataRequired()])
     index = IntegerField("Index", default=0)

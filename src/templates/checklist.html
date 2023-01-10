@@ -100,8 +100,8 @@
                                         <th scope="col table-info">Customer RUT </th>
                                     </tr>
                                     <tr>
-                                        <td id="customer_name_row"></td>
-                                        <td id="customer_rut_row"></td>
+                                        <th id="customer_name_row"></td>
+                                        <th id="customer_rut_row"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -258,7 +258,7 @@
                                             {% endfor %}
                                             {% endif %}
                                         
-                                            <button id="btn_search_deal_id" , class="btn btn-md btn-outline-success mt-3">
+                                            <button id="btn_search_deal_id" , type="button", class="btn btn-md btn-outline-success mt-3">
                                                 Search</button>
 
 
@@ -534,38 +534,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="duration_time" , class="col-md-auto row">
-                        <div class=" ">
-                            <div class="custome-select">
-                                {{form_software.duration_time.label(class="form-control-label mt-3 pt-0 mb-0",
-                                for="validationCustom01")}}
-                                {{form_software.duration_time(class="form-select form-control-md validated " ,
-                                id='validationcustome01')}}
-                                {% if form_software.duration_time.errors and form_software.duration_time.data %}
-                                {% for error in form_software.duration_time.errors %}
-                                <p id="error" class="text-danger"> {{error}}</p>
-                                {% endfor %}
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="customer_contact" , class="col-md-auto row ">
-                        <div class=" ">
-                            <div class="form-group ">
-                                {{form_software.customer_contact.label(class="form-control-label mt-3 pt-0 mb-0",
-                                for="validationCustom01")}}
-                                {{form_software.customer_contact(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
-                                {% if form_software.customer_contact.errors and form_software.customer_contact.data %}
-                                {% for error in form_software.customer_contact.errors %}
-                                <p id="error" class="text-danger"> {{error}}</p>
-                                {% endfor %}
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="subscription_id" , class="col-md-auto row">
+                     <div id="subscription_id" , class="col-md-3 row">
                         <div class=" ">
                             <div class="form-group ">
                                 {{form_software.subscription_id.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -580,7 +549,25 @@
                             </div>
                         </div>
                     </div>
-                    <div id="start_date" , class="col-md-auto row ">
+
+                    <div id="duration_time" , class="col-md-3 row">
+                        <div class=" ">
+                            <div class="custome-select">
+                                {{form_software.duration_time.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form_software.duration_time(class="form-select form-control-md validated " ,
+                                id='validationcustome01')}}
+                                {% if form_software.duration_time.errors and form_software.duration_time.data %}
+                                {% for error in form_software.duration_time.errors %}
+                                <p id="error" class="text-danger"> {{error}}</p>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                    <div id="start_date" , class="col-md-3 row ">
                         <div class=" ">
                             <div class="form-group ">
                                 {{form_software.start_date.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -595,7 +582,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="type_of_purchase" , class="col-md-auto row ">
+                    <div id="type_of_purchase" , class="col-md-3 row ">
                         <div class=" ">
                             <div class="custome-select ">
                                 {{form_software.type_of_purchase.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -611,6 +598,23 @@
                             </div>
                         </div>
                     </div>
+
+                     <div id="customer_contact" , class="col-md-6 row ">
+                        <div class=" ">
+                            <div class="form-group ">
+                                {{form_software.customer_contact.label(class="form-control-label mt-3 pt-0 mb-0",
+                                for="validationCustom01")}}
+                                {{form_software.customer_contact(class="form-control form-control-md validated " ,
+                                id='validationcustome01')}}
+                                {% if form_software.customer_contact.errors and form_software.customer_contact.data %}
+                                {% for error in form_software.customer_contact.errors %}
+                                <p id="error" class="text-danger"> {{error}}</p>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="delete_software" , class="col-md-auto  ">
                         <div class="">
                             <div class="form-group ">
@@ -686,7 +690,7 @@
 
     let elementList = {
         "cisco": ["#cisco_deal_id", "#cisco_account_manager_name", "#cisco_account_manager_phone", "#cisco_account_manager_email", "#cisco_smart_account", "#cisco_virtual_account", "#delete_cisco"],
-        "software": ["#software_type", "#duration_time", "#customer_contact", "#subscription_id", "#start_date", "#type_of_purchase", "#delete_software"],
+        "software": ["#software_type","#subscription_id", "#duration_time",  "#start_date", "#type_of_purchase", "#customer_contact","#delete_software" ],
         "vendor": ["#vendor_deal_id", "#vendor_name", "#vendor_account_manager_name", "#vendor_account_manager_phone", "#vendor_account_manager_email", "#delete_vendor"]
     }
 
