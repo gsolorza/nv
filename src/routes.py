@@ -21,10 +21,20 @@ def assign_role_name_to_user():
         role = get_role(query, db())
         current_user.role_name = role.role_name
 
-    if path.startswith("/form"):
+    if path.startswith("/form") or path == "/checklist":
         query = schema.Query(column="role_name", value="admin")
         admin_role = get_role(query, db())
         g.admin = admin_role
+
+        query = schema.Query(column="role_name", value="Sales")
+        sales_role = get_role(query, db())
+        g.sales = sales_role
+        
+        query = schema.Query(column="id", value=current_user.role_id)
+        role = get_role(query, db())
+        current_user.role_name = role.role_name
+
+
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -81,13 +91,12 @@ def checklist():
     form = ChecklistFormSales()
     customer = CustomerForm()
     all_forms = []
-    role_list = get_role(schema.Query(), db())
     pre_sales_role = get_role(schema.Query(
         column="role_name", value="PreSales"), db())
     pre_sales = get_user_role(
         pre_sales_role.id, db())  # type: ignore
     form.set_choices([pre_sale.name for pre_sale in pre_sales], form.pre_sales_name.name)
-    form.set_choices([role.role_name for role in role_list if role.id != current_user.role_id and role.role_name != "admin"], form.status.name)  # type: ignore
+    form.set_choices([pre_sales_role.role_name], form.status.name)  # type: ignore
     if request.method == "POST":
         pprint(request.form)
         customers = [dict(customer) for customer in get_customer(schema.Query(), db())] # type: ignore   
@@ -223,17 +232,17 @@ def history():
 def form_update(form_id):
     query = schema.Query(column="id", value=form_id)
     role_list = get_role(schema.Query(), db())
-    print("asdasdad")
     form_data = display_full_form(query, db())
-    pprint(form_data)
     pre_sales_role = get_role(schema.Query(column="role_name", value="PreSales"), db())
     pl_role = get_role(schema.Query(column="role_name", value="P&L"), db())
     pre_sales = get_user_role(pre_sales_role.id, db())  # type: ignore
     form = ChecklistFormSales()
     form.set_choices(choices=[pre_sale.name for pre_sale in pre_sales], field_name=form.pre_sales_name.name)
     form.set_choices(choices=[role.role_name for role in role_list if role.role_name != "admin"], field_name=form.status.name)  # type: ignore
-    if current_user.role_id == pl_role.id:
+    if current_user.role_id == pl_role.id or current_user.role_id == g.admin.id:
         form.status.choices.append(schema.Status.completed.value)
+    elif current_user.role_id == g.sales.id:
+        form.status.choices = [pre_sales_role.role_name]
     form.client_manager_name.data = form_data.form.client_manager_name
     customer = CustomerForm()
     customers = [dict(customer) for customer in get_customer(schema.Query(), db())] # type: ignore
@@ -244,7 +253,6 @@ def form_update(form_id):
     vendor_quantity = len(form_data.vendor) if vendor_has_data else 1 # type: ignore
     software_quantity = len(form_data.software) if software_has_data else 1 # type: ignore
     if request.method == "POST":
-        pprint(request.form)
         all_forms = []
         form.db_validation = False
         all_forms.append(form)
@@ -267,7 +275,9 @@ def form_update(form_id):
     forms_cisco = encap_form(Cisco(), form_data) if cisco_has_data else replicateForm(Cisco(),  request.form, cisco_quantity)
     forms_vendor = encap_form(Vendor(), form_data) if vendor_has_data else replicateForm(Vendor(),  request.form, vendor_quantity)
     forms_software = encap_form(Software(), form_data) if software_has_data else replicateForm(Software(),  request.form, software_quantity)
-    if form.status.data == schema.Status.completed.value and current_user.name != "admin":
+    if current_user.role_id == g.admin.id:
+        return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role)
+    elif form.status.data != current_user.role_name:
         return render_template("form_history.html", title="Checklist History", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role)
     return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role)
     

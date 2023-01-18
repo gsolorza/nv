@@ -1,121 +1,61 @@
 {% extends 'layout.html'%}
 {%block content%}
-<div class="content-section ">
+
 <div class="container col-md-6">
-  <h1 class="display-6  .colorh2 ">My Checklist {{current_user.name}} !</h1>
+  <h1 class="display-6  "> My Checklist - {{current_user.name}} !</h1>
   <strong>
   <hr class="hrclass">
   <br><br>
 </div>
+<div class="content-section">
+  <div class="">
+    <nav class="navbar navbar-expand-md  ">
+        <input id="search" class="container col-md-3" type="search" placeholder="Search by Sales Force ID" aria-label="Search"
+          name="sales_force_id">
+    </nav>
+  </div>
 
-<div class="">
-  <nav class="navbar navbar-expand-md  ">
-      <input id="search" class="container col-md-3" type="search" placeholder="Search by Sales Force ID" aria-label="Search"
-        name="sales_force_id">
+  <table id="" class="table content-section table-bordered table-hover border-primary pt-2">
+    <thead class="table-primary ">
+      <th> Client Manager </th>
+      <th> Pre Sales Engineer </th>
+      <th> Customer </th>
+      <th> Sales Force ID </th>
+      <th> Quote Direct </th>
+      <th> Purchase Order </th>
+      <th> Date </th>
+      <th> Assigned </th>
+      <th></th>
+    </thead>
+    <tbody id="table_body" class="text-wrap">
+    </tbody>
+  </table>
+</div>
+
+<div class="content-section">
+  <nav class="pagination-container">
+    <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">
+  
+      &lt;
+  
+    </button>
+    <div id="pagination-numbers">
+  
+    </div>
+    <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">
+  
+      &gt;
+    </button>
   </nav>
 </div>
-
-<table id="" class="table content-section table-bordered table-hover border-primary p-2">
- <thead class="table-primary">
-    <th> Client Manager </th>
-    <th> Pre Sales Engineer </th>
-    <th> Customer </th>
-    <th> Sales Force ID </th>
-    <th> Quote Direct </th>
-    <th> Purchase Order </th>
-    <th> Date </th>
-    <th> Assigned </th>
-    <th></th>
-  </thead>
-  <tbody id="table_body">
-  </tbody>
-</table>
-
-</div>
-
 
 <script>
   
   var forms = {{form_history | tojson }}
-  
-  var tableBody = document.querySelector("#table_body")
-  var search = document.querySelector("#search")
 
-  function findTableMatch(searchWord, values){
-    for(value of values){
-      if(value && value.toLowerCase().startsWith(searchWord.toLowerCase()))
-      return true
-    }
-    return false
-  }
-
-  function updateTableForm(searchWord){
-    if(!searchWord){
-      tableBody.innerHTML = ""
-      for(form of forms){
-        let tr = document.createElement("tr")
-        let td = document.createElement("td")
-        let tdForm = document.createElement("form")
-        tdForm.className = "container"
-        tdForm.method = "GET"
-        tdForm.action = `/form/${form.id}`
-        let button = document.createElement("button")
-        button.className = "btn btn-outline-primary"
-        button.innerText = "EDIT"
-        button.type = "submit"
-        tr.innerHTML += `<td>${form.client_manager_name}</td>`
-        tr.innerHTML += `<td>${form.pre_sales_name}</td>`
-        tr.innerHTML += `<td>${form.customer_name}</td>`
-        tr.innerHTML += `<td>${form.sales_force_id}</td>`
-        tr.innerHTML += `<td>${form.quote_direct}</td>`
-        tr.innerHTML += `<td>${form.purchase_order}</td>`
-        tr.innerHTML += `<td>${form.date.replace("00:00:00 GMT", "")}</td>`
-        tr.innerHTML += `<td>${form.status}</td>`
-        td.appendChild(tdForm)
-        tdForm.appendChild(button)
-        tr.appendChild(td)
-        tableBody.appendChild(tr)
-      }
-    }
-    else if(searchWord){
-      tableBody.innerHTML = ""
-      for(form of forms){
-        if(findTableMatch(searchWord, Object.values(form))){
-          let tr = document.createElement("tr")
-          let td = document.createElement("td")
-          let tdForm = document.createElement("form")
-          tdForm.className = "container"
-          tdForm.method = "GET"
-          tdForm.action = `/form/${form.id}`
-          let button = document.createElement("button")
-          button.className = "btn btn-outline-primary"
-          button.innerText = "EDIT"
-          button.type = "submit"
-          tr.innerHTML += `<td>${form.client_manager_name}</td>`
-          tr.innerHTML += `<td>${form.pre_sales_name}</td>`
-          tr.innerHTML += `<td>${form.customer_name}</td>`
-          tr.innerHTML += `<td>${form.sales_force_id}</td>`
-          tr.innerHTML += `<td>${form.quote_direct}</td>`
-          tr.innerHTML += `<td>${form.purchase_order}</td>`
-          tr.innerHTML += `<td>${form.date.replace("00:00:00 GMT", "")}</td>`
-          tr.innerHTML += `<td>${form.status}</td>`
-          td.appendChild(tdForm)
-          tdForm.appendChild(button)
-          tr.appendChild(td)
-          tableBody.appendChild(tr)
-        }
-      }
-    }
-  }
-
-  search.addEventListener("keyup", () => {
-    searchWord = search.value;
-    updateTableForm(searchWord);
-  })
-
-  window.onload = function (){
-    updateTableForm();
-  }
 </script>
+<script src="{{url_for ('static', filename='js/createChecklistTable.js')}}"></script>
+<script src="{{url_for ('static', filename='js/pagination.js')}}"></script>
+
 
 {%endblock content%}

@@ -116,7 +116,7 @@ class Vendor(FlaskForm):
     vendor_deal_id = StringField(
         "Deal ID", validators=[DataRequired(), Length(min=5, max=30)])
     vendor_name = StringField("Vendor Name", validators=[
-                              DataRequired(), Length(min=1, max=20), Regexp(r"^[0-9a-zA-Z]+$", message="The Vendor name should only include letters and numbers")])
+                              DataRequired(), Length(min=1, max=20), Regexp(r"^[0-9a-zA-Z\s]+$", message="The Vendor name should only include letters and numbers")])
     vendor_account_manager_name = StringField(" Manager Name", validators=[
                                        DataRequired(), Length(min=3, max=20), Regexp(r"^[A-Za-z\s]+$", message="The name should only include letters")])
     vendor_account_manager_phone = StringField(" Manager Phone", validators=[

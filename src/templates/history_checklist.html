@@ -32,92 +32,30 @@
   </table>
 </div>
 
+<div class="content-section">
+  <nav class="pagination-container">
+    <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">
+  
+      &lt;
+  
+    </button>
+    <div id="pagination-numbers">
+  
+    </div>
+    <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">
+  
+      &gt;
+    </button>
+  </nav>
+</div>
 
-  <script>
+<script>
   
   var forms = {{form_history | tojson }}
-  
-  var tableBody = document.querySelector("#table_body")
-  var search = document.querySelector("#search")
-
-  function findTableMatch(searchWord, values){
-    for(value of values){
-      if(value && value.toLowerCase().startsWith(searchWord.toLowerCase()))
-      return true
-    }
-    return false
-  }
-
-  function updateTableForm(searchWord){
-    if(!searchWord){
-      tableBody.innerHTML = ""
-      for(form of forms){
-        let tr = document.createElement("tr")
-        let td = document.createElement("td")
-        let tdForm = document.createElement("form")
-        tdForm.className = "container"
-        tdForm.method = "GET"
-        tdForm.action = `/form/${form.id}`
-        let button = document.createElement("button")
-        button.className = "btn btn-outline-primary"
-        button.innerText = "VIEW"
-        button.type = "submit"
-        tr.innerHTML += `<td>${form.client_manager_name}</td>`
-        tr.innerHTML += `<td>${form.pre_sales_name}</td>`
-        tr.innerHTML += `<td>${form.customer_name}</td>`
-        tr.innerHTML += `<td>${form.sales_force_id}</td>`
-        tr.innerHTML += `<td>${form.quote_direct}</td>`
-        tr.innerHTML += `<td>${form.purchase_order}</td>`
-        tr.innerHTML += `<td>${form.date.replace("00:00:00 GMT", "")}</td>`
-        tr.innerHTML += `<td>${form.status}</td>`
-        td.appendChild(tdForm)
-        tdForm.appendChild(button)
-        tr.appendChild(td)
-        tableBody.appendChild(tr)
-      }
-    }
-    else if(searchWord){
-      tableBody.innerHTML = ""
-      for(form of forms){
-        if(findTableMatch(searchWord, Object.values(form))){
-          let tr = document.createElement("tr")
-          let td = document.createElement("td")
-          let tdForm = document.createElement("form")
-          tdForm.className = "container"
-          tdForm.method = "GET"
-          tdForm.action = `/form/${form.id}`
-          let button = document.createElement("button")
-          button.className = "btn btn-outline-primary"
-          button.innerText = "VIEW"
-          button.type = "submit"
-          tr.innerHTML += `<td>${form.client_manager_name}</td>`
-          tr.innerHTML += `<td>${form.pre_sales_name}</td>`
-          tr.innerHTML += `<td>${form.customer_name}</td>`
-          tr.innerHTML += `<td>${form.sales_force_id}</td>`
-          tr.innerHTML += `<td>${form.quote_direct}</td>`
-          tr.innerHTML += `<td>${form.purchase_order}</td>`
-          tr.innerHTML += `<td>${form.date.replace("00:00:00 GMT", "")}</td>`
-          tr.innerHTML += `<td>${form.status}</td>`
-          td.appendChild(tdForm)
-          tdForm.appendChild(button)
-          tr.appendChild(td)
-          tableBody.appendChild(tr)
-        }
-      }
-    }
-  }
-
-  search.addEventListener("keyup", () => {
-    searchWord = search.value;
-    updateTableForm(searchWord);
-  })
-
-  window.onload = function (){
-    updateTableForm();
-  }
-
 
 </script>
+<script src="{{url_for ('static', filename='js/createChecklistTable.js')}}"></script>
+<script src="{{url_for ('static', filename='js/pagination.js')}}"></script>
 
 
 {%endblock content%}
