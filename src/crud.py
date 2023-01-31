@@ -2,7 +2,9 @@ from sqlalchemy.orm import Session
 from src.schema import MessageType
 from src import models, schema, bcrypt
 from typing import Any, Union
+import datetime
 from pprint import pprint
+import json
 
 def get_user(column: str, value: Union[str, int], db: Session):
     query = (
@@ -182,6 +184,15 @@ def get_user_role(roleId: int, db: Session):
     users = [schema.UserQuery.parse_obj(x) for x in query]
     return users
 
+def update_user_password(email: str, new_password: str, db: Session):
+    hash_password = bcrypt.generate_password_hash(new_password).decode("utf-8")
+    query = (
+        db.query(models.User)
+        .filter(models.User.email == email.lower())
+        .update({"password": hash_password}, synchronize_session=False)
+    )
+    db.commit()
+    return query
 
 def update_form(data: schema.UpdateForm, db: Session):
     if data.form_type == schema.FormTypes.checklist:
@@ -230,7 +241,7 @@ def create_user(users: list[schema.CreateUser], db: Session):
                     user.password).decode("utf-8")
                 new_user = models.User(
                     name=user.name,
-                    email=user.email,
+                    email=user.email.lower(),
                     password=hash_password,
                     role_id=user.role_id,
                 )
@@ -238,7 +249,7 @@ def create_user(users: list[schema.CreateUser], db: Session):
                 db.commit()
                 db.refresh(new_user)
                 user = schema.UserBase(
-                    name=user.name, email=user.email, role_id=user.role_id
+                    name=user.name, email=user.email.lower(), role_id=user.role_id
                 )
                 message.add(MessageType.userCreated, user)
             except Exception as error:
@@ -306,10 +317,11 @@ def create_form(form: schema.CreateForm, db: Session):
     return message
 
 
-def create_customer(customer: schema.CreateCustomer, db: Session):
+def create_customers(customer: schema.CreateCustomer, db: Session):
     message = schema.Message()
-    if get_customer(schema.Query(column="customer_rut", value=customer.customer_rut), db):
-        message.add(MessageType.alreadyExist, customer.customer_rut)
+    query = get_customer(schema.Query(column="customer_rut", value=customer.customer_rut), db)
+    if query:
+        return None
     else:
         try:
             new_customer = models.Customer(
@@ -320,8 +332,8 @@ def create_customer(customer: schema.CreateCustomer, db: Session):
             db.commit()
             db.refresh(new_customer)
             message.add(MessageType.customerCreated, new_customer)
-        except Exception as error:
-            message.add(MessageType.generalError, error)
+        except Exception:
+            return None
     return message
 
 
@@ -410,10 +422,19 @@ def delete_form(id: schema.Id, db: Session):
 
     return message
 
-def apply_form_changes(form_data: schema.FullForm, input_data: dict[str, str], db:Session) -> Any:
+def apply_form_changes(form_data: schema.FullForm, input_data: dict[str, str], user_name:str, user_role:str, db:Session) -> Any:
     for label, form_value in dict(form_data.form).items():
         input_value = input_data.get(label)
-        if input_value:
+        if input_value and label.lower().startswith("comment"):
+            form_value_list = json.loads(form_value)
+            new_comment = {"name": user_name, 
+                           "role": user_role, 
+                           "date": str(datetime.date.today()), 
+                           "comment": input_value}
+            form_value_list.append(new_comment)
+            new_data = schema.UpdateForm(form_type=schema.FormTypes.checklist, column=label, value=json.dumps(form_value_list), id=form_data.form.id)
+            update_form(new_data, db)
+        elif input_value:
             if str(form_value).lower() != str(input_value).lower():
                 new_data = schema.UpdateForm(form_type=schema.FormTypes.checklist, column=label, value=input_value, id=form_data.form.id)
                 update_form(new_data, db)
@@ -428,10 +449,7 @@ def apply_form_changes(form_data: schema.FullForm, input_data: dict[str, str], d
                 for label, form_value in dict(form[i]).items():
                     input_value = input_data.get(label+str(i))
                     if input_value:
-                        # print(f"{label} -> {form_value} and {input_value}")
-                        # print(form[i].id)
                         if str(form_value).lower() != str(input_value).lower():
                             new_data = schema.UpdateForm(form_type=form_type, column=label, value=input_value, id=form[i].id)
-                            pprint(new_data)
                             update_form(new_data, db)
                 i += 1

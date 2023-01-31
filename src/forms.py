@@ -3,8 +3,10 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Email
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
 from src import schema
 from typing import Union, Any
-from src.crud import get_form
+from src.crud import get_form, get_user, get_customer
+import datetime
 from src.db import db
+import json
 
 
 class LoginForm(FlaskForm):
@@ -30,14 +32,19 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
 
-class RequestResetForm(FlaskForm):
+class ForgotPassword(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
 
-   
+    def validate_email(self, email):
+        if not email.errors:
+            user = get_user("email", email.data,  db())
+            if not user:
+                raise ValidationError("That email address does not exist in our records")
 
-class ResetPasswordForm(FlaskForm):
+
+class ResetPassword(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
@@ -60,10 +67,15 @@ class InitialFormSales(FlaskForm):
 
 class CustomerForm(FlaskForm):
     customer_name = StringField("Customer Name", validators=[
-                                DataRequired(), Length(min=5, max=30)])
-    customer_rut = StringField("Customer RUT", validators=[
-                               DataRequired(), Length(min=5, max=30)])
+                                DataRequired(), Length(min=4, max=30), Regexp(r"^[0-9a-zA-Z\s]+$", message="Customer name should only include letters and numbers")])
+    customer_rut = StringField("Customer RUT", render_kw={"placeholder": "1234512345.1"}, validators=[
+                               DataRequired(), Length(min=12, max=12), Regexp(r"^[0-9.]+$", message="RUT should only contain numbers and a single dot")])
     submit=SubmitField("Create Customer")
+
+    def validate_customer_rut(self, customer_rut):
+        query = get_customer(schema.Query(column="customer_rut", value=customer_rut.data), db())
+        if query:
+            raise ValidationError("Customer RUT already exist")
 
 class ChecklistFormSales(FlaskForm):
     sales_force_id = StringField("Sales Force ID", validators=[
@@ -111,6 +123,20 @@ class ChecklistFormSales(FlaskForm):
     def validate_quote_direct(self, quote_direct):
         if(get_form("quote_direct", quote_direct.data, db()) and self.db_validation):
             raise ValidationError("The quote from direct already exist in the Database")
+    
+    def format_comments_save(self, user_name, user_role):     
+        comments = []
+        comments.append({
+            "name": user_name,
+            "role": user_role,
+            "date": str(datetime.date.today()),
+            "comment": self.comments.data
+        })
+        json_comments = json.dumps(comments)
+        return json_comments
+    
+    def format_comments_view(self):
+        return json.loads(self.comments.data)
 
 class Vendor(FlaskForm):
     vendor_deal_id = StringField(
@@ -180,7 +206,6 @@ def encap_form(form: Union[ChecklistFormSales, Vendor, Cisco, Software], data: s
             form.date.data = data.form.date
             form.status.data = data.form.status
             form.sale_note.data = data.form.sale_note
-            form.comments.data = data.form.comments
             return form
         else:
             return None

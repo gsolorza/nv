@@ -27,14 +27,25 @@
 <div class="container colorh2">
   <!-- Example row of columns -->
   <div class="row">
-    {% if role.role_name == "Sales" %}
-    <div class="col-md-4">
-      <h2><strong>Create Checklist</strong></h2>
-      <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-        condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
-        sed odio dui. {{ current_user.email }}</p>
-      <p><a class="btn btn-secondary" href="{{ url_for('initial') }}" role="button">Create &raquo;</a></p>
-    </div>
+    {% if current_user.role_id == g.sales.id or current_user.role_id == g.admin.id %}
+      <div class="col-md-4">
+        <h2><strong>Create Checklist</strong></h2>
+        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+          condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
+          sed odio dui.</p>
+        <p><a class="btn btn-secondary" href="{{ url_for('initial') }}" role="button">Create &raquo;</a></p>
+      </div>
+    
+    {% endif %}
+    
+    {% if current_user.role_id == g.admin.id %}
+      <div class="col-md-4">
+        <h2><strong>Create Customer</strong></h2>
+        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+          condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
+          sed odio dui.</p>
+        <p><a class="btn btn-secondary" href="{{ url_for('create_customer') }}" role="button">Create &raquo;</a></p>
+      </div>
     {% endif %}
     <div class="col-md-4">
       <h2><strong> Checklist history</strong></h2>

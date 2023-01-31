@@ -1,11 +1,13 @@
 from flask import render_template, request, redirect, url_for, flash, session, g
 from flask_login import login_required, logout_user, current_user, login_user
-from src.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm,InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, CustomerForm, replicateForm, is_data_validated, encap_form
-from src import app, login_manager, bcrypt, schema
-from src.schema import Status
-from src.crud import get_user, get_role, get_customer, create_form, create_vendor, create_software, display_partial_form, display_full_form, get_user_role, apply_form_changes
+from src.forms import LoginForm, RegistrationForm, ForgotPassword, ResetPassword,InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, CustomerForm, replicateForm, is_data_validated, encap_form
+from src import app, login_manager, bcrypt, schema, mail, sender_email_address
+from src.crud import get_user, get_role, get_customer, create_form, create_vendor, create_software, display_partial_form, display_full_form, get_user_role, apply_form_changes, update_user_password, create_customers
 from src.db import db
+import json
+from flask_mail import Message
 from pprint import pprint
+from itsdangerous import URLSafeTimedSerializer as Serializer
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -13,26 +15,18 @@ def load_user(user_id):
 
 @app.before_request
 def assign_role_name_to_user():
-    path = request.path
-    pathList = ["/mychecklist"]
-
-    if path in pathList:
+    if current_user.is_authenticated:
         query = schema.Query(column="id", value=current_user.role_id)
         role = get_role(query, db())
         current_user.role_name = role.role_name
 
-    if path.startswith("/form") or path == "/checklist":
-        query = schema.Query(column="role_name", value="admin")
-        admin_role = get_role(query, db())
-        g.admin = admin_role
+    query = schema.Query(column="role_name", value="admin")
+    admin_role = get_role(query, db())
+    g.admin = admin_role
 
-        query = schema.Query(column="role_name", value="Sales")
-        sales_role = get_role(query, db())
-        g.sales = sales_role
-        
-        query = schema.Query(column="id", value=current_user.role_id)
-        role = get_role(query, db())
-        current_user.role_name = role.role_name
+    query = schema.Query(column="role_name", value="Sales")
+    sales_role = get_role(query, db())
+    g.sales = sales_role
 
 
 
@@ -41,23 +35,18 @@ def login():
 
     form = LoginForm()
     if current_user.is_authenticated:  # type: ignore
-        query = schema.Query(
-            column="id", value=current_user.role_id)  # type: ignore
-        role = get_role(query, db())
-        return render_template("home.html", role=role)
+        return render_template("home.html")
 
     if form.validate_on_submit():
         user = get_user("email", form.email.data.lower(), db())
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            flash("You Have been logged In!", "primary")
+            flash("You Have been logged In!", "success")
             login_user(user, remember=form.remember.data)
-            query = schema.Query(column="id", value=user.role_id)
-            role = get_role(query, db())
             next_page = request.args.get("next")
-            return redirect(next_page) if next_page else render_template('home.html', role=role)
+            return redirect(next_page) if next_page else render_template('home.html')
 
         else:
-            flash("Invalid Credentials", "danger")
+            flash("Invalid username or password", "danger")
 
     return render_template("login.html", title="login", form=form)
 
@@ -71,11 +60,7 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
-    query = schema.Query(
-        column="id", value=current_user.role_id)  # type: ignore
-    role = get_role(query, db())
-    print(session)
-    return render_template("home.html", role=role)
+    return render_template("home.html")
 
 
 @app.route("/initial_form", methods=["GET", "POST"])
@@ -98,7 +83,6 @@ def checklist():
     form.set_choices([pre_sale.name for pre_sale in pre_sales], form.pre_sales_name.name)
     form.set_choices([pre_sales_role.role_name], form.status.name)  # type: ignore
     if request.method == "POST":
-        pprint(request.form)
         customers = [dict(customer) for customer in get_customer(schema.Query(), db())] # type: ignore   
         cisco_quantity = request.form.get("cisco_quantity")
         vendor_quantity = request.form.get("vendor_quantity")
@@ -129,7 +113,7 @@ def checklist():
                 client_manager_name = form.client_manager_name.data,
                 pre_sales_name = form.pre_sales_name.data,
                 customer_id = form.customer_id.data,
-                comments = form.comments.data,
+                comments = form.format_comments_save(current_user.name, current_user.role_name),
                 status = form.status.data,
                 customer_address = form.customer_address.data,
                 customer_contact_name = form.customer_contact_name.data,
@@ -181,19 +165,10 @@ def checklist():
                         )
                         software = create_software(new_software_form, db())
                         result.append(software.message)
-            flash(f"{result}", "primary")
-            print("VALIDATED")
+            flash(f"Form have been created successfully!", "success")
             return redirect(url_for("mychecklist"))
-        flash(
-        f'initial information, added correctly!', 'primary')
         return render_template("checklist.html", form=form, forms_vendor=forms_vendor, forms_software=forms_software, forms_cisco=forms_cisco, customer=customer, customers=customers)
     return redirect(url_for("initial"))
-
-
-@app.route('/test', methods=["GET", "POST"])
-def test():
-    return render_template("about.html")
-
 
 @app.route('/mychecklist', methods=["GET"])
 @login_required
@@ -229,6 +204,7 @@ def history():
 
 
 @app.route("/form/<int:form_id>", methods=["GET", "POST"])
+@login_required
 def form_update(form_id):
     query = schema.Query(column="id", value=form_id)
     role_list = get_role(schema.Query(), db())
@@ -236,6 +212,7 @@ def form_update(form_id):
     pre_sales_role = get_role(schema.Query(column="role_name", value="PreSales"), db())
     pl_role = get_role(schema.Query(column="role_name", value="P&L"), db())
     pre_sales = get_user_role(pre_sales_role.id, db())  # type: ignore
+    comments = json.loads(form_data.form.comments) if form_data.form.comments else False
     form = ChecklistFormSales()
     form.set_choices(choices=[pre_sale.name for pre_sale in pre_sales], field_name=form.pre_sales_name.name)
     form.set_choices(choices=[role.role_name for role in role_list if role.role_name != "admin"], field_name=form.status.name)  # type: ignore
@@ -266,9 +243,9 @@ def form_update(form_id):
         if software_has_data:
             all_forms.extend(forms_software)
         if is_data_validated(all_forms):
-            apply_form_changes(form_data, request.form, db())
+            apply_form_changes(form_data, request.form, current_user.name, current_user.role_name, db())
             return redirect(url_for("mychecklist"))
-        return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role)
+        return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role, comments=comments)
     customer.customer_name.data = form_data.customer.customer_name
     customer.customer_rut.data = form_data.customer.customer_rut
     form = encap_form(form, form_data)
@@ -276,23 +253,74 @@ def form_update(form_id):
     forms_vendor = encap_form(Vendor(), form_data) if vendor_has_data else replicateForm(Vendor(),  request.form, vendor_quantity)
     forms_software = encap_form(Software(), form_data) if software_has_data else replicateForm(Software(),  request.form, software_quantity)
     if current_user.role_id == g.admin.id:
-        return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role)
+        return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role, comments=comments)
     elif form.status.data != current_user.role_name:
-        return render_template("form_history.html", title="Checklist History", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role)
-    return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role)
+        return render_template("form_history.html", title="Checklist History", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role, comments=comments)
+    return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role, comments=comments)
     
 
-@app.route("/CreateCustomer",methods=["GET","POST"])
-def CreateCustomer():
+@app.route("/create_customer",methods=["GET","POST"])
+@login_required
+def create_customer():
     customer = CustomerForm()
+    if customer.validate_on_submit():
+        new_customer = schema.CreateCustomer(
+            customer_name=customer.customer_name.data,
+            customer_rut=customer.customer_rut.data
+        )
+        response = create_customers(new_customer, db())
+        if response:
+            flash("Customer has been created successfully", "success")
+            return render_template("create_customer.html", title="Create Customer",customer=customer)
+        else:
+            flash("Customer creation failed, contact Administrator", "danger")
+            return render_template("create_customer.html", title="Create Customer",customer=customer)
     return render_template("create_customer.html", title="Create Customer",customer=customer)
 
-@app.route("/RequestResetForm",methods=["GET","POST"])
-def requestresetform():
-    form = RequestResetForm()
-    return render_template("RequestResetForm.html", title="Forgot Password ",form=form)
+@app.route("/forgot_password",methods=["GET","POST"])
+def forgot_password():
+    form = ForgotPassword()
+    if form.validate_on_submit():
+        serializer = Serializer(app.config["SECRET_KEY"])
+        token = serializer.dumps(form.email.data, salt=app.config["SECURITY_PASSWORD_SALT"])
+        url = url_for("reset_password", token=token, _external=True)
+        try:
+            msg = Message(
+            "Reset Password Notification",
+            sender=sender_email_address,
+            recipients=[form.email.data]
+            )
+            msg.body = f"Click on this link to reset your password --> {url}"
+            mail.send(msg)
+        except Exception:
+            flash("Error sending Email please contact Administrator", "danger")
+            return render_template("forgot_password.html", title="Forgot Password ",form=form)
+        flash("An email has been sent to you with a link to reset your password", "success")
+        return render_template("forgot_password.html", title="Forgot Password ",form=form)
+    return render_template("forgot_password.html", title="Forgot Password ",form=form)
 
-@app.route("/ResetPassword",methods=["GET","POST"])
-def ResetPassword():
-    form = RegistrationForm()
+@app.route("/reset_password/<token>",methods=["GET","POST"])
+def reset_password(token):
+    form = ResetPassword()
+    serializer = Serializer(app.config["SECRET_KEY"])
+    if form.validate_on_submit():
+        try:
+            # Validate if the token is valid based on the max_age attribute
+            email = serializer.loads(
+                token,
+                salt=app.config["SECURITY_PASSWORD_SALT"],
+                max_age=600
+            )
+        except Exception:
+            forgot_password_form = ForgotPassword()
+            flash("The password reset link expired, please try generating a new one")
+            return render_template("forgot_password.html", title="Forgot Password ",form=forgot_password_form)
+        if request.method == "POST":
+            try:
+                update_user_password(email, form.password.data, db())
+                flash("Try to log in with your new password", "success")
+                return redirect(url_for("login"))
+            except Exception:
+                flash("Error setting the new password, please contact your Administrator", "danger")
+                return render_template("reset_password.html", title="Reset Password",form=form)
     return render_template("reset_password.html", title="Reset Password",form=form)

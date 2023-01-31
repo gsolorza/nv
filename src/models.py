@@ -33,7 +33,7 @@ class Form(Base):
                 unique=True, nullable=False)
     sales_force_id = Column(String, index=True, nullable=False)
     purchase_order = Column(String, index=True, nullable=False)
-    quote_direct = Column(String, unique=True)
+    quote_direct = Column(String, index=True, unique=True, nullable=False)
     client_manager_name = Column(String, nullable=False)
     pre_sales_name = Column(String, nullable=False)
     sale_note = Column(String, nullable=True, default=None)

@@ -636,10 +636,42 @@
 
 
 <div class="col-md-12 shadow-sm p-3 mb-5 bg-body rounded content-section">
-    <div class="row bg-primary p-2 text-dark bg-opacity-10">
+    {% if comments %}
+        <section>
+            <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12 col-lg-10">
+                <div class="card text-dark">
+                    {% for comment in comments %}
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-start">
+                            <div>
+                            <p class="fw-bold mb-1">{{comment.name}} 
+                            <span class="badge bg-primary">{{comment.role}}</span>
+                            </p> 
+                            <div class="d-flex align-items-center mb-3">
+                                <p class="mb-0">
+                                {{comment.date}}
+                                </p>
+                            </div>
+                            <p class="mb-0">
+                                {{comment.comment}}
+                            </p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-0" />
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+            </div>
+        </section>
+    {% endif %}
+    
+    <div class="row bg-primary p-2 text-dark bg-opacity-10 mt-3">
         <legend class=""><i class="fs-6">Please add your Comments</i></legend>
-
-
+        
         <div class="col-md-12 ">
             {{form.comments(class="form-control form-control-md validated " , id='validationcustome01')}}
             {% if form.comments.errors and form.comments.data %}

@@ -7,17 +7,27 @@
   
     <div class="col-md-4">
         <form method="POST" action="" class="content-section">
-         
+            {{ customer.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="text-center">CREATE CUSTOMER</legend>
                 <div class="form-group">
                     {{ customer.customer_name.label(class="form-control-label") }}
                     {{ customer.customer_name(class="form-control form-control-md") }}
+                    {% if customer.customer_name.errors and customer.customer_name.data%}
+                    {% for error in customer.customer_name.errors %}
+                    <p id="error" class="text-danger"> {{error}}</p>
+                    {% endfor %}
+                    {% endif %}
             
                 </div>
                 <div class="form-group">
                    {{customer.customer_rut.label(class="form-control-label")}}
                    {{ customer.customer_rut(class="form-control form-control-md") }}
+                   {% if customer.customer_rut.errors and customer.customer_rut.data%}
+                   {% for error in customer.customer_rut.errors %}
+                   <p id="error" class="text-danger"> {{error}}</p>
+                   {% endfor %}
+                   {% endif %}
                 </div>
                
               
