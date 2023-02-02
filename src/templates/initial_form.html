@@ -10,7 +10,7 @@
         <form method="POST" action="{{url_for('checklist')}}" class="content-section">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <h1 class="display-5  .colorh2 ">Initial Information</h1>
+                <h2 class="colorh2 ">Initial Information</h2>
                 <div class="form-group  needs-validation" novalidate>
                     {{form.sales_force_id.label(class="form-control-label", for="validationCustom01")}}
                     {{form.sales_force_id(class="form-control form-control-md validated " , id='validationcustome01')}}

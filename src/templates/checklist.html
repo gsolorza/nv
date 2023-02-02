@@ -68,10 +68,9 @@
 
 
         <div class="col-md-12 ">
-            <div class="row p-3 mb-5 bg-body rounded content-section border border-info">
+            <div class="row p-3 mb-5 bg-body rounded content-section border border-primary">
 
-
-                <legend class="text-center"><strong>CUSTOMER INFORMATION </strong></legend>
+                 <h3 class="colorh2 ">Customer Information</h3>
                 <hr>
                 <div>
                     <div class="col-md-12 row">
@@ -93,13 +92,13 @@
                             </div>
 
 
-                            <table class="table mt-2 border-end" id="customer_table">
+                            <table class="table mt-2 " id="customer_table">
                                 <tbody>
-                                    <tr class="table-primary">
+                                    <tr class="t-modify">
                                         <th scope="col table-info">Customer Name</th>
                                         <th scope="col table-info">Customer RUT </th>
                                     </tr>
-                                    <tr>
+                                    <tr class="t_interior">
                                         <th id="customer_name_row"></td>
                                         <th id="customer_rut_row"></td>
                                     </tr>
@@ -109,9 +108,9 @@
                           <div class="col-md-4">
                         </div>
                         <div class="col-md-12 row">
-                            <legend class="text-center"><strong><i class="fs-6">Contact Customer
-                                        Information</i></strong>
-                            </legend>
+                           
+                            <h5 class="colorh2 ">Contact Customer
+                                        Information</h5><hr>
 
 
 
@@ -169,9 +168,9 @@
                                 {% endif %}
 
                             </div>
-                            <legend class="text-center"><strong><i class="fs-6">Dispatch Customer
-                                        Information</i></strong>
-                            </legend>
+                            
+                            <h5 class="colorh2 ">Dispatch Customer
+                                        Information</h5><hr>
 
                             <div class="col-md-3 ">
                                 {{form.dispatch_address.label(class="form-control-label mt-3 pt-0 mb-0",
@@ -238,8 +237,8 @@
         <input type="number" id="cisco_quantity" name="cisco_quantity" value="{{forms_cisco|length}}" hidden>
         <section id="cisco_vendor" , name="seccion-prueba" , class="col-md-12">
             {% if forms_cisco %}
-            <div class="row shadow-sm  mb-5 bg-body rounded content-section border border-info " id="form_cisco">
-                <legend class="text-center"><strong>CISCO INFORMATION </strong></legend><br>
+            <div class="row  shadow-sm p-3 mb-5 bg-body mt-3 rounded content-section " id="form_cisco">
+                <h3 class="colorh2 ">Cisco Information</h3><br>
                     <div id="all_cisco_forms" class="row">
                         {% for form_cisco in forms_cisco%}
                             <div class="col-md-12 row" id="form_section_cisco_{{form_cisco.index.data}}">
@@ -373,8 +372,8 @@
                         {% endfor %}
                     </div>
                 <div class="row">
-                    <button id="btnciscovendor" type="button" class="btn btn-md btn-outline-primary  col-md-3 mt-4"> Add Cisco
-                        Vendor </button>
+                      <button id="btnciscovendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
+                Add</button>
                 </div>
             </div>
             {% endif %}
@@ -385,135 +384,136 @@
             {{ customer.customer_name(hidden=True, id="customer_name") }}
             {{ customer.customer_rut(hidden=True, id="customer_rut") }}
             {{ form.customer_id(hidden=True, id="customer_id") }}
-    
+        </section>
     <!--SECCION VENDOR-->
-<input type="number" id="vendor_quantity" name="vendor_quantity" value="{{forms_vendor|length}}" hidden>
-<section id="vendor" , name="seccion-prueba" , class="col-md-12">
-    {% if forms_vendor %}
-    <div class="row shadow-sm p-3 mb-5 bg-body rounded content-section border border-info" id="form_vendor">
-        
-        <legend class="text-center"><strong>VENDOR INFORMATION </strong></legend><br>
+        <input type="number" id="vendor_quantity" name="vendor_quantity" value="{{forms_vendor|length}}" hidden>
+        <section id="vendor" , name="seccion-prueba" , class="col-md-12">
+            {% if forms_vendor %}
+            <div class="row  shadow-sm p-3 mb-5 bg-body mt-3 rounded content-section" id="form_vendor">
+                
+            <h3 class="colorh2 ">Vendor Information</h3><br>
 
-        <div id="all_vendor_forms" class="row">
-            {% for form_vendor in forms_vendor%}
-                <div class="col-md-12 row" id="form_section_vendor_{{form_vendor.index.data}}">
-                    <hr>
-        
-                    <div id="vendor_deal_id" , class="col-md-2 row">
-                        <div class="">
-                            <div class="form-group ">
-                                {{form_vendor.vendor_deal_id.label(class="form-control-label mt-3 pt-0 mb-0",
-                                for="validationCustom01")}}
-                                {{form_vendor.vendor_deal_id(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
-                                {% if form_vendor.vendor_deal_id.errors and form_vendor.vendor_deal_id.data %}
-                                {% for error in form_vendor.vendor_deal_id.errors %}
-                                <p id="error" class="text-danger"> {{error}}</p>
-                                {% endfor %}
-                                {% endif %}
+                <div id="all_vendor_forms" class="row">
+                    {% for form_vendor in forms_vendor%}
+                        <div class="col-md-12 row" id="form_section_vendor_{{form_vendor.index.data}}">
+                            <hr>
+                
+                            <div id="vendor_deal_id" , class="col-md-2 row">
+                                <div class="">
+                                    <div class="form-group ">
+                                        {{form_vendor.vendor_deal_id.label(class="form-control-label mt-3 pt-0 mb-0",
+                                        for="validationCustom01")}}
+                                        {{form_vendor.vendor_deal_id(class="form-control form-control-md validated " ,
+                                        id='validationcustome01')}}
+                                        {% if form_vendor.vendor_deal_id.errors and form_vendor.vendor_deal_id.data %}
+                                        {% for error in form_vendor.vendor_deal_id.errors %}
+                                        <p id="error" class="text-danger"> {{error}}</p>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                            <div id="vendor_name" , class="col-md-2 row">
+                                <div class="">
+                                    <div class="form-group " >
+                                        {{form_vendor.vendor_name.label(class="form-control-label mt-3 pt-0 mb-0",
+                                        for="validationCustom01")}}
+                                        {{form_vendor.vendor_name(class="form-control form-control-md validated " ,
+                                        id='validationcustome01')}}
+                                        {% if form_vendor.vendor_name.errors and form_vendor.vendor_name.data %}
+                                        {% for error in form_vendor.vendor_name.errors %}
+                                        <p id="error" class="text-danger"> {{error}}</p>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div id="vendor_account_manager_name" , class="col-md-2 row ">
+                                <div class=" ">
+                                    <div class="form-group " >
+                                        {{form_vendor.vendor_account_manager_name.label(class="form-control-label mt-3 pt-0 mb-0",
+                                        for="validationCustom01")}}
+                                        {{form_vendor.vendor_account_manager_name(class="form-control form-control-md validated " ,
+                                        id='validationcustome01')}}
+                                        {% if form_vendor.vendor_account_manager_name.errors and form_vendor.vendor_account_manager_name.data %}
+                                        {% for error in form_vendor.vendor_account_manager_name.errors %}
+                                        <p id="error" class="text-danger"> {{error}}</p>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div id="vendor_account_manager_phone" , class="col-md-2 row">
+                                <div class=" ">
+                                    <div class="form-group " >
+                                        {{form_vendor.vendor_account_manager_phone.label(class="form-control-label mt-3 pt-0 mb-0",
+                                        for="validationCustom01")}}
+                                        {{form_vendor.vendor_account_manager_phone(class="form-control form-control-md validated " ,
+                                        id='validationcustome01')}}
+                                        {% if form_vendor.vendor_account_manager_phone.errors and form_vendor.vendor_account_manager_phone.data %}
+                                        {% for error in form_vendor.vendor_account_manager_phone.errors %}
+                                        <p id="error" class="text-danger"> {{error}}</p>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="vendor_account_manager_email" , class="col-md-3 row ">
+                                <div class="">
+                                    <div class="form-group " >
+                                        {{form_vendor.vendor_account_manager_email.label(class="form-control-label mt-3 pt-0 mb-0",
+                                        for="validationCustom01")}}
+                                        {{form_vendor.vendor_account_manager_email(class="form-control form-control-md validated " ,
+                                        id='validationcustome01')}}
+                                        {% if form_vendor.vendor_account_manager_email.errors and form_vendor.vendor_account_manager_email.data %}
+                                        {% for error in form_vendor.vendor_account_manager_email.errors %}
+                                        <p id="error" class="text-danger"> {{error}}</p>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div id="delete_vendor" , class=" col-md-1 row ">
+                                <div class="">
+                                    <div class="form-group " >
+                                        <br>
+                                        <button id="delete_form" type="button" name="delete_cisco" class="btn btn-outline-danger"
+                                            onclick="deleteForm('#form_section_vendor_{{form_vendor.index.data}}')" value="test"> X</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                    </div>
-                    
-                    <div id="vendor_name" , class="col-md-2 row">
-                        <div class="">
-                            <div class="form-group " >
-                                {{form_vendor.vendor_name.label(class="form-control-label mt-3 pt-0 mb-0",
-                                for="validationCustom01")}}
-                                {{form_vendor.vendor_name(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
-                                {% if form_vendor.vendor_name.errors and form_vendor.vendor_name.data %}
-                                {% for error in form_vendor.vendor_name.errors %}
-                                <p id="error" class="text-danger"> {{error}}</p>
-                                {% endfor %}
-                                {% endif %}
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <div id="vendor_account_manager_name" , class="col-md-2 row ">
-                        <div class=" ">
-                            <div class="form-group " >
-                                {{form_vendor.vendor_account_manager_name.label(class="form-control-label mt-3 pt-0 mb-0",
-                                for="validationCustom01")}}
-                                {{form_vendor.vendor_account_manager_name(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
-                                {% if form_vendor.vendor_account_manager_name.errors and form_vendor.vendor_account_manager_name.data %}
-                                {% for error in form_vendor.vendor_account_manager_name.errors %}
-                                <p id="error" class="text-danger"> {{error}}</p>
-                                {% endfor %}
-                                {% endif %}
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div id="vendor_account_manager_phone" , class="col-md-2 row">
-                        <div class=" ">
-                            <div class="form-group " >
-                                {{form_vendor.vendor_account_manager_phone.label(class="form-control-label mt-3 pt-0 mb-0",
-                                for="validationCustom01")}}
-                                {{form_vendor.vendor_account_manager_phone(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
-                                {% if form_vendor.vendor_account_manager_phone.errors and form_vendor.vendor_account_manager_phone.data %}
-                                {% for error in form_vendor.vendor_account_manager_phone.errors %}
-                                <p id="error" class="text-danger"> {{error}}</p>
-                                {% endfor %}
-                                {% endif %}
-                            </div>
-                        </div>
-
-                    </div>
-                    <div id="vendor_account_manager_email" , class="col-md-3 row ">
-                        <div class="">
-                            <div class="form-group " >
-                                {{form_vendor.vendor_account_manager_email.label(class="form-control-label mt-3 pt-0 mb-0",
-                                for="validationCustom01")}}
-                                {{form_vendor.vendor_account_manager_email(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
-                                {% if form_vendor.vendor_account_manager_email.errors and form_vendor.vendor_account_manager_email.data %}
-                                {% for error in form_vendor.vendor_account_manager_email.errors %}
-                                <p id="error" class="text-danger"> {{error}}</p>
-                                {% endfor %}
-                                {% endif %}
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div id="delete_vendor" , class=" col-md-1 row ">
-                        <div class="">
-                            <div class="form-group " >
-                                <br>
-                                <button id="delete_form" type="button" name="delete_cisco" class="btn btn-outline-danger"
-                                    onclick="deleteForm('#form_section_vendor_{{form_vendor.index.data}}')" value="test"> X</button>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
 
-     
-        <div class="row">
-            <button id="btnvendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-3 mt-4">
-                Add a new Vendor</button>
-        </div>
+            
+                <div class="row">
+            
+                <button id="btnvendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
+                        Add</button>
+                </div>
     </div>
     {%endif%}
 
-</section>
+        </section>
 
 
 <!--SECCION SOFTWARE-->
 <input type="number" id="software_quantity" name="software_quantity" value="{{forms_software|length}}" hidden>
 <section id="software" , name="seccion-prueba" , class="col-md-12">
     {% if forms_software %}
-    <div class="row shadow-sm p-3 mb-5 bg-body rounded content-section border border-info" id="form_software">
-        <legend class="text-center"><strong>SOFTWARE INFORMATION </strong></legend><br>
+    <div class="row  shadow-sm p-3 mb-5 bg-body mt-3 rounded content-section" id="form_software">
+        <h3 class="colorh2 ">Software Information</h3><br>
 
         <div id="all_software_forms" class="row">
             {% for form_software in forms_software %}
@@ -632,32 +632,90 @@
 
         <div class="row">
             <button id="btnsoftware" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
-                Add a new Software</button>
+                Add</button>
         </div>
     </div>
     {% endif%}
 </section>
 
+<section>
+  <div class=" ">
+          
+                <section>
 
-<div class="col-md-12 shadow-sm p-3 mb-5 bg-body rounded content-section">
-    <div class="row bg-primary p-2 text-dark bg-opacity-10">
-        <legend class=""><i class="fs-6">Please add your Comments</i></legend>
+                    <div class="card card-modify ">
+                         <div class=" p-2 mb-2">
+                            <h5 class=" ">Comments</h5>
+                        </div>
+                        <div class="card text-dark">
+                            {% for comment in comments %}
+                            <div class="card-body p-0 t_interior">
+
+                                <div class="">
+
+                                    <div class="col-md-12 mr-0 row">
+                                        
+                                        <div class="col-md-1 m-0 p-0"><small>
+                                           <img class ="pr-1 pl-1" alt="svgImg" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iMjIiIGhlaWdodD0iMjIiCnZpZXdCb3g9IjAgMCA0OCA0OCI+CjxwYXRoIGZpbGw9IiM4QkMzNEEiIGQ9Ik0zNywzOUgxMWwtNiw2VjExYzAtMy4zLDIuNy02LDYtNmgyNmMzLjMsMCw2LDIuNyw2LDZ2MjJDNDMsMzYuMyw0MC4zLDM5LDM3LDM5eiI+PC9wYXRoPgo8L3N2Zz4="/>
+                                            {{comment.name}}</small>
+                                        </div>
+                                        <div class="col-md-8 m-0 p-0">
+                                          
+                                                  <small class="">
+                                                 {{comment.comment}}
+                                                </small>
+                                           
+                                        </div>
+
+                                        <div class="col-md-2 m-0 p-0">
+
+                                         
+                                        <img src="https://img.icons8.com/color/20/null/play--v1.png"/>
+                                        <small class="">{{comment.role}}</small>
+                                        
+                                        </div>
+                                       
+
+                                        <div class="col-md-1 m-0 p-0">
+
+                                       
+                                       
+                                        <small class="badge bg-primary opacity-75">{{comment.date}}</small>
+                                        
+                                        </div>
+
+                                        
+                                        
+                                    </div>
+                                        
+                                </div>
+
+                            
+                                <hr class="my-0" />
+                                {% endfor %}
+
+                                <div class="col-md-12 mt-4">
+                                        {{form.comments(class="form-control form-control-md validated " ,
+                                        id='validationcustome01')}}
+                                        {% if form.comments.errors and form.comments.data %}
+                                        {% for error in form.comments.errors %}
+                                        <p id="error" class="text-danger"> {{error}}</p>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <br>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
-        <div class="col-md-12 ">
-            {{form.comments(class="form-control form-control-md validated " , id='validationcustome01')}}
-            {% if form.comments.errors and form.comments.data %}
-            {% for error in form.comments.errors %}
-            <p id="error" class="text-danger"> {{error}}</p>
-            {% endfor %}
-            {% endif %}
-        </div>
-        <br>
-
-
-
-    </div>
-    <br>
+            </div>
+        </section>
+  
+<div class="col-md-12 mt-4">
+   
     <div class="input-group col-md-2" for="validationcustome01">
 
         {{form.status(class="custom-select", id="inputGroupSelect04",

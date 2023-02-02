@@ -10,18 +10,12 @@ body {
   padding-bottom: 4em;
   min-height: 100vh;
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #ffffff;
+.t-small{
+  font-size:smaller;
 }
-.colorh2 h2,
-h1,
-strong label {
+
+
+.colorh2  {
   color: #0072bb !important;
 }
 .bg-steel {
@@ -39,7 +33,33 @@ strong label {
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
 }
+.t-modify th{
+  background-color: #0072bb;
+  color: #f0f0f0;
+  font-weight: 200;
+}
+.t_interior th{
+  background-color:#fcfcfc;
+  color: #333333;
+  font-weight: 100;
 
+}
+.t_interior {
+  background-color:#f5f1f6;
+  color: #333333;
+  font-weight: 100;
+
+}
+#table_body{
+  background-color:#f5f1f6;
+  color: #333333;
+  font-weight: 100;
+}
+
+.form-control-label{
+font-weight: 100;
+
+}
 .content-section {
   background: #ffffff;
   padding: 10px 20px;
@@ -56,14 +76,19 @@ strong label {
   border: 0;
 }
 .footer {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #005d6a;
   padding: 1em 0;
-  text-align: center;
+  text-align: right;
   position: absolute;
   bottom: 0;
   width: 100%;
+  color: #f0f0f0;
 }
 
+.card-modify{
+  background: #0072bb;
+  color: rgb(255, 255, 255);
+}
 .hrclass {
   height: 2px;
   background-color: #0072bb;
@@ -104,7 +129,7 @@ strong label {
 }
 ::selection{
   color: #fff;
-  background: #4285f4;
+  background: #00a5bb;
 }
 .wrapper{
   width: auto;
@@ -114,18 +139,20 @@ strong label {
   display: flex;
   align-items: center;
   cursor: pointer;
+ 
 }
 .select-btn{
   height: 65px;
-  padding: 0 20px;
-  font-size: 20px;
-  background: #0d6efd2b;
+  padding: 0 10px;
+  font-size: 18px;
+  background: #0072bb;
+  color: rgb(255, 255, 255);
   border-radius: 7px;
   justify-content: space-between;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 .select-btn i{
-  font-size: 20px;
+  font-size: 10px;
   transition: transform 0.3s linear;
 }
 .wrapper.active .select-btn i{
@@ -135,7 +162,8 @@ strong label {
   display: none;
   padding: 10px;
   margin-top: 0px;
-  background: rgba(125, 178, 232, 0.504);
+  background: #f5f1f6;
+  color: #0072bb;
   border-radius: 7px;
 
 }
@@ -165,7 +193,7 @@ strong label {
 }
 .search input:focus{
   padding-left: 12px;
-  border: 2px solid #4285f4;
+  border: 2px solid #0072bb;
 }
 .search input::placeholder{
   color: #bfbfbf;
@@ -193,7 +221,7 @@ strong label {
 .options li{
   height: 50px;
   padding: 0 13px;
-  font-size: 21px;
+  font-size: 16px;
 }
 .options ol, ul{
   padding-left: 0px !important;
@@ -293,7 +321,7 @@ strong label {
 
   color: #fff;
 
-  background: #0085b6;
+  background:#0072bb;
 
 }
 
