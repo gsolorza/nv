@@ -32,6 +32,14 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
 
+class RequestAccount(FlaskForm):
+    email = EmailField('Email',
+                       validators=[DataRequired(), Email()])
+    
+    rol = StringField('Rol',
+                      validators=[DataRequired()])
+    submit = SubmitField('Send')
+    
 class ForgotPassword(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])

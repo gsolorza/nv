@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+
+        </div>
+  
+    <div class="col-md-4">
+        <form method="POST" action="" class="content-section">
+            
+            <fieldset class="form-group">
+                <legend class="text-center colorh2">CREATE AN ACCOUNT</legend>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-md is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-md") }}
+                    {% endif %}
+                </div>
+
+                 <div class="form-group">
+                    {{ form.rol.label(class="form-control-label") }}
+                    {% if form.rol.errors %}
+                        {{ form.rol(class="form-control form-control-md is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.rol.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.rol(class="form-control form-control-md") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                {{ form.submit(class="btn btn-md btn-primary btn-block") }}
+               </div>
+                          <div class=" col-md-3">
+            <small class="text-muted">
+              <a href="{{ url_for('login') }}">Back</a>
+          </div>
+                </div>
+
+               
+              
+            </fieldset>
+           
+        </form>
+    </div>
+    <div class="col-md-4">
+            
+    </div>
+
+</div>
+    
+    </div>
+</div>
+
+ 
+{% endblock content %}

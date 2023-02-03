@@ -39,9 +39,25 @@
       <div class="form-group">
         {{ form.submit(class="btn btn-md btn-primary btn-block") }}
       </div>
-      <small class="text-muted">
-        <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
-      </small>
+
+
+      <div class="">
+        <div class="row col-md-12">
+          <div class=" col-md-9">
+            <small class="text-muted">
+              <a href="{{ url_for('forgot_password') }}">Forgot password?</a></small>
+          </div>
+          
+          <div class=" col-md-3">
+            <small class="text-muted">
+              <a href="{{ url_for('requestAccount') }}">Create an Account</a>
+          </div>
+
+        </div>
+      </div>
+
+
+
     </form>
   </div>
   <div class="col-md-4"></div>

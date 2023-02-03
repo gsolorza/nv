@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, session, g
 from flask_login import login_required, logout_user, current_user, login_user
-from src.forms import LoginForm, RegistrationForm, ForgotPassword, ResetPassword,InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, CustomerForm, replicateForm, is_data_validated, encap_form
+from src.forms import LoginForm, RegistrationForm, ForgotPassword, ResetPassword,InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, CustomerForm,RequestAccount, replicateForm, is_data_validated, encap_form
 from src import app, login_manager, bcrypt, schema, mail, sender_email_address
 from src.crud import get_user, get_role, get_customer, create_form, create_vendor, create_software, display_partial_form, display_full_form, get_user_role, apply_form_changes, update_user_password, create_customers
 from src.db import db
@@ -324,3 +324,9 @@ def reset_password(token):
                 flash("Error setting the new password, please contact your Administrator", "danger")
                 return render_template("reset_password.html", title="Reset Password",form=form)
     return render_template("reset_password.html", title="Reset Password",form=form)
+
+@app.route("/RequestAccount",methods=["GET","POST"])
+def requestAccount():
+    form = RequestAccount()
+ 
+    return render_template("RequestAccount.html", title="Request Account",form=form)
