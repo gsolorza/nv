@@ -257,9 +257,7 @@
                                             <p id="error" class="text-danger"> {{error}}</p>
                                             {% endfor %}
                                             {% endif %}
-                                        
-                                            <button id="btn_search_deal_id" , type="button", class="btn btn-md btn-outline-success mt-3">
-                                                Search</button>
+                                    
 
 
                                         </div>
@@ -355,14 +353,12 @@
                                     </div>
                                 </div>
 
-
-
                                 <div id="delete_cisco" , class=" col-md-1 row ">
                                     <div class="">
                                         <div class="form-group  needs-validation">
                                             <br>
                                             <button id="delete_form" type="button" name="delete_cisco"
-                                                class="btn btn-outline-danger" onclick="deleteForm('#form_section_cisco_{{form_cisco.index.data}}')">
+                                                class="btn btn-outline-danger" onclick="deleteForm('#form_section_cisco_{{form_cisco.index.data}}')" hidden="hidden">
                                                 X</button>
 
 
@@ -373,7 +369,7 @@
                         {% endfor %}
                     </div>
                 <div class="row">
-                      <button id="btnciscovendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
+                      <button id="btnciscovendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4" hidden="hidden">
                 Add</button>
                 </div>
             </div>
@@ -489,7 +485,7 @@
                                     <div class="form-group " >
                                         <br>
                                         <button id="delete_form" type="button" name="delete_cisco" class="btn btn-outline-danger"
-                                            onclick="deleteForm('#form_section_vendor_{{form_vendor.index.data}}')" value="test"> X</button>
+                                            onclick="deleteForm('#form_section_vendor_{{form_vendor.index.data}}')" hidden="hidden"> X</button>
                                     </div>
                                 </div>
                             </div>
@@ -500,7 +496,7 @@
             
                 <div class="row">
             
-                <button id="btnvendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
+                <button id="btnvendor" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4" hidden="hidden">
                         Add</button>
                 </div>
     </div>
@@ -621,7 +617,7 @@
                             <div class="form-group ">
                                 <br>
                                 <button id="delete_form" type="button" name="delete_software"
-                                    class="btn btn-outline-danger mt-3" onclick="deleteForm('#form_section_software_{{form_software.index.data}}')">
+                                    class="btn btn-outline-danger mt-3" onclick="deleteForm('#form_section_software_{{form_software.index.data}}')" hidden="hidden">
                                     X</button>
 
                             </div>
@@ -632,7 +628,7 @@
         </div>
 
         <div class="row">
-            <button id="btnsoftware" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4">
+            <button id="btnsoftware" type="button" class="btn btn-md btn-outline-primary justify-content-md-center  col-md-auto mt-4" hidden="hidden">
                 Add</button>
         </div>
     </div>
@@ -658,12 +654,10 @@
 
                             <div class="col-md-12 mr-0 row">
 
-                                <div class="col-md-1 m-0 p-0"><small>
-                                        <img class="pr-1 pl-1" alt="svgImg"
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iMjIiIGhlaWdodD0iMjIiCnZpZXdCb3g9IjAgMCA0OCA0OCI+CjxwYXRoIGZpbGw9IiM4QkMzNEEiIGQ9Ik0zNywzOUgxMWwtNiw2VjExYzAtMy4zLDIuNy02LDYtNmgyNmMzLjMsMCw2LDIuNyw2LDZ2MjJDNDMsMzYuMyw0MC4zLDM5LDM3LDM5eiI+PC9wYXRoPgo8L3N2Zz4=" />
-                                        {{comment.name}}</small>
+                                <div class="col-md-3 m-0 p-0"><small>
+                                         {{comment.name}}</small>
                                 </div>
-                                <div class="col-md-8 m-0 p-0">
+                                <div class="col-md-6 m-0 p-0">
 
                                     <small class="">
                                         {{comment.comment}}
@@ -674,8 +668,7 @@
                                 <div class="col-md-2 m-0 p-0">
 
 
-                                    <img src="https://img.icons8.com/color/20/null/play--v1.png" />
-                                    <small class="">{{comment.role}}</small>
+                                     <small class="">{{comment.role}}</small>
 
                                 </div>
 
@@ -871,7 +864,7 @@
             }
         }
         else {
-            for (i = 0; i <= sectionLength - 1; i++) {
+            for (i = 0; i < sectionLength - 1; i++) {
                 form.remove()
                 let form_section = `form_section_${form_name}_${i}`;
                 let selectedForm = allForms.children[i]

@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, session, g
 from flask_login import login_required, logout_user, current_user, login_user
 from src.forms import LoginForm, RegistrationForm, ForgotPassword, ResetPassword,InitialFormSales, ChecklistFormSales, Vendor, Software, Cisco, CustomerForm,RequestAccount, replicateForm, is_data_validated, encap_form
 from src import app, login_manager, bcrypt, schema, mail, sender_email_address
-from src.crud import get_user, get_role, get_customer, create_form, create_vendor, create_software, display_partial_form, display_full_form, get_user_role, apply_form_changes, update_user_password, create_customers
+from src.crud import get_user, get_role, get_customer, create_form, create_vendor, create_software, display_partial_form, display_full_form, get_user_role, apply_form_changes, update_user_password, create_customers, create_user
 from src.db import db
 import json
 from flask_mail import Message
@@ -175,23 +175,14 @@ def checklist():
 def mychecklist():
     forms = []
     if request.method == "GET":
-        data = request.args.get("sales_force_id")
         if current_user.role_name == "admin":
             query = schema.Query()
             forms = [dict(form) for form in display_partial_form(query, db())]
             return render_template("mychecklist.html", title="Histoy Checklist", form_history=forms)
-        elif data:
-            assigned_forms = []
-            query = schema.Query(column="sales_force_id", value=data)
-            forms = [dict(form) for form in display_partial_form(query, db())]
-            for form in forms:
-                if form.status == current_user.role_name:
-                    assigned_forms.append(form)
-            return render_template("mychecklist.html", title="Histoy Checklist", form_history=assigned_forms)
-        elif not data:
-                query = schema.Query(column="status", value=current_user.role_name)
-                forms = [dict(form) for form in display_partial_form(query, db())]         
-                return render_template("mychecklist.html", title="Histoy Checklist", form_history=forms)
+        else:
+            query = schema.Query(column="status", value=current_user.role_name)
+            forms = [dict(form) for form in display_partial_form(query, db())]         
+            return render_template("mychecklist.html", title="Histoy Checklist", form_history=forms)
 
     return render_template("mychecklist.html", title="Histoy Checklist", form_history=forms)
 
@@ -255,6 +246,7 @@ def form_update(form_id):
     if current_user.role_id == g.admin.id:
         return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role, comments=comments)
     elif form.status.data != current_user.role_name:
+        form.status.choices = [form.status.data]
         return render_template("form_history.html", title="Checklist History", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role, comments=comments)
     return render_template("form_update.html", title="Checklist", form=form, forms_vendor=forms_vendor, forms_cisco=forms_cisco, forms_software=forms_software, customer=customer, customers=customers, pl_role=pl_role, comments=comments)
     
@@ -325,8 +317,23 @@ def reset_password(token):
                 return render_template("reset_password.html", title="Reset Password",form=form)
     return render_template("reset_password.html", title="Reset Password",form=form)
 
-@app.route("/RequestAccount",methods=["GET","POST"])
-def requestAccount():
-    form = RequestAccount()
- 
-    return render_template("RequestAccount.html", title="Request Account",form=form)
+@app.route("/create_account", methods=["GET","POST"])
+@login_required
+def create_account():
+    if current_user.role_id == g.admin.id:
+        form = RegistrationForm()
+        role_list = get_role(schema.Query(), db())
+        form.set_role_choices(choices=[(role.id, role.role_name) for role in role_list if role.role_name != "admin"])
+        if form.validate_on_submit():
+            new_user = [schema.CreateUser(
+                name=form.name.data,
+                email=form.email.data,
+                password=form.password.data,
+                role_id=form.role.data
+            )]
+            create_user(new_user, db())
+            flash("User has been created successfuly", "success")
+            return redirect(url_for("home"))
+        return render_template("register.html", title="Create Account",form=form)
+    
+    return redirect(url_for("login"))

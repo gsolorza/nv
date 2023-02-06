@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Email
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
 from src import schema
 from typing import Union, Any
-from src.crud import get_form, get_user, get_customer
+from src.crud import get_form, get_user, get_customer, get_user
 import datetime
 from src.db import db
 import json
@@ -21,15 +21,24 @@ class LoginForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
 
+    name = StringField("Name", validators=[DataRequired(), Length(min=4, max=30), Regexp(r"^[A-Za-z\s]+$", message="The name should only include letters")])
     email = EmailField('Email',
                        validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
 
-    rol = StringField('Rol',
-                      validators=[DataRequired()])
+    role = SelectField("Role", choices=[], validators=[DataRequired()])
     submit = SubmitField('Sign Up')
+
+    def set_role_choices(self, choices):
+        self.role.choices = choices
+    
+    def validate_email(self, email):
+        if not email.errors:
+            user = get_user("email", email.data.lower(),  db())
+            if user:
+                raise ValidationError("That email address already exists please choose another one")
 
 
 class RequestAccount(FlaskForm):
@@ -47,7 +56,7 @@ class ForgotPassword(FlaskForm):
 
     def validate_email(self, email):
         if not email.errors:
-            user = get_user("email", email.data,  db())
+            user = get_user("email", email.data.lower(),  db())
             if not user:
                 raise ValidationError("That email address does not exist in our records")
 
@@ -115,7 +124,7 @@ class ChecklistFormSales(FlaskForm):
     comments = TextAreaField("Comments", validators=[DataRequired(), Length(
         min=5, max=2000)], render_kw={"placeholder": "Enter your comments"})
     
-    status = SelectField("Assign", choices=[])
+    status = SelectField("Assign", choices=[], validators=[DataRequired()])
     customer_id = IntegerField("Customer ID", validators=[DataRequired()])
     db_validation = True
     submit = SubmitField("Submit")

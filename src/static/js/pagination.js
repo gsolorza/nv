@@ -4,24 +4,46 @@ let listItems = paginatedList.querySelectorAll("tr");
 const nextButton = document.getElementById("next-button");
 const prevButton = document.getElementById("prev-button");
 
+let paginationMinRange = 0
+let paginationMaxRange = 10
+
 const paginationLimit = 5;
 let pageCount = Math.ceil(listItems.length / paginationLimit);
 let currentPage;
+let pageDifference;
+
+function isBetween(index, min, max) {
+  return (index >= min && index <= max) || (index >= max && index <= min);
+}
 
 const appendPageNumber = (index) => {
-    const pageNumber = document.createElement("button");
-    pageNumber.className = "pagination-number";
-    pageNumber.innerHTML = index;
-    pageNumber.setAttribute("page-index", index);
-    pageNumber.setAttribute("aria-label", "Page " + index);
-    paginationNumbers.appendChild(pageNumber);
+  const pageNumber = document.createElement("button");
+  pageNumber.className = "pagination-number";
+  pageNumber.innerHTML = index;
+  pageNumber.setAttribute("page-index", index);
+  pageNumber.setAttribute("aria-label", "Page " + index);
+  
+  if (!isBetween(index, paginationMinRange, paginationMaxRange))
+    pageNumber.setAttribute("hidden", true)
+
+  paginationNumbers.appendChild(pageNumber);
   };
   
 const getPaginationNumbers = () => {
+    paginationNumbers.innerHTML = ""
     for (let i = 1; i <= pageCount; i++) {
       appendPageNumber(i);
     }
+    document.querySelectorAll(".pagination-number").forEach((button) => {
+      const pageIndex = Number(button.getAttribute("page-index"));
+      if (pageIndex) {
+        button.addEventListener("click", () => {
+          setCurrentPage(pageIndex);
+        });
   
+      }
+  
+    });
 };
 
 const handleActivePageNumber = () => {
@@ -60,45 +82,56 @@ const handlePageButtonsStatus = () => {
 };
 
 const setCurrentPage = (pageNum) => {
-    currentPage = pageNum;
-    handleActivePageNumber();
-    handlePageButtonsStatus();
-    const prevRange = (pageNum - 1) * paginationLimit;
-    const currRange = pageNum * paginationLimit;
+  console.log(`Current Page ${currentPage}`)
+  console.log(`Page Number ${pageNum}`)
+  if (pageNum >= paginationMaxRange) {
+    paginationMinRange += 10
+    paginationMaxRange += 10
+    getPaginationNumbers();
+  }
+  else if (pageNum <= paginationMinRange){
+    paginationMinRange -= 10
+    paginationMaxRange -= 10
+    getPaginationNumbers();
+  }
+  currentPage = pageNum;
+  handleActivePageNumber();
+  handlePageButtonsStatus();
+  const prevRange = (pageNum - 1) * paginationLimit;
+  const currRange = pageNum * paginationLimit;
   
-    listItems.forEach((item, index) => {
-      item.setAttribute("hidden", "");
-      if (index >= prevRange && index < currRange) {
-        item.removeAttribute("hidden");
-      }
-    });
-  };
+  console.log(`Current Range ${currRange}`)
+  console.log(`Previous Range ${prevRange}`)
+  listItems.forEach((item, index) => {
+    item.setAttribute("hidden", "");
+    if (index >= prevRange && index < currRange) {
+      item.removeAttribute("hidden");
+    }
+  });
+};
 
 const onClickPagination = () => {
 
-    prevButton.addEventListener("click", () => {
+  prevButton.addEventListener("click", () => {
       setCurrentPage(currentPage - 1);
     });
-    nextButton.addEventListener("click", () => {
+  nextButton.addEventListener("click", () => {
       setCurrentPage(currentPage + 1);
     });
-    document.querySelectorAll(".pagination-number").forEach((button) => {
-        const pageIndex = Number(button.getAttribute("page-index"));
-        if (pageIndex) {
-          button.addEventListener("click", () => {
-            setCurrentPage(pageIndex);
-          });
-    
-        }
-    
-      });
 }
 
+const displayFormCount = () => { 
+  p = document.createElement("p")
+  p.className = "text-center"
+  p.innerText = `Total Number of Checklist: ${listItems.length}`
+  document.querySelector("#forms-total-number").appendChild(p)
+}
 
 window.addEventListener("load", () => {
-    getPaginationNumbers();
-    setCurrentPage(1);
-    onClickPagination();
+  getPaginationNumbers();
+  setCurrentPage(1);
+  onClickPagination();
+  displayFormCount();
 });
 
 

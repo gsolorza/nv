@@ -11,6 +11,19 @@
             <fieldset class="form-group">
                 <legend class="text-center">REGISTRO</legend>
                 <div class="form-group">
+                    {{ form.name.label(class="form-control-label") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-md is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control-md") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
                     {% if form.email.errors %}
                         {{ form.email(class="form-control form-control-md is-invalid") }}
@@ -50,11 +63,15 @@
                     {% endif %}
                 </div>
                 <div class="form-group  needs-validation" novalidate >
-                    {{form.rol.label(class="form-control-label", for="validationCustom01")}}
-                    {{form.rol(class="form-control form-control-md validated " , id='validationcustome01')}}
-                    <div class="invalid-feedback">
-                        Please provide a valid zip.
-                      </div>
+                    {{form.role.label(class="form-control-label mt-3 pt-0 mb-0", id="inputGroupSelect04",
+                    for="validationCustom01")}}
+                    {{form.role(class="custom-select", id="inputGroupSelect04",
+                    for="validationCustom01", id="role")}}
+                    {% if form.role.errors and form.role.data %}
+                        {% for error in form.role.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </fieldset>
             <div class="form-group">

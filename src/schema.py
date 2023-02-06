@@ -63,7 +63,7 @@ class RoleQuery(BaseModel):
 class UserBase(BaseModel):
     name: str
     email: str
-    role_id: str
+    role_id: int
 
 
 class CreateUser(UserBase):

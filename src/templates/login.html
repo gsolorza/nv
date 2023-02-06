@@ -1,4 +1,4 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout_login.html' %} {% block content %}
 <div class="row">
   <div class="col-md-4"></div>
 
@@ -47,12 +47,6 @@
             <small class="text-muted">
               <a href="{{ url_for('forgot_password') }}">Forgot password?</a></small>
           </div>
-          
-          <div class=" col-md-3">
-            <small class="text-muted">
-              <a href="{{ url_for('requestAccount') }}">Create an Account</a>
-          </div>
-
         </div>
       </div>
 

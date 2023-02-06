@@ -43,7 +43,10 @@ function initTableForm() {
       tr.innerHTML += `<td>${form.quote_direct}</td>`
       tr.innerHTML += `<td>${form.purchase_order}</td>`
       tr.innerHTML += `<td>${formatDate(form.date)}</td>`
-      tr.innerHTML += `<td>${form.status}</td>`
+      if(form.status == "Completed")
+        tr.innerHTML += `<td class="badge bg-success mt-3"> ${form.status} </td>`
+      else
+        tr.innerHTML += `<td>${form.status}</td>`
       td.appendChild(tdForm)
       tdForm.appendChild(button)
       tr.appendChild(td)
@@ -72,7 +75,10 @@ function updateTableForm(searchWord) {
         tr.innerHTML += `<td>${form.quote_direct}</td>`
         tr.innerHTML += `<td>${form.purchase_order}</td>`
         tr.innerHTML += `<td>${formatDate(form.date)}</td>`
-        tr.innerHTML += `<td>${form.status}</td>`
+        if(form.status == "Completed")
+          tr.innerHTML += `<td class="badge bg-success mt-3"> ${form.status} </td>`
+        else
+          tr.innerHTML += `<td>${form.status}</td>`
         td.appendChild(tdForm)
         tdForm.appendChild(button)
         tr.appendChild(td)
@@ -100,7 +106,10 @@ function updateTableForm(searchWord) {
         tr.innerHTML += `<td>${form.quote_direct}</td>`
         tr.innerHTML += `<td>${form.purchase_order}</td>`
         tr.innerHTML += `<td>${formatDate(form.date)}</td>`
-        tr.innerHTML += `<td>${form.status}</td>`
+        if(form.status == "Completed")
+          tr.innerHTML += `<td class="badge bg-success mt-3 "> ${form.status} </td>`
+        else
+          tr.innerHTML += `<td>${form.status}</td>`
         td.appendChild(tdForm)
         tdForm.appendChild(button)
         tr.appendChild(td)
@@ -110,10 +119,11 @@ function updateTableForm(searchWord) {
   }
   listItems = paginatedList.querySelectorAll("tr");
   pageCount = Math.ceil(listItems.length / paginationLimit);
+  paginationMinRange = 0
+  paginationMaxRange = 10
   paginationNumbers.innerHTML = ""
   getPaginationNumbers();
   setCurrentPage(1);
-  onClickPagination();
 }
 
 search.addEventListener("keyup", () => {

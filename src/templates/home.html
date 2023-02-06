@@ -41,7 +41,7 @@
     
     {% if current_user.role_id == g.admin.id %}
       <div class="col-md-4">
-       <h3 class="colorh2 ">Create Customer </h3><br>
+       <h3 class="colorh2 ">Create Customer</h3><br>
 
        
         <p class="p-modify">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
@@ -49,6 +49,15 @@
           sed odio dui.</p>
         <p><a class="btn btn-primary" href="{{ url_for('create_customer') }}" role="button">Create &raquo;</a></p>
       </div>
+
+      <div class="col-md-4">
+        <h3 class="colorh2 ">Create User Account</h3><br>
+ 
+         <p class="p-modify">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+           condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
+           sed odio dui.</p>
+         <p><a class="btn btn-primary" href="{{ url_for('create_account') }}" role="button">Create &raquo;</a></p>
+       </div>
     {% endif %}
     <div class="col-md-4">
      <h3 class="colorh2 "> Checklist history </h3><br>

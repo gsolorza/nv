@@ -673,229 +673,55 @@
 
 
 <section class="content-section mt-2">
-
-
-         
-                <div class="card card-modify ">
-                    <div class=" p-2 mb-2">
-                        <h5 class=" ">Comments</h5>
-                    </div>
-                    <div class="card text-dark">
-                        {% for comment in comments %}
-                        <div class="card-body p-0 t_interior">
-
-                            <div class="">
-
-                                <div class="col-md-12 mr-0 row">
-
-                                    <div class="col-md-1 m-0 p-0"><small>
-                                            <img class="pr-1 pl-1" alt="svgImg"
-                                                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iMjIiIGhlaWdodD0iMjIiCnZpZXdCb3g9IjAgMCA0OCA0OCI+CjxwYXRoIGZpbGw9IiM4QkMzNEEiIGQ9Ik0zNywzOUgxMWwtNiw2VjExYzAtMy4zLDIuNy02LDYtNmgyNmMzLjMsMCw2LDIuNyw2LDZ2MjJDNDMsMzYuMyw0MC4zLDM5LDM3LDM5eiI+PC9wYXRoPgo8L3N2Zz4=" />
-                                            {{comment.name}}</small>
-                                    </div>
-                                    <div class="col-md-8 m-0 p-0">
-
-                                        <small class="">
-                                            {{comment.comment}}
-                                        </small>
-
-                                    </div>
-
-                                    <div class="col-md-2 m-0 p-0">
-
-
-                                        <img src="https://img.icons8.com/color/20/null/play--v1.png" />
-                                        <small class="">{{comment.role}}</small>
-
-                                    </div>
-
-
-                                    <div class="col-md-1 m-0 p-0">
-
-
-
-                                        <small class="badge bg-primary opacity-75">{{comment.date}}</small>
-
-                                    </div>
-
-
-
-                                </div>
-
-                            </div>
-
-
-                            <hr class="my-0" />
-                            {% endfor %}
-
-                            <div class="col-md-12 mt-4 mb-4">
-                                {{form.comments(class="form-control form-control-md validated " ,
-                                id='validationcustome01')}}
-                                {% if form.comments.errors and form.comments.data %}
-                                {% for error in form.comments.errors %}
-                                <p id="error" class="text-danger"> {{error}}</p>
-                                {% endfor %}
-                                {% endif %}
-                            </div>
-                            <br>
-
-                        </div>
-                    </div>
-
-                    <br>
-                    <div class="container col-md-3 " for="validationcustome01">
-
-                        {{form.status.label(class="form-control-label mt-3 pt-0 mb-0", id="inputGroupSelect04",
-                        for="validationCustom01")}}
-                        {{form.status(class="custom-select", id="inputGroupSelect04",
-                        for="validationCustom01", id="status")}}
-                        {% if form.status.errors and form.status.data %}
-                        {% for error in form.status.errors %}
+    <div class="card card-modify ">
+        <div class=" p-2 mb-2">
+            <h5 class=" ">Comments</h5>
+        </div>
+        <div class="card text-dark">
+            <div class="col-md-12 mt-4 mb-4">
+                {{form.comments(class="form-control form-control-md validated " ,
+                id='validationcustome01')}}
+                {% if form.comments.errors and form.comments.data %}
+                    {% for error in form.comments.errors %}
                         <p id="error" class="text-danger"> {{error}}</p>
-                        {% endfor %}
-                        {% endif %}
-                        <br>
-                        <br>
-
-
-                        
-                    </div>
-
-                         <div class="col-md-12 mt-4">
-                    <div class="form-group ">
-                        {{ form.submit(class="btn btn-md btn-success ", id="submit") }}
-                    </div>
-                </div>
-                </div>
-
-
-                <div class="col-md-12 mt-4">
-                    <p></p>
-                </div>
-
-            </div>
-
-
-</section>
-
-    <section class="content-section mt-2">
-            {% if comments %}
-            <div class="card card-modify ">
-                <div class=" p-2 mb-2">
-                    <h5 class=" ">Comments</h5>
-                </div>
-                <div class="card text-dark">
-                    {% for comment in comments %}
-                    <div class="card-body p-0 t_interior">
-
-                        <div class="">
-
-                            <div class="col-md-12 mr-0 row">
-
-                                <div class="col-md-1 m-0 p-0"><small>
-                                        <img class="pr-1 pl-1" alt="svgImg"
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iMjIiIGhlaWdodD0iMjIiCnZpZXdCb3g9IjAgMCA0OCA0OCI+CjxwYXRoIGZpbGw9IiM4QkMzNEEiIGQ9Ik0zNywzOUgxMWwtNiw2VjExYzAtMy4zLDIuNy02LDYtNmgyNmMzLjMsMCw2LDIuNyw2LDZ2MjJDNDMsMzYuMyw0MC4zLDM5LDM3LDM5eiI+PC9wYXRoPgo8L3N2Zz4=" />
-                                        {{comment.name}}</small>
-                                </div>
-                                <div class="col-md-8 m-0 p-0">
-
-                                    <small class="">
-                                        {{comment.comment}}
-                                    </small>
-
-                                </div>
-
-                                <div class="col-md-2 m-0 p-0">
-
-
-                                    <img src="https://img.icons8.com/color/20/null/play--v1.png" />
-                                    <small class="">{{comment.role}}</small>
-
-                                </div>
-
-
-                                <div class="col-md-1 m-0 p-0">
-
-
-
-                                    <small class="badge bg-primary opacity-75">{{comment.date}}</small>
-
-                                </div>
-
-
-
-                            </div>
-
-                        </div>
-
-
-                        <hr class="my-0" />
-                        {% endfor %}
-
-                        <div class="col-md-12 mt-4 mb-4">
-                            {{form.comments(class="form-control form-control-md validated " ,
-                            id='validationcustome01', disabled="")}}
-                            {% if form.comments.errors and form.comments.data %}
-                            {% for error in form.comments.errors %}
-                            <p id="error" class="text-danger"> {{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <br>
-
-                    </div>
-                </div>
+                    {% endfor %}
+                {% endif %}
             </div>
             <br>
-        </section>
-            <div class="container col-md-3 " for="validationcustome01">
 
-                {{form.status.label(class="form-control-label mt-3 pt-0 mb-0", id="inputGroupSelect04",
-                for="validationCustom01")}}
-                {{form.status(class="custom-select", id="inputGroupSelect04",
-                for="validationCustom01", id="status", disabled="")}}
-                {% if form.status.errors and form.status.data %}
-                {% for error in form.status.errors %}
-                <p id="error" class="text-danger"> {{error}}</p>
-                {% endfor %}
-                {% endif %}
-                <br>
-                <br>
+        </div>
+    </div>
 
+    <br>
+    <div class="container col-md-3 " for="validationcustome01">
 
-                <div class=" ">
-                    <div id="sale_note_group" class="form-group ">
-                        {% if current_user.role_id == pl_role.id %}
-                        {{form.sale_note.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01")}}
-                        {{form.sale_note(class="form-control form-control-md validated " ,
-                        id='validationcustome01', id="sale_note", disabled="")}}
-                        {% else %}
-                        {{form.sale_note.label(class="form-control-label mt-3 pt-0 mb-0",
-                        for="validationCustom01", disabled="")}}
-                        {{form.sale_note(class="form-control form-control-md validated " ,
-                        id='validationcustome01', disabled="")}}
-                        {% endif %}
-                        {% if form.sale_note.errors and form.sale_note.data %}
-                        {% for error in form.sale_note.errors %}
-                        <p id="error" class="text-danger"> {{error}}</p>
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-                
-            
-            </div>
-
-
-    
-
+        {{form.status.label(class="form-control-label mt-3 pt-0 mb-0", id="inputGroupSelect04",
+        for="validationCustom01")}}
+        {{form.status(class="custom-select", id="inputGroupSelect04",
+        for="validationCustom01", id="status")}}
+        {% if form.status.errors and form.status.data %}
+        {% for error in form.status.errors %}
+        <p id="error" class="text-danger"> {{error}}</p>
+        {% endfor %}
         {% endif %}
+        <br>
+        <br>
 
 
+        
+    </div>
 
+    <div class="col-md-12 mt-4">
+        <div class="form-group ">
+            {{ form.submit(class="btn btn-md btn-success ", id="submit") }}
+        </div>
+    </div>
 
+    <div class="col-md-12 mt-4">
+        <p></p>
+    </div>
 
+</section>
 
     </form>
 
@@ -1002,7 +828,7 @@
                 }
             }
             else {
-                for (i = 0; i <= sectionLength - 1; i++) {
+                for (i = 0; i < sectionLength - 1; i++) {
                     form.remove()
                     let form_section = `form_section_${form_name}_${i}`;
                     let selectedForm = allForms.children[i]
