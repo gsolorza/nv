@@ -44,18 +44,14 @@
        <h3 class="colorh2 ">Create Customer</h3><br>
 
        
-        <p class="p-modify">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-          condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
-          sed odio dui.</p>
+        <p class="p-modify">Please enter here to add a new customer to the database</p>
         <p><a class="btn btn-primary" href="{{ url_for('create_customer') }}" role="button">Create &raquo;</a></p>
       </div>
 
       <div class="col-md-4">
         <h3 class="colorh2 ">Create User Account</h3><br>
  
-         <p class="p-modify">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-           condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
-           sed odio dui.</p>
+         <p class="p-modify">Please enter here to add a new user account to the database.</p>
          <p><a class="btn btn-primary" href="{{ url_for('create_account') }}" role="button">Create &raquo;</a></p>
        </div>
     {% endif %}
@@ -63,17 +59,13 @@
      <h3 class="colorh2 "> Checklist history </h3><br>
 
      
-      <p class="p-modify">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-        condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec
-        sed odio dui. </p>
+      <p class="p-modify">Here you will find the history of all requests and their status </p>
       <p><a class="btn btn-primary" href="{{ url_for('history') }}" role="button">View details &raquo;</a></p>
     </div>
     <div class="col-md-4">
      <h3 class="colorh2 "> My Checklist  </h3><br>
 
-      <p class="p-modify">Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta
-        felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum
-        massa justo sit amet risus.</p>
+      <p class="p-modify"> Here you will find the requests assigned to you</p>
       <p><a class="btn btn-primary" href="{{ url_for('mychecklist') }}" role="button">View details &raquo;</a></p>
     </div>
   </div>
