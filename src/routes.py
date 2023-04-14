@@ -83,7 +83,10 @@ def checklist():
     form.set_choices([pre_sale.name for pre_sale in pre_sales], form.pre_sales_name.name)
     form.set_choices([pre_sales_role.role_name], form.status.name)  # type: ignore
     if request.method == "POST":
-        customers = [dict(customer) for customer in get_customer(schema.Query(), db())] # type: ignore   
+        customers = [dict(customer) for customer in get_customer(schema.Query(), db())] if get_customer(schema.Query(), db()) else None # type: ignore
+        if not customers:
+            flash("You need to have customers before creating a checklist", "danger")
+            return redirect(url_for("create_customer"))
         cisco_quantity = request.form.get("cisco_quantity")
         vendor_quantity = request.form.get("vendor_quantity")
         software_quantity = request.form.get("software_quantity")

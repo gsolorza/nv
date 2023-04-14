@@ -3,8 +3,31 @@ from src.schema import MessageType
 from src import models, schema, bcrypt
 from typing import Any, Union
 import datetime
+import os
 from pprint import pprint
 import json
+
+def create_admin_account(db: Session):
+
+    try:
+
+        create_role([
+            schema.CreateRole(role_name="admin"),
+            schema.CreateRole(role_name="Sales"),
+            schema.CreateRole(role_name="PreSales"),
+            schema.CreateRole(role_name="P&L"),
+            schema.CreateRole(role_name="InsidePreSales")
+            ], db)
+
+        create_user([schema.CreateUser(
+            name = "admin",
+            email = os.environ.get("ADMIN_EMAIL"),
+            role_id = 1,
+            password = os.environ.get("ADMIN_PASSWORD")
+        )], db)
+    except Exception as error:
+        print(f"error creating user {error}")
+        pass
 
 def get_user(column: str, value: Union[str, int], db: Session):
     query = (
@@ -268,7 +291,6 @@ def create_role(roles: list[schema.CreateRole], db: Session):
             message.add(MessageType.alreadyExist, query)
         else:
             try:
-                print("this")
                 new_role = models.Role(
                     role_name=role.role_name,
                 )

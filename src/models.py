@@ -1,8 +1,7 @@
-from src.db import Base
+from src.db import Base, engine
 from sqlalchemy import Column, String, ForeignKey, Integer, Boolean, Date
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
-
 
 class User(Base, UserMixin):
 
