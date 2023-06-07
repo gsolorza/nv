@@ -1,4 +1,4 @@
-from src.db import Base, engine
+from src.db import Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Boolean, Date
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
@@ -110,3 +110,4 @@ class Software(Base):
     type_of_purchase = Column(String, nullable=True)
     form_id = Column(Integer, ForeignKey("form.id", ondelete="CASCADE"))
     form = relationship("Form", back_populates="software")
+

@@ -10,9 +10,6 @@
         {{ form.hidden_tag() }}
         {% if true %}
         <div class="row p-3 mb-5 bg-body rounded content-section border border-5 border-primary-subtle">
-            <marquee class="content-section" bgcolor=yellow width="100%" direction="left" height="30px">
-                Please Don't forget
-            </marquee>
             <legend class="text-center"><strong class="display-6 colorh2">Purchase Order Processing Checklist -
                     Chile</strong></legend>
             <strong class="dislpay-6">Welcome {{current_user.name}}</strong>
@@ -955,6 +952,7 @@
                     checklist.scrollIntoView()
                     var error = `<p id="customer_select_error" class="text-danger text-center"> Please Select a Customer </p>`
                     wrapper.insertAdjacentHTML("afterbegin", error)
+                    console.log("Customer validation")
                 }
                 else {
                     cisco_quantity = document.querySelector("#all_cisco_forms").children.length
@@ -972,7 +970,9 @@
                     if (formHasData(elementList.software, document.querySelector("#form_section_software_0"))) {
                         document.querySelector("#software_has_data").value = "true"
                     }
+                    console.log("cisco quantity valdation")
                 }
+                console.log("None conditions")
             });
         });
 

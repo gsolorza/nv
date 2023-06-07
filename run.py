@@ -1,9 +1,8 @@
 from src import app
-from src.db import Base, engine, db
-from src.crud import create_admin_account
-from src import models
+from src.db import Base,engine
+from src.crud import create_default_accounts
 
 
-models.Base.metadata.create_all(bind=engine)
-create_admin_account(db())
+Base.metadata.create_all(bind=engine)
+create_default_accounts()
 # app.run(debug=True, port=5000)
